@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-17
+- Componenti identificati dalle foto; BOM riscritta. Batterie in parallelo (1S) con TP4056, MT3608 a 12 V e Mini‑360 alimentato dai 12 V.
 - Step‑down Mini‑360 disponibile, da tarare a 3,3 V per l'ESP32.
 - Boost MT3608 disponibile, da tarare a 12 V.
 - Motore 1503 (7,4 V, 0,5 Ω) confermato, con limite di tensione FOC nel firmware.

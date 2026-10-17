@@ -45,18 +45,19 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 | ESP32 | da identificare | ✅ disponibile |
 | Driver brushless | SimpleFOC Mini v1.0 (DRV8313, 8–30 V) | ✅ disponibile |
 | Motore brushless | 1503, 7,4 V, 0,3 A, 0,5 Ω | ✅ disponibile |
-| Batteria | 2 × 18350 in serie (2S, 7,4 V) | ✅ disponibile |
-| Caricatore USB | da identificare | ✅ disponibile |
-| Rotary encoder | da identificare | ✅ disponibile |
+| Batteria | 2 × 18350 in parallelo (1S, 3,7 V) | ✅ disponibile |
+| Caricatore USB | TP4056 USB‑C con protezione | ✅ disponibile |
+| Rotary encoder | EC11 con pulsante | ✅ disponibile |
 | LED a tubo 5 cm | da identificare | ✅ disponibile |
 | Sensore magnetico | AS5600, encoder magnetico assoluto I2C | ✅ disponibile |
-| Boost 12 V, buck 3,3 V, caricatore 2S USB‑C, BMS 2S, interruttore, MOSFET LED, partitore | proposti | ❓ da confermare |
+| Boost MT3608, step‑down Mini‑360 | — | ✅ disponibili |
+| Portapile, interruttore, MOSFET LED, partitore, debounce | proposti | 🛒 da comprare |
 
 ## Schema a blocchi
 
 ```
- USB‑C ──► [Caricatore 2S] ──► [2×18350 + BMS] ──► [Interruttore] ─┬─► [Mini‑360 3,3 V] ──► ESP32
-                                                                   └─► [Boost 12 V] ──► [SimpleFOC Mini] ──► Motore
+ USB‑C ──► [TP4056] ──► [2×18350 in parallelo] ──► [Interruttore] ──► [MT3608 12 V] ─┬─► [SimpleFOC Mini] ──► Motore
+                                                                                    └─► [Mini‑360 3,3 V] ──► ESP32
                                                                                                │
  [Rotary encoder] ──► ESP32 ◄── [Sensore magnetico] ◄── magnete sull'albero ◄───────────────────┤
                        │                                                                       │
@@ -67,11 +68,13 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 **Driver:** SimpleFOC Mini v1.0, basato su DRV8313. Il motore va alimentato a 8–30 V (consigliati 10–12 V), la logica è a 3,3 V e si collega direttamente all'ESP32 con 3 PWM (IN1–IN3) più EN.
 
-**Alimentazione:** due 18350 in serie (2S, 6,0–8,4 V). Poiché il driver non funziona sotto 8 V, un boost MT3608 porta il motore a 12 V (tarare il trimmer prima di collegare il driver); uno step‑down Mini‑360 tarato a 3,3 V alimenta l'ESP32 dal pin 3V3. Ricarica da USB‑C con un caricatore 2S, protezione con un BMS 2S.
+**Alimentazione:** due 18350 in parallelo (1S, 3,0–4,2 V), ricaricate da USB‑C con il TP4056 che include la protezione. Un boost MT3608 porta tutto a 12 V per il driver (che vuole almeno 8 V); dai 12 V uno step‑down Mini‑360 ricava 3,3 V per il pin 3V3 dell'ESP32. Tarare entrambi i trimmer prima di collegare i carichi. Le due celle vanno messe in parallelo solo quando hanno la stessa tensione.
 
 **Motore:** 1503 a bassa resistenza (0,5 Ω). Il driver lavora a 12 V ma il firmware limita la tensione di fase a circa 0,5–1 V, così la corrente resta entro 1–2 A e il motore non scalda.
 
-**Sensore:** AS5600 (I2C, 12 bit) sotto l'albero, magnete diametrale sull'albero, pin DIR a GND.
+**Sensore:** AS5600 (I2C, 12 bit) dietro al motore, con il magnete diametrale incollato sull'estremità dell'albero che sporge dalla base del 1503; pin DIR a GND. Il LED si monta sulla campana, davanti.
+
+**Encoder:** EC11 nudo con pulsante, pull‑up interne dell'ESP32 e debounce RC.
 
 _Il resto è in definizione._ Analisi di partenza, punti critici e parti mancanti: [docs/analisi-iniziale.md](docs/analisi-iniziale.md).
 Qui andranno: schema elettrico, pinout ESP32, alimentazione e autonomia.
@@ -112,7 +115,7 @@ Metronomus/
 ├── hardware/              BOM, schema, pinout
 ├── firmware/              codice ESP32
 ├── fili/                  geometria del circuito in rame, taratura
-├── foto/                  foto dei componenti e del prototipo
+├── foto/                  foto dei componenti (driver, motore, AS5600, encoder, TP4056, MT3608, Mini‑360)
 └── produzione/            PDF 1:1 di taglio, piegatura e saldatura
 ```
 

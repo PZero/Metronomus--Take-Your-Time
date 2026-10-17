@@ -8,9 +8,10 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-17 | Lunghezze dei fili misurate sull'asse del filo, con deduzione di piega tarata | Precisione ripetibile | Misura sui bordi esterni |
 | 2026-10-17 | Controllo FOC in posizione con libreria SimpleFOC, driver SimpleFOC Mini v1.0 | Il driver di Fabio è nato per questo; moto sinusoidale fluido come un pendolo vero | ESC da drone; avanti/indietro con finecorsa Hall |
 | 2026-10-17 | Indicatore del tempo: il pendolo si ferma e punta su una scala Maelzel incisa al laser ([dettagli](#indicatore-del-tempo-il-pendolo-come-lancetta)) | Estetica pulita, zero componenti in più | Display 3 cifre, strumento ad ago, Nixie, arco di LED |
-| 2026-10-17 | Alimentazione motore ≥ 8 V (2S/3S oppure 1S + boost) | Limite minimo del DRV8313 | Motore alimentato direttamente da 1S |
-| 2026-10-17 | Batteria 2 × 18350 in serie (2S) + boost a ~12 V per il motore + buck 3,3 V per l'ESP32 | Celle di Fabio; la 2S scende sotto gli 8 V minimi del driver | 1S + boost (correnti più alte), 3S (celle non disponibili) |
+| 2026-10-17 | Alimentazione motore ≥ 8 V (boost da 1S) | Limite minimo del DRV8313 | Motore alimentato direttamente da 1S |
+| 2026-10-17 | ~~2 × 18350 in serie (2S)~~ → **2 × 18350 in parallelo (1S)**, ricarica con il TP4056 USB‑C, MT3608 a 12 V per il motore, Mini‑360 da 12 V a 3,3 V per l'ESP32 | Usa solo componenti già disponibili: il TP4056 è per una cella e il Mini‑360 non funziona sotto 4,75 V, quindi lo si alimenta dai 12 V del boost | 2S con caricatore e BMS 2S da comprare |
 | 2026-10-17 | Sensore di posizione AS5600 | Angolo assoluto, necessario per il pendolo FOC e per l'indicatore del tempo | Hall semplice |
+| 2026-10-17 | Motore 1503 (7,4 V, 0,5 Ω) con limite di tensione FOC basso nel firmware | Motore già disponibile, carico leggero (LED da 5 cm) | Motore gimbal 2204: da valutare se il 1503 scalda o scatta troppo |
 
 ---
 
