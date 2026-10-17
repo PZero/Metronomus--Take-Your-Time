@@ -10,15 +10,17 @@ Le etichette uguali indicano piedini collegati tra loro. Gli stessi nomi di rete
 
 | Rete | Collega | Note |
 |---|---|---|
-| **VBAT** | TP4056 B+ ↔ + delle due 18350 | Celle in parallelo (1S), 3,0–4,2 V |
-| **VSW** | TP4056 OUT+ → SW1 → MT3608 VIN+, R1, modulo vibrazione VCC | Batteria dopo l'interruttore |
+| **VBAT** | TP4056 B+/OUT+ ↔ + delle due 18350 → source Q2, R8, LDO IN | Sempre presente, 3,0–4,2 V |
+| **VSW** | drain Q2 → MT3608 VIN+, R1, modulo vibrazione VCC | Batteria dopo l'interruttore elettronico: spenta in letargo |
+| PWR_EN | ESP32 GPIO10 → 100 Ω → gate Q3 (100 kΩ a GND) | Q3 tira giù il gate di Q2 (R8 100 kΩ verso VBAT) |
 | **V12** | MT3608 VOUT+ → SimpleFOC +, Mini‑360 IN+, R6, R7 | 12,0 V |
-| **3V3** | Mini‑360 OUT+ → ESP32 3V3, AS5600 VCC | 3,30 V |
+| **3V3** | LDO OUT → ESP32 3V3 | Sempre acceso (anche in letargo) |
+| **3V3_SW** | Mini‑360 OUT+ → AS5600 VCC | Spento in letargo |
+| DRV_3V3 | SimpleFOC 3V3 → SimpleFOC EN | Driver abilitato quando è alimentato |
 | **GND** | tutte le masse, AS5600 DIR, encoder C e SW | Comune |
 | PWM_A / PWM_B / PWM_C | ESP32 GPIO5 / 6 / 7 → SimpleFOC IN1 / IN2 / IN3 | |
-| DRV_EN | ESP32 GPIO10 → SimpleFOC EN | |
 | SDA / SCL | ESP32 GPIO20 / 21 ↔ AS5600 SDA / SCL | I2C 400 kHz |
-| ENC_A / ENC_B / ENC_SW | EC11 A / B / SW → R 10 kΩ → ESP32 GPIO3 / 4 / 9 | 10 nF a GND su ogni ingresso |
+| ENC_A / ENC_B / ENC_SW | EC11 A / B / SW → R 10 kΩ → ESP32 GPIO3 / 4 / 2 | 10 nF a GND su ogni ingresso. GPIO2 risveglia dal deep sleep |
 | LED_PWM | ESP32 GPIO1 → 100 Ω → gate Q1 (100 kΩ a GND) | |
 | LED_K | catodi LED1, LED2 → drain Q1 | Source di Q1 a GND |
 | VIB_IN | ESP32 GPIO8 → modulo vibrazione IN | |
@@ -29,3 +31,9 @@ Le etichette uguali indicano piedini collegati tra loro. Gli stessi nomi di rete
 - Resistenze R6/R7 dei filamenti dopo la misura della Vf.
 - Se il modulo AS5600 ha già le pull‑up su SDA/SCL (altrimenti 4,7 kΩ a 3V3).
 - Se il modulo vibrazione ha già la pull‑down su IN (altrimenti 100 kΩ a GND).
+
+## Letargo (al posto dell'interruttore)
+- Pressione di 3 s sul pulsante dell'encoder: il firmware ferma il pendolo, porta PWR_EN a 0 (Q2 spegne boost, driver, LED, AS5600 e vibrazione), mette SDA/SCL in alta impedenza e manda l'ESP32 in deep sleep con risveglio su GPIO2 basso.
+- Al risveglio il firmware controlla che il pulsante resti premuto per 3 s; se viene lasciato prima, torna a dormire.
+- Restano alimentati solo l'LDO e l'ESP32: consumo atteso di qualche decina di µA (da misurare). Togliere il LED rosso di alimentazione della SuperMini.
+- I GPIO 0–5 sono gli unici che svegliano l'ESP32‑C3 dal deep sleep: per questo il pulsante è su GPIO2.

@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-10-17
+- Letargo con il pulsante dell'encoder al posto dell'interruttore: LDO sempre acceso, MOSFET sulla parte di potenza, pulsante su GPIO2. Schema rev. 0.2.
+- Primo render di concept (render/concept.png, generato da render/concept.py).
 - Primo schema elettrico (hardware/schema.pdf/png/svg, generato da schema.py) e tabella delle reti.
 - Aggiunto il motorino a vibrazione per il tic (GPIO 8) e il secondo filamento LED.
 - Scelto l'ESP32‑C3 SuperMini; prima bozza del pinout in hardware/pinout.md.

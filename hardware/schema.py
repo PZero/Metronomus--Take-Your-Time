@@ -8,10 +8,10 @@ due piedini con la stessa etichetta sono collegati tra loro.
 from pathlib import Path
 
 QUI = Path(__file__).parent
-W, H = 1680, 1188  # A3 orizzontale, 4 px = 1 mm
+W, H = 1680, 1290  # circa A3 orizzontale
 
 ROSSO, BLU, NERO, GRIGIO = "#b3261e", "#1f4e9c", "#222222", "#6b6b6b"
-POTENZA = {"V12", "VSW", "3V3"}
+POTENZA = {"V12", "VSW", "3V3", "3V3_SW", "VBAT"}
 el = []
 
 
@@ -99,6 +99,16 @@ def nmos(x, y):
     poli([(x - 10, y + 42), (x - 3, y + 38), (x - 3, y + 46), (x - 10, y + 42)], fill=NERO)
 
 
+def pmos(x, y):
+    """MOSFET P orizzontale: source in (x, y), drain in (x + 60, y), gate in (x + 30, y + 30)."""
+    poli([(x, y), (x + 18, y), (x + 18, y + 12)], ROSSO)
+    poli([(x + 60, y), (x + 42, y), (x + 42, y + 12)], ROSSO)
+    linea(x + 12, y + 12, x + 48, y + 12, NERO, 3)
+    linea(x + 16, y + 18, x + 44, y + 18)
+    linea(x + 30, y + 18, x + 30, y + 30)
+    poli([(x + 18, y + 4), (x + 14, y + 10), (x + 22, y + 10), (x + 18, y + 4)], fill=NERO)
+
+
 def etichetta_rete(x, y, nome, lato):
     if nome == "GND":
         massa(x, y)
@@ -139,11 +149,11 @@ def sezione(x, y, w, h, titolo, c):
 
 # ------------------------------------------------------------------ cartiglio
 testo(40, 48, "METRONOMUS · schema elettrico", NERO, 26, "start", "bold")
-testo(40, 74, "rev. 0.1 · 17/10/2026 · bozza da verificare su breadboard · "
+testo(40, 74, "rev. 0.2 · 17/10/2026 · bozza da verificare su breadboard · "
       "le etichette uguali indicano piedini collegati tra loro", GRIGIO, 14)
 
 # ------------------------------------------------------------------ ALIMENTAZIONE
-sezione(30, 95, 1620, 380, "ALIMENTAZIONE", ROSSO)
+sezione(30, 95, 1620, 485, "ALIMENTAZIONE", ROSSO)
 
 tp = modulo(110, 140, 220, 240, "TP4056\nUSB-C\n+ protezione", sx=[("USB-C", "")],
             dx=[("B+", ""), ("B−", ""), ("OUT+", ""), ("OUT−", "")], passo=55, stub=40)
@@ -157,16 +167,42 @@ for cx in (bx + 60, bx + 120):
     punto(cx, yn)
     batteria(cx, yp, yn - yp)
 testo(bx + 145, yp + 20, "2 × 18350\nin parallelo (1S)", GRIGIO, 12)
-# OUT+ → interruttore → VSW
+# OUT+ = VBAT (sempre presente) → interruttore elettronico Q2/Q3 → VSW
 ox, oy = tp["OUT+"]
-linea(ox, oy, ox + 140, oy, ROSSO)
-interruttore(ox + 140, oy, 80)
-testo(ox + 180, oy + 28, "SW1 generale", NERO, 12, "middle")
+linea(ox, oy, 440, oy, ROSSO)
+punto(385, oy, ROSSO)
+testo(385, oy - 10, "VBAT", ROSSO, 14, "middle", "bold")
+punto(410, oy, ROSSO)
+pmos(440, oy)
+testo(470, oy - 14, "Q2 AO3401 (P)", NERO, 12, "middle")
+# R8 tra source e gate di Q2
+linea(410, oy, 410, oy + 50)
+resistenza(410, oy + 50, 50, verticale=False)
+testo(435, oy + 75, "R8 100 kΩ", NERO, 12, "middle")
+linea(460, oy + 50, 470, oy + 50)
+linea(470, oy + 30, 470, oy + 50)
+punto(470, oy + 50)
+poli([(470, oy + 50), (530, oy + 50), (530, oy + 70)])
+nmos(530, oy + 70)
+testo(542, oy + 110, "Q3 AO3400", NERO, 12)
+massa(530, oy + 130)
+resistenza(440, oy + 100, 60, verticale=False)
+testo(470, oy + 125, "100 Ω", NERO, 12, "middle")
+punto(440, oy + 100)
+resistenza(440, oy + 100, 45)
+massa(440, oy + 145)
+testo(432, oy + 128, "100 kΩ", NERO, 12, "end")
+linea(440, oy + 100, 420, oy + 100, BLU)
+testo(416, oy + 105, "PWR_EN", BLU, 13, "end", "bold")
 vsw = (ox + 300, oy)
-linea(ox + 220, oy, vsw[0], oy, ROSSO)
+linea(500, oy, vsw[0], oy, ROSSO)
 punto(*vsw, ROSSO)
 testo(vsw[0] + 8, vsw[1] - 10, "VSW", ROSSO, 14, "start", "bold")
 massa(*tp["OUT−"])
+# LDO sempre acceso per l'ESP32
+poli([(385, oy), (385, 520), (860, 520)], ROSSO)
+ldo = modulo(900, 490, 170, 80, "LDO 3,3 V\nbasso consumo", sx=[("IN", ""), ("GND", "GND")],
+             dx=[("OUT", "3V3")], passo=40, stub=40)
 
 # partitore batteria da VSW
 x_, y_ = vsw
@@ -183,8 +219,7 @@ linea(x_, adc[1], x_ + 90, adc[1])
 condensatore(x_ + 90, adc[1], 55)
 testo(x_ + 108, adc[1] + 32, "C1 100 nF", NERO, 12)
 massa(x_ + 90, adc[1] + 55)
-linea(x_, adc[1], x_ - 60, adc[1], BLU)
-testo(x_ - 66, adc[1] + 5, "VBAT_ADC", BLU, 13, "end", "bold")
+testo(x_ + 45, adc[1] - 8, "VBAT_ADC", BLU, 13, "middle", "bold")
 
 # MT3608
 mt = modulo(800, 230, 170, 110, "MT3608\nboost → 12 V", sx=[("VIN+", ""), ("VIN−", "GND")],
@@ -201,27 +236,29 @@ testo(v12[0], 155, "V12 → driver, filamenti LED", ROSSO, 13, "middle", "bold")
 
 # Mini-360
 mn = modulo(1180, 230, 170, 110, "Mini-360\nstep-down → 3,3 V", sx=[("IN+", ""), ("IN−", "GND")],
-            dx=[("OUT+", "3V3"), ("OUT−", "GND")], passo=50, stub=50)
+            dx=[("OUT+", "3V3_SW"), ("OUT−", "GND")], passo=50, stub=50)
 linea(*v12, *mn["IN+"], ROSSO)
 
-testo(880, 405, "Tarare MT3608 a 12,0 V e Mini-360 a 3,30 V PRIMA di collegare i carichi.\n"
+testo(1190, 500, "Tarare MT3608 a 12,0 V e Mini-360 a 3,30 V PRIMA di collegare i carichi.\n"
       "Mettere le celle in parallelo solo quando hanno la stessa tensione.\n"
-      "Il pin 3V3 del SimpleFOC Mini (10 mA) non va usato per alimentare nulla.", ROSSO, 13)
+      "In letargo PWR_EN = 0: Q2 spegne boost, driver, LED, AS5600 e vibrazione.\n"
+      "Restano accesi solo LDO + ESP32 in deep sleep (decine di µA).", ROSSO, 13)
 
 # ------------------------------------------------------------------ CONTROLLO
+INIZIO_CONTROLLO = len(el)
 sezione(30, 495, 1620, 670, "CONTROLLO E ATTUATORI", BLU)
 
 esp = modulo(740, 560, 230, 360, "ESP32-C3\nSuperMini",
              sx=[("5V", "n.c."), ("GND", "GND"), ("3V3", "3V3"), ("GPIO4", "ENC_B"), ("GPIO3", "ENC_A"),
-                 ("GPIO2", "n.c."), ("GPIO1", "LED_PWM"), ("GPIO0", "VBAT_ADC")],
+                 ("GPIO2", "ENC_SW"), ("GPIO1", "LED_PWM"), ("GPIO0", "VBAT_ADC")],
              dx=[("GPIO5", "PWM_A"), ("GPIO6", "PWM_B"), ("GPIO7", "PWM_C"), ("GPIO8", "VIB_IN"),
-                 ("GPIO9", "ENC_SW"), ("GPIO10", "DRV_EN"), ("GPIO20", "SDA"), ("GPIO21", "SCL")],
+                 ("GPIO9", "n.c."), ("GPIO10", "PWR_EN"), ("GPIO20", "SDA"), ("GPIO21", "SCL")],
              passo=42, stub=60)
-testo(855, 945, "GPIO9 = tasto BOOT · GPIO8 = LED di bordo\nGPIO2 libero (riserva: nFT del driver)", GRIGIO, 12, "middle")
+testo(855, 945, "GPIO2 = pulsante, risveglia dal letargo · GPIO9 = tasto BOOT\nTogliere il LED rosso di alimentazione della SuperMini", GRIGIO, 12, "middle")
 
 drv = modulo(1200, 560, 200, 380, "SimpleFOC\nMini v1.0\n(DRV8313)",
-             sx=[("IN1", "PWM_A"), ("IN2", "PWM_B"), ("IN3", "PWM_C"), ("EN", "DRV_EN"), ("GND", "GND"),
-                 ("nFT", "n.c."), ("nSP", "n.c."), ("nRT", "n.c.")],
+             sx=[("IN1", "PWM_A"), ("IN2", "PWM_B"), ("IN3", "PWM_C"), ("EN", "DRV_3V3"), ("GND", "GND"),
+                 ("nFT", "n.c."), ("nSP", "n.c."), ("nRT", "n.c."), ("3V3", "DRV_3V3")],
              dx=[("+", "V12"), ("−", "GND"), ("M1", ""), ("M2", ""), ("M3", "")], passo=42, stub=40)
 mx, my = 1540, drv["M2"][1]
 el.append(f'<circle cx="{mx}" cy="{my}" r="42" fill="#fbf7f0" stroke="{NERO}" stroke-width="2.2"/>')
@@ -233,8 +270,8 @@ for p, d in (("M1", -28), ("M2", 0), ("M3", 28)):
     poli([(x0, y0), (x0 + 30, y0), (x0 + 30, my + d), (xe, my + d)])
 testo(mx, my + 62, "Motore 1503\n0,5 Ω · voltage_limit ≈ 0,5–1 V", GRIGIO, 12, "middle")
 
-asx = modulo(1485, 880, 135, 260, "AS5600",
-             sx=[("VCC", "3V3"), ("GND", "GND"), ("DIR", "GND"), ("SDA", "SDA"), ("SCL", "SCL"),
+asx = modulo(1515, 880, 120, 260, "AS5600",
+             sx=[("VCC", "3V3_SW"), ("GND", "GND"), ("DIR", "GND"), ("SDA", "SDA"), ("SCL", "SCL"),
                  ("GPO", "n.c."), ("OUT", "n.c.")], passo=34, stub=40)
 
 vib = modulo(1150, 1000, 170, 120, "Modulo\nvibrazione", sx=[("VCC", "VSW"), ("IN", "VIB_IN"), ("GND", "GND")],
@@ -284,6 +321,7 @@ for i, (pin_, rete, rn) in enumerate((("A", "ENC_A", "R3"), ("B", "ENC_B", "R4")
     massa(490, y + 45)
 testo(360, 920, "C (comune) e secondo piedino del pulsante a GND.\nPull-up interne dell'ESP32 attive.", GRIGIO, 12)
 
+el[INIZIO_CONTROLLO:] = ['<g transform="translate(0,100)">'] + el[INIZIO_CONTROLLO:] + ["</g>"]
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
        f'<rect width="{W}" height="{H}" fill="white"/>' + "\n".join(el) + "</svg>")
 (QUI / "schema.svg").write_text(svg, encoding="utf-8")

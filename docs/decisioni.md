@@ -16,6 +16,8 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-17 | Microcontrollore ESP32‑C3 SuperMini, pinout in [pinout.md](../hardware/pinout.md) | Piccolo, piedini tutti sul bordo (facile in rame), GPIO sufficienti, già usato da Fabio | ESP32 D1 Mini WROOM (40 pin su doppia fila) |
 | 2026-10-17 | Tic con motorino a vibrazione fissato sotto la base (impulsi ≥ 60 ms), su GPIO 8 | Suono meccanico del battito senza altoparlante, componente già disponibile | Piezo, altoparlante I2S |
 | 2026-10-17 | Due filamenti LED in parallelo sullo stesso MOSFET, ognuno con la sua resistenza | Più luce senza usare altri pin | Un solo filamento; due canali separati |
+| 2026-10-17 | **Niente interruttore**: 3 s sul pulsante dell'encoder mettono in letargo (deep sleep + rail di potenza spento da MOSFET), altri 3 s risvegliano. Pulsante su GPIO2, PWR_EN su GPIO10, LDO sempre acceso per l'ESP32, EN del driver al suo 3V3 | Idea di Fabio; consumo in letargo di decine di µA invece di decine di mA | Interruttore a levetta; relè Relpol RSM850B (monostabile, bobina 6 V) |
+| 2026-10-17 | Il metronomo starà su una base di legno dentro una piccola teca di vetro: encoder sul bordo della base (pomello fuori dal vetro), USB‑C sul retro, tic con il motorino a vibrazione sotto la base | Il clic di un relè sotto vetro si sentirebbe appena; la vibrazione passa dalla base | Relè a vista per il tic |
 
 ---
 

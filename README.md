@@ -51,13 +51,15 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 | LED a tubo 5 cm | Filamento LED rigido (~3 V) | ✅ disponibile |
 | Sensore magnetico | AS5600, encoder magnetico assoluto I2C | ✅ disponibile |
 | Boost MT3608, step‑down Mini‑360 | — | ✅ disponibili |
-| Portapile, interruttore, MOSFET LED, partitore, debounce | proposti | 🛒 da comprare |
+| Portapile, LDO 3,3 V, MOSFET (AO3401, AO3400), partitore, debounce | proposti | 🛒 da comprare |
 
 ## Schema a blocchi
 
 ```
- USB‑C ──► [TP4056] ──► [2×18350 in parallelo] ──► [Interruttore] ──► [MT3608 12 V] ─┬─► [SimpleFOC Mini] ──► Motore
-                                                                                    └─► [Mini‑360 3,3 V] ──► ESP32
+ USB‑C ──► [TP4056] ──► [2×18350 in parallelo] ─┬─► [LDO 3,3 V] ──► ESP32 (sempre acceso)
+                                               └─► [MOSFET] ──► [MT3608 12 V] ─┬─► [SimpleFOC Mini] ──► Motore
+                                                     ▲                         ├─► Filamenti LED
+                                               PWR_EN (ESP32)                  └─► [Mini‑360 3,3 V] ──► AS5600
                                                                                                │
  [Rotary encoder] ──► ESP32 ◄── [Sensore magnetico] ◄── magnete sull'albero ◄───────────────────┤
                        │                                                                       │
@@ -74,7 +76,9 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 **Sensore:** AS5600 (I2C, 12 bit) dietro al motore, con il magnete diametrale incollato sull'estremità dell'albero che sporge dalla base del 1503; pin DIR a GND. Il LED si monta sulla campana, davanti.
 
-**Encoder:** EC11 nudo con pulsante, pull‑up interne dell'ESP32 e debounce RC.
+**Encoder:** EC11 nudo con pulsante, pull‑up interne dell'ESP32 e debounce RC. È anche l'unico comando: **3 secondi di pressione mettono il metronomo in letargo**, altri 3 lo risvegliano. Niente interruttore: in letargo un MOSFET spegne tutta la parte di potenza e resta acceso solo l'ESP32 in deep sleep (decine di µA).
+
+**Teca:** il metronomo sta su una base di legno dentro una piccola teca di vetro; il pomello dell'encoder sporge dal bordo della base, la USB‑C è sul retro.
 
 **Microcontrollore:** ESP32‑C3 SuperMini. Usa 12 dei suoi 13 GPIO: tre PWM e l'abilitazione per il driver, I2C per l'AS5600, tre ingressi per l'encoder, un'uscita per i LED, una per il motorino a vibrazione e un ingresso analogico per la batteria.
 

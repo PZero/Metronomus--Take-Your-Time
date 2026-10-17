@@ -24,7 +24,9 @@ _Aggiornata il 17/10/2026 con le foto in [`foto/`](../foto)._
 | Componente | Proposta | Perché |
 |---|---|---|
 | Portapile 2 × 18350 | Oppure celle con linguette a saldare | Non saldare direttamente sulle celle |
-| Interruttore generale | Levetta in metallo | Estetica in tema con il rame |
+| LDO 3,3 V a basso consumo | RT9080‑33 (600 mA, Iq 2 µA) o MCP1700‑3302 (250 mA, solo con WiFi spento) | ESP32 sempre alimentato per il letargo |
+| MOSFET P per il letargo | AO3401 + 100 kΩ gate‑source | Spegne tutta la parte di potenza |
+| MOSFET N di comando | AO3400 + 100 Ω + 100 kΩ (lo stesso dei LED) | Comanda il gate dell'AO3401 |
 | MOSFET per il LED | AO3400 / IRLZ44N logic‑level + 100 Ω gate + 100 kΩ pull‑down | PWM del LED dal pin ESP32 |
 | Partitore batteria | 2 × 100 kΩ + 100 nF | Misura del livello di carica |
 | Debounce encoder | 3 × 10 kΩ + 3 × 10 nF | Letture pulite di A, B e pulsante |
