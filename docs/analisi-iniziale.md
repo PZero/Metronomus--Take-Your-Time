@@ -4,6 +4,8 @@ _17 ottobre 2026 · prima stesura, prima di aver visto le foto dei componenti._
 
 ## 1. Il punto critico: il driver del motore
 
+> **Aggiornamento 17/10:** il driver è un **SimpleFOC Mini v1.0** (DRV8313). Problema risolto: è un driver FOC, adatto al controllo in posizione. Vincolo nuovo: alimentazione motore **8–30 V**.
+
 Il pendolo deve **oscillare**: rallentare, fermarsi all'estremo, invertire, accelerare. È il contrario di quello per cui sono fatti molti brushless.
 
 | Se il driver è… | Funziona per il pendolo? |
@@ -28,7 +30,7 @@ Batteria + caricatore USB (probabilmente un TP4056) non bastano da soli:
 
 - **Interruttore** generale (oppure spegnimento software con deep sleep).
 - **Regolatore 3,3 V** per l'ESP32 se la batteria è una Li‑ion 1S (3,0–4,2 V). Un LDO a bassa caduta (MCP1700, HT7333, AP2112) o un buck‑boost.
-- **Tensione del motore**: i motori gimbal lavorano bene a 7–12 V. Con una 1S servono un **boost** (MT3608 o simile) oppure una batteria 2S con caricatore 2S USB‑C.
+- **Tensione del motore**: il SimpleFOC Mini (DRV8313) richiede **almeno 8 V**, e i motori gimbal lavorano bene a 10–12 V. Con una 1S servono un **boost** (MT3608 o simile) oppure una batteria 2S con caricatore 2S USB‑C.
 - **Protezione batteria** (sovrascarica/cortocircuito): i moduli TP4056 "con protezione" hanno il DW01, quelli base no.
 - **Misura della batteria**: partitore resistivo verso un ingresso ADC dell'ESP32 per avvisare quando è scarica.
 - **Load sharing**: con il TP4056 il metronomo non dovrebbe funzionare mentre ricarica senza un piccolo circuito di condivisione (MOSFET P + diodo Schottky).
