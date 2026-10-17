@@ -24,8 +24,11 @@ _Da completare con i modelli esatti dopo le foto._
 | Boost per il motore | **MT3608 (disponibile)**, regolato a 12 V **prima** di collegare il driver | Con 2S la tensione scende sotto 8 V già a metà carica: il DRV8313 del SimpleFOC Mini **non funziona sotto 8 V** |
 | Caricatore 2S USB‑C | Modulo con chip IP2326 (5 V → 8,4 V) | Il TP4056 carica solo celle singole |
 | BMS 2S | Scheda protezione 2S (es. HX‑2S) | Sovrascarica, cortocircuito; se possibile con bilanciamento |
-| MOSFET per il LED | AO3400 / IRLZ44N logic‑level | PWM del LED dal pin ESP32 |
+| MOSFET per il LED | AO3400 / IRLZ44N logic‑level + 100 Ω gate + 100 kΩ pull‑down | PWM del LED dal pin ESP32 |
 | Partitore batteria | 2 × 100 kΩ + 100 nF | Misura carica |
+| Portapile 2 × 18350 | O celle con linguette a saldare | Non saldare direttamente sulle celle |
+| Condensatore elettrolitico | 220–470 µF 25 V | Sull'alimentazione del driver, contro picchi e reset |
+| Magnete diametrale | 6 × 2,5 mm | Per l'AS5600 (spesso incluso nel modulo) |
 | Filo flessibile per il LED | Silicone 30 AWG | Collegare il LED che oscilla |
 | Piezo o altoparlante + MAX98357A | — | Suono del tic (opzionale) |
 | Filo di rame | Ø 1,0 mm, rame rosso o stagnato | Il circuito |
