@@ -1,8 +1,9 @@
 """Render di concept di Metronomus (Blender / bpy).
 
-Uso:  python render/concept.py            (con il modulo bpy: pip install bpy)
-  o:  blender -b -P render/concept.py
-Produce render/concept.png. Misure in mm, convertite in metri.
+Uso:  python render/concept.py [teca] [campioni]   (con il modulo bpy: pip install bpy)
+  o:  blender -b -P render/concept.py -- [teca] [campioni]
+Produce render/concept.png, oppure render/concept-teca.png con la teca di vetro,
+l'encoder sul bordo anteriore della base e la USB‑C sul retro. Misure in mm, convertite in metri.
 È un'immagine indicativa: la disposizione reale verrà da fili/geometria.yaml.
 """
 import math
@@ -15,6 +16,7 @@ from mathutils import Vector
 QUI = Path(__file__).resolve().parent
 MM = 0.001
 CAMPIONI = int(sys.argv[-1]) if sys.argv[-1].isdigit() else 96
+TECA = "teca" in sys.argv
 ANGOLO_PENDOLO = math.radians(-14)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -36,28 +38,54 @@ def materiale(nome, colore, metallo=0.0, ruvidita=0.5, emissione=None, forza=0.0
 
 
 def legno():
+    """Noce: venature lunghe lungo x (rumore stirato) più fibre fini."""
     m = bpy.data.materials.new("legno")
     m.use_nodes = True
     n, l = m.node_tree.nodes, m.node_tree.links
     p = n["Principled BSDF"]
-    p.inputs["Roughness"].default_value = 0.55
+    p.inputs["Roughness"].default_value = 0.5
     coord = n.new("ShaderNodeTexCoord")
     mapping = n.new("ShaderNodeMapping")
-    mapping.inputs["Scale"].default_value = (1, 1, 1)
-    onde = n.new("ShaderNodeTexWave")
-    onde.wave_type = "BANDS"
-    onde.bands_direction = "X"
-    onde.inputs["Scale"].default_value = 7.0
-    onde.inputs["Distortion"].default_value = 4.0
-    onde.inputs["Detail"].default_value = 4.0
-    onde.inputs["Detail Scale"].default_value = 2.0
+    mapping.inputs["Scale"].default_value = (0.6, 14, 14)
+    venature = n.new("ShaderNodeTexNoise")
+    venature.inputs["Scale"].default_value = 3.0
+    venature.inputs["Detail"].default_value = 6.0
+    venature.inputs["Roughness"].default_value = 0.55
+    venature.inputs["Distortion"].default_value = 0.6
+    fibre = n.new("ShaderNodeTexWave")
+    fibre.wave_type = "BANDS"
+    fibre.bands_direction = "Y"
+    fibre.wave_profile = "SAW"
+    fibre.inputs["Scale"].default_value = 6.0
+    fibre.inputs["Distortion"].default_value = 6.0
+    fibre.inputs["Detail"].default_value = 3.0
     rampa = n.new("ShaderNodeValToRGB")
-    rampa.color_ramp.elements[0].color = (0.10, 0.05, 0.025, 1)
-    rampa.color_ramp.elements[1].color = (0.24, 0.13, 0.065, 1)
+    rampa.color_ramp.elements[0].position = 0.3
+    rampa.color_ramp.elements[0].color = (0.085, 0.042, 0.02, 1)
+    rampa.color_ramp.elements[1].position = 0.7
+    rampa.color_ramp.elements[1].color = (0.20, 0.105, 0.05, 1)
+    mix = n.new("ShaderNodeMix")
+    mix.data_type = "RGBA"
+    mix.blend_type = "MULTIPLY"
+    mix.inputs["Factor"].default_value = 0.25
     l.new(coord.outputs["Object"], mapping.inputs["Vector"])
-    l.new(mapping.outputs["Vector"], onde.inputs["Vector"])
-    l.new(onde.outputs["Fac"], rampa.inputs["Fac"])
-    l.new(rampa.outputs["Color"], p.inputs["Base Color"])
+    l.new(mapping.outputs["Vector"], venature.inputs["Vector"])
+    l.new(mapping.outputs["Vector"], fibre.inputs["Vector"])
+    l.new(venature.outputs["Fac"], rampa.inputs["Fac"])
+    l.new(rampa.outputs["Color"], mix.inputs["A"])
+    l.new(fibre.outputs["Color"], mix.inputs["B"])
+    l.new(mix.outputs["Result"], p.inputs["Base Color"])
+    return m
+
+
+def vetro():
+    m = bpy.data.materials.new("vetro")
+    m.use_nodes = True
+    p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs["Base Color"].default_value = (0.95, 1.0, 0.98, 1)
+    p.inputs["Roughness"].default_value = 0.0
+    p.inputs["IOR"].default_value = 1.5
+    p.inputs["Transmission Weight"].default_value = 1.0
     return m
 
 
@@ -76,6 +104,7 @@ FILAMENTO = materiale("filamento", (1.0, 0.75, 0.25), 0.0, 0.4, (1.0, 0.5, 0.1),
 INCISIONE = materiale("incisione", (0.85, 0.75, 0.6), 0.0, 0.7)
 PAVIMENTO = materiale("pavimento", (0.035, 0.035, 0.04), 0.0, 0.6)
 OTTONE = materiale("pomello", (0.85, 0.5, 0.3), 1.0, 0.35)
+VETRO = vetro()
 
 
 # ------------------------------------------------------------------ primitive (mm)
@@ -136,7 +165,10 @@ def scheda(c, d, mat, chip=(), nome="scheda"):
 # ------------------------------------------------------------------ scena
 # pavimento e base in legno
 scatola((0, 0, -21), (900, 900, 2), PAVIMENTO, "pavimento")
-base = scatola((0, 5, -10), (230, 130, 20), LEGNO, "base")
+if TECA:
+    base = scatola((0, 5, -11), (270, 170, 22), LEGNO, "base")
+else:
+    base = scatola((0, 5, -10), (230, 130, 20), LEGNO, "base")
 bpy.ops.object.modifier_add(type="BEVEL")
 base.modifiers["Bevel"].width = 2 * MM
 base.modifiers["Bevel"].segments = 3
@@ -239,14 +271,30 @@ for nome, (c, d, mat, chip) in moduli.items():
             a = (c[0] + sx * (d[0] / 2 - 1.5), c[1] + sy * (d[1] / 2 - 1.5), c[2] - 0.8)
             filo([a, (a[0], a[1], 0)])
 
-# encoder EC11 con pomello in rame, a destra davanti
-scatola((92, -40, 4), (12, 13, 8), ACCIAIO, "encoder")
-cilindro((92, -40, 8), (92, -40, 15), 3.5, ACCIAIO)
-cilindro((92, -40, 15), (92, -40, 30), 3.0, ACCIAIO)
-pomello = cilindro((92, -40, 18), (92, -40, 31), 8, OTTONE, 48, "pomello")
-for k in range(24):
-    a = 2 * math.pi * k / 24
-    cilindro((92 + 8 * math.cos(a), -40 + 8 * math.sin(a), 19), (92 + 8 * math.cos(a), -40 + 8 * math.sin(a), 30), 0.6, OTTONE, 6)
+# encoder EC11 con pomello in ottone
+if TECA:
+    # sul bordo anteriore della base: corpo incassato nel legno, asse orizzontale,
+    # il pomello resta fuori dalla teca
+    FRONTE = 5 - 85
+    cilindro((92, FRONTE, -11), (92, FRONTE - 6, -11), 4.5, ACCIAIO, 32)
+    cilindro((92, FRONTE - 6, -11), (92, FRONTE - 9, -11), 3.0, ACCIAIO)
+    pomello = cilindro((92, FRONTE - 3, -11), (92, FRONTE - 16, -11), 8, OTTONE, 48, "pomello")
+    for k in range(24):
+        a = 2 * math.pi * k / 24
+        cilindro((92 + 8 * math.cos(a), FRONTE - 4, -11 + 8 * math.sin(a)),
+                 (92 + 8 * math.cos(a), FRONTE - 15, -11 + 8 * math.sin(a)), 0.6, OTTONE, 6)
+    # USB-C sul retro: feritoia nel bordo posteriore
+    scatola((-92, 5 + 85, -11), (9.5, 1.5, 3.6), CHIP, "usb_c")
+    ENCODER_A, ENCODER_B = (88, -50, 0), (96, -50, 0)
+else:
+    scatola((92, -40, 4), (12, 13, 8), ACCIAIO, "encoder")
+    cilindro((92, -40, 8), (92, -40, 15), 3.5, ACCIAIO)
+    cilindro((92, -40, 15), (92, -40, 30), 3.0, ACCIAIO)
+    pomello = cilindro((92, -40, 18), (92, -40, 31), 8, OTTONE, 48, "pomello")
+    for k in range(24):
+        a = 2 * math.pi * k / 24
+        cilindro((92 + 8 * math.cos(a), -40 + 8 * math.sin(a), 19), (92 + 8 * math.cos(a), -40 + 8 * math.sin(a), 30), 0.6, OTTONE, 6)
+    ENCODER_A, ENCODER_B = (88, -40, 8), (96, -40, 8)
 
 # batterie 18350 in parallelo (sdraiate) con fascette di rame
 for y in (-12, 34):
@@ -283,13 +331,31 @@ reti = [
     (pin("mt3608", 16, 6.5), pin("driver", 11, 8.5), 32),
     (pin("tp4056", 6.5, -11), pin("mt3608", -16, -6.5), 8),
     # encoder
-    ((88, -40, 8), pin("esp32", -2, -10), 12),
-    ((96, -40, 8), pin("esp32", 2, -10), 15),
+    (ENCODER_A, pin("esp32", -2, -10), 12),
+    (ENCODER_B, pin("esp32", 2, -10), 15),
     # LED: dal driver di potenza al mozzo
     (pin("driver", 11, -8.5), (6, -10, 70), 46),
 ]
 for a, b, z in reti:
     filo(manhattan(a, b, z))
+
+# ------------------------------------------------------------------ teca di vetro
+if TECA:
+    LX, LY, H, S = 240, 140, 225, 3  # interno della teca e spessore del vetro
+    CY = 5
+    lastre = [
+        ((0, CY - LY / 2 - S / 2, H / 2), (LX + 2 * S, S, H)),
+        ((0, CY + LY / 2 + S / 2, H / 2), (LX + 2 * S, S, H)),
+        ((-LX / 2 - S / 2, CY, H / 2), (S, LY, H)),
+        ((LX / 2 + S / 2, CY, H / 2), (S, LY, H)),
+        ((0, CY, H + S / 2), (LX + 2 * S, LY + 2 * S, S)),
+    ]
+    for c, d in lastre:
+        o = scatola(c, d, VETRO, "vetro")
+        o.visible_shadow = False
+    # scanalatura nella base dove appoggia il vetro
+    for c, d in lastre[:4]:
+        scatola((c[0], c[1], 0.15), (d[0] + 1, d[1] + 1, 0.4), CHIP, "scanalatura")
 
 # ------------------------------------------------------------------ luci e camera
 mondo = bpy.data.worlds.new("mondo")
@@ -306,24 +372,29 @@ def luce_area(nome, loc, mira, forza, dim, colore=(1, 1, 1)):
     l.data.size = dim * MM
     l.data.color = colore
     l.rotation_euler = (Vector(mira) * MM - l.location).to_track_quat("-Z", "Y").to_euler()
+    l.visible_camera = False
+    l.visible_glossy = not TECA  # niente rettangoli bianchi riflessi nel vetro
+    l.visible_transmission = not TECA
 
 
 bpy.ops.object.light_add(type="POINT", location=(p2 + Vector((0, -6, 0))) * MM)
 bpy.context.object.data.energy = 0.6
 bpy.context.object.data.color = (1.0, 0.6, 0.2)
 bpy.context.object.data.shadow_soft_size = 0.01
+bpy.context.object.visible_camera = False
+bpy.context.object.visible_transmission = False
 luce_area("chiave", (-260, -260, 380), (0, 0, 60), 9, 260, (1.0, 0.95, 0.9))
 luce_area("riempimento", (320, -200, 160), (0, 0, 60), 2.5, 300, (0.8, 0.88, 1.0))
 luce_area("controluce", (60, 350, 300), (0, 0, 100), 7, 200, (1.0, 0.85, 0.7))
 
-bpy.ops.object.camera_add(location=Vector((-250, -470, 250)) * MM)
+bpy.ops.object.camera_add(location=Vector((-290, -560, 270) if TECA else (-250, -470, 250)) * MM)
 cam = bpy.context.object
 cam.data.lens = 50
 cam.data.dof.use_dof = True
-cam.data.dof.focus_distance = 0.53
+cam.data.dof.focus_distance = 0.63 if TECA else 0.53
 cam.data.dof.aperture_fstop = 5.6
 cam.data.clip_start = 0.01
-mira = Vector((0, 10, 92)) * MM
+mira = Vector((0, 0, 85) if TECA else (0, 10, 92)) * MM
 cam.rotation_euler = (mira - cam.location).to_track_quat("-Z", "Y").to_euler()
 scena.camera = cam
 
@@ -335,7 +406,9 @@ scena.render.resolution_x = 1600
 scena.render.resolution_y = 1200
 scena.view_settings.view_transform = "AgX"
 scena.view_settings.look = "AgX - Medium High Contrast"
-scena.view_settings.exposure = -0.3
-scena.render.filepath = str(QUI / "concept.png")
+scena.view_settings.exposure = -0.9 if TECA else -0.3
+scena.cycles.max_bounces = 16
+scena.cycles.transmission_bounces = 16
+scena.render.filepath = str(QUI / ("concept-teca.png" if TECA else "concept.png"))
 bpy.ops.render.render(write_still=True)
 print("Render salvato in", scena.render.filepath)

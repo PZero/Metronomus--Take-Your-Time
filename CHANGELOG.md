@@ -1,6 +1,9 @@
 # Changelog
 
 ## 2026-10-17
+- Tolti dalla lista acquisti portapile e magnete (incluso con l'AS5600); il modulo vibrazione ha già la pull‑down su IN.
+- Render con la teca di vetro (render/concept-teca.png: `python render/concept.py teca`), encoder sul bordo della base e venatura del legno migliorata.
+- Confermato il motorino a vibrazione come tic: niente relè.
 - Letargo con il pulsante dell'encoder al posto dell'interruttore: LDO sempre acceso, MOSFET sulla parte di potenza, pulsante su GPIO2. Schema rev. 0.2.
 - Primo render di concept (render/concept.png, generato da render/concept.py).
 - Primo schema elettrico (hardware/schema.pdf/png/svg, generato da schema.py) e tabella delle reti.

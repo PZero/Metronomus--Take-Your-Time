@@ -30,7 +30,7 @@ Le etichette uguali indicano piedini collegati tra loro. Gli stessi nomi di rete
 ## Da verificare sul banco
 - Resistenze R6/R7 dei filamenti dopo la misura della Vf.
 - Se il modulo AS5600 ha già le pull‑up su SDA/SCL (altrimenti 4,7 kΩ a 3V3).
-- Se il modulo vibrazione ha già la pull‑down su IN (altrimenti 100 kΩ a GND).
+- Modulo vibrazione: dalla foto ha già 5,1 kΩ tra base e GND, quindi niente pull‑down esterna (conferma col tester).
 
 ## Letargo (al posto dell'interruttore)
 - Pressione di 3 s sul pulsante dell'encoder: il firmware ferma il pendolo, porta PWR_EN a 0 (Q2 spegne boost, driver, LED, AS5600 e vibrazione), mette SDA/SCL in alta impedenza e manda l'ESP32 in deep sleep con risveglio su GPIO2 basso.

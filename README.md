@@ -26,6 +26,12 @@
 
 Un metronomo che è anche una scultura. Al posto dell'asta con il peso c'è un **tubo LED da 5 cm** fissato all'albero di un **motore brushless**, che oscilla come un pendolo e si accende a ogni battito. Tutta l'elettronica è a vista: i collegamenti non stanno su un circuito stampato ma sono **segmenti dritti di rame da Ø 1 mm** saldati ad angolo retto con precisione millimetrica, che fanno anche da struttura.
 
+Tutto sta su una base di legno, dentro una piccola teca di vetro: il pomello dell'encoder esce dal bordo anteriore della base e la presa USB‑C è sul retro.
+
+![Render di concept con la teca](render/concept-teca.png)
+
+_Render indicativo, generato con `python render/concept.py teca` (Blender come modulo Python)._
+
 ## Come funziona
 
 - **Ruoti l'encoder** → cambia il tempo (BPM): il pendolo si ferma e fa da lancetta su una scala Maelzel incisa al laser sulla base. Quando lasci l'encoder riparte a battere il nuovo tempo. Niente display ([dettagli](docs/decisioni.md#indicatore-del-tempo-il-pendolo-come-lancetta)).
@@ -51,7 +57,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 | LED a tubo 5 cm | Filamento LED rigido (~3 V) | ✅ disponibile |
 | Sensore magnetico | AS5600, encoder magnetico assoluto I2C | ✅ disponibile |
 | Boost MT3608, step‑down Mini‑360 | — | ✅ disponibili |
-| Portapile, LDO 3,3 V, MOSFET (AO3401, AO3400), partitore, debounce | proposti | 🛒 da comprare |
+| LDO 3,3 V, MOSFET (AO3401, AO3400), partitore, debounce | proposti | 🛒 da comprare |
 
 ## Schema a blocchi
 
