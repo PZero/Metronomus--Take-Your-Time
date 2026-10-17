@@ -13,7 +13,7 @@ Scrivi sempre in italiano.
   - `elettronica` → scelta componenti, schema, pinout, alimentazione, firmware.
   - `piano-fili` → geometria del circuito in rame, distinta di taglio, piegature, dime, PDF 1:1.
   - `git-readme` → README, changelog, commit, ordine del repository.
-- Ogni decisione presa va in `docs/decisioni.md` (data, decisione, motivo, alternative scartate).
+- Ogni decisione presa va nell'**unico** file `docs/decisioni.md`: una riga nella tabella (data, decisione, motivo, alternative scartate) e, se serve, una sezione di dettaglio in fondo. Mai un file separato per decisione.
 - Le cose da fare vanno in `docs/roadmap.md`, divise per fase.
 - Le domande aperte per Fabio vanno in `docs/domande-aperte.md`.
 

@@ -28,7 +28,7 @@ Un metronomo che è anche una scultura. Al posto dell'asta con il peso c'è un *
 
 ## Come funziona
 
-- **Ruoti l'encoder** → cambia il tempo (BPM): il pendolo si ferma e fa da lancetta su una scala Maelzel incisa al laser sulla base. Quando lasci l'encoder riparte a battere il nuovo tempo. Niente display ([dettagli](docs/indicatore-tempo.md)).
+- **Ruoti l'encoder** → cambia il tempo (BPM): il pendolo si ferma e fa da lancetta su una scala Maelzel incisa al laser sulla base. Quando lasci l'encoder riparte a battere il nuovo tempo. Niente display ([dettagli](docs/decisioni.md#indicatore-del-tempo-il-pendolo-come-lancetta)).
 - **L'ESP32** calcola la traiettoria del pendolo e comanda il **driver** del motore.
 - **Il sensore magnetico** legge la posizione dell'albero, così il pendolo sa dove si trova e quando invertire.
 - **Il LED** si accende o pulsa sul battito.
@@ -45,18 +45,18 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 | ESP32 | da identificare | ✅ disponibile |
 | Driver brushless | SimpleFOC Mini v1.0 (DRV8313, 8–30 V) | ✅ disponibile |
 | Motore brushless | da identificare | ✅ disponibile |
-| Batteria | da identificare | ✅ disponibile |
+| Batteria | 2 × 18350 in serie (2S, 7,4 V) | ✅ disponibile |
 | Caricatore USB | da identificare | ✅ disponibile |
 | Rotary encoder | da identificare | ✅ disponibile |
 | LED a tubo 5 cm | da identificare | ✅ disponibile |
-| Sensore magnetico | da identificare | ✅ disponibile |
-| Regolatore 3,3 V, interruttore, MOSFET LED, partitore | proposti | ❓ da confermare |
+| Sensore magnetico | AS5600, encoder magnetico assoluto I2C | ✅ disponibile |
+| Boost 12 V, buck 3,3 V, caricatore 2S USB‑C, BMS 2S, interruttore, MOSFET LED, partitore | proposti | ❓ da confermare |
 
 ## Schema a blocchi
 
 ```
- USB ──► [Caricatore] ──► [Batteria] ──► [Interruttore] ─┬─► [Regolatore 3,3 V] ──► ESP32
-                                                         └─► [Boost?] ──► [Driver BLDC] ──► Motore
+ USB‑C ──► [Caricatore 2S] ──► [2×18350 + BMS] ──► [Interruttore] ─┬─► [Buck 3,3 V] ──► ESP32
+                                                                   └─► [Boost 12 V] ──► [SimpleFOC Mini] ──► Motore
                                                                                                │
  [Rotary encoder] ──► ESP32 ◄── [Sensore magnetico] ◄── magnete sull'albero ◄───────────────────┤
                        │                                                                       │
@@ -66,6 +66,10 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 ## Elettronica
 
 **Driver:** SimpleFOC Mini v1.0, basato su DRV8313. Il motore va alimentato a 8–30 V (consigliati 10–12 V), la logica è a 3,3 V e si collega direttamente all'ESP32 con 3 PWM (IN1–IN3) più EN.
+
+**Alimentazione:** due 18350 in serie (2S, 6,0–8,4 V). Poiché il driver non funziona sotto 8 V, un boost porta il motore a circa 12 V; un piccolo buck dà 3,3 V all'ESP32. Ricarica da USB‑C con un caricatore 2S, protezione con un BMS 2S.
+
+**Sensore:** AS5600 (I2C, 12 bit) sotto l'albero, magnete diametrale sull'albero, pin DIR a GND.
 
 _Il resto è in definizione._ Analisi di partenza, punti critici e parti mancanti: [docs/analisi-iniziale.md](docs/analisi-iniziale.md).
 Qui andranno: schema elettrico, pinout ESP32, alimentazione e autonomia.

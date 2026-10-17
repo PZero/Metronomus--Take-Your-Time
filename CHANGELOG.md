@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-10-17
+- Batteria 2 × 18350 (2S) e sensore AS5600 confermati; aggiornata la catena di alimentazione.
+- Tutte le decisioni riunite nell'unico file docs/decisioni.md.
 - Deciso l'indicatore del tempo: il pendolo punta su una scala Maelzel incisa al laser.
 - Identificato il driver: SimpleFOC Mini v1.0 (DRV8313). Aggiunto il vincolo di alimentazione motore ≥ 8 V.
 - Creato il progetto: struttura cartelle, README, ruoli dei subagenti.

@@ -6,4 +6,4 @@ Metronomo artistico: ESP32 + motore brushless che fa oscillare un LED a tubo da 
 - Usa i ruoli definiti in `agenti/` (copiati in `.claude/agents/` per Claude Code): `coordinatore`, `git-readme`, `elettronica`, `piano-fili`.
 - I nomi delle reti elettriche sono condivisi tra `hardware/` e `fili/`: cambiarne uno significa aggiornare entrambi.
 - Dopo ogni modifica significativa: aggiorna README e CHANGELOG, poi commit (ruolo `git-readme`).
-- Decisioni in `docs/decisioni.md`, domande per Fabio in `docs/domande-aperte.md`.
+- **Tutte** le decisioni vanno nell'unico file `docs/decisioni.md` (riga nella tabella + eventuale sezione di dettaglio): mai un file .md per singola decisione. Domande per Fabio in `docs/domande-aperte.md`.
