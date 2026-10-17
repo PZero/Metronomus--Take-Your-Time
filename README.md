@@ -48,7 +48,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 | Batteria | 2 × 18350 in parallelo (1S, 3,7 V) | ✅ disponibile |
 | Caricatore USB | TP4056 USB‑C con protezione | ✅ disponibile |
 | Rotary encoder | EC11 con pulsante | ✅ disponibile |
-| LED a tubo 5 cm | da identificare | ✅ disponibile |
+| LED a tubo 5 cm | Filamento LED rigido (~3 V) | ✅ disponibile |
 | Sensore magnetico | AS5600, encoder magnetico assoluto I2C | ✅ disponibile |
 | Boost MT3608, step‑down Mini‑360 | — | ✅ disponibili |
 | Portapile, interruttore, MOSFET LED, partitore, debounce | proposti | 🛒 da comprare |

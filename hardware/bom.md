@@ -15,7 +15,7 @@ _Aggiornata il 17/10/2026 con le foto in [`foto/`](../foto)._
 | Batterie | **2 × 18350 Li‑ion** | — | Collegate **in parallelo** (1S), solo dopo averle portate alla stessa tensione |
 | Boost | **MT3608** (trimmer multigiro 3296) | [foto](../foto/boost-mt3608.jpg) | Ingresso 2–24 V. Tarato a **12 V prima** di collegare il driver |
 | Step‑down | **MH Mini‑360** (MP2307) | [foto](../foto/stepdown-mini360.jpg) | Ingresso 4,75–23 V: alimentato dai 12 V del boost. Tarato a **3,3 V prima** di collegarlo, uscita al pin 3V3 dell'ESP32 |
-| LED a tubo 5 cm | _da identificare_ | — | Serve per dimensionare resistenza o driver di corrente |
+| LED a tubo 5 cm | **Filamento LED rigido** (fosforo giallo, terminali metallici alle due estremità) — da confermare lunghezza e tensione | [foto](../foto/led-filamento-prova.jpg) | Tipicamente ~3 V, 20–100 mA, polarizzato (il + è di solito l'estremità con il foro o il segno). Un terminale sta sul mozzo, l'altro in punta: serve un filo sottile di ritorno lungo il filamento. Pilotaggio: MOSFET low‑side + resistenza da dimensionare dopo aver misurato la Vf |
 
 ## Da comprare
 
