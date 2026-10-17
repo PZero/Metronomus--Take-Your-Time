@@ -1,6 +1,6 @@
 # Metronomus · istruzioni per Claude
 
-Metronomo artistico: ESP32 + motore brushless che fa oscillare un LED a tubo da 5 cm, sensore magnetico di posizione, rotary encoder per i BPM, batteria con ricarica USB. Circuito esposto in filo di rame Ø 1 mm con sole pieghe a 90°, precisione molto alta.
+Metronomo artistico: ESP32 + motore brushless che fa oscillare un LED a tubo da 5 cm, sensore magnetico di posizione, rotary encoder per i BPM, batteria con ricarica USB. Circuito esposto in filo di rame Ø 1 mm: segmenti dritti tagliati e saldati ad angolo retto, nessuna piega, precisione molto alta.
 
 - Scrivi sempre in italiano (README, documenti, commit).
 - Usa i ruoli definiti in `agenti/` (copiati in `.claude/agents/` per Claude Code): `coordinatore`, `git-readme`, `elettronica`, `piano-fili`.

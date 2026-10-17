@@ -22,13 +22,13 @@
 ## Fase 3 · Design del circuito in rame
 - [ ] Disposizione dei moduli nello spazio (layout 3D)
 - [ ] Geometria dei fili (`fili/geometria.yaml`)
-- [ ] Taratura della deduzione di piega con pieghe di prova
+- [ ] Prove di taglio e giunti saldati (`fili/prove-giunti.md`)
 - [ ] Distinta di taglio e sequenza di montaggio
 - [ ] Dima per laser/stampa 3D
 - [ ] Scala Maelzel da incidere al laser (SVG generato dai dati del firmware)
 
 ## Fase 4 · Produzione
-- [ ] PDF 1:1 di taglio, piegatura e saldatura (`produzione/`)
+- [ ] PDF 1:1 di taglio e saldatura dei segmenti (`produzione/`)
 - [ ] Montaggio e saldatura
 - [ ] Taratura finale e protezione del rame
 - [ ] Foto finali nel README

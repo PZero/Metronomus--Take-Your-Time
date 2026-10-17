@@ -1,6 +1,6 @@
 # Metronomus · Take Your Time
 
-> Un metronomo artistico: un pendolo di luce mosso da un motore brushless, governato da un ESP32, con il circuito esposto in filo di rame da 1 mm piegato ad angoli retti.
+> Un metronomo artistico: un pendolo di luce mosso da un motore brushless, governato da un ESP32, con il circuito esposto in filo di rame da 1 mm, segmenti dritti saldati ad angolo retto.
 
 **Stato:** 🟡 Fase 1 · identificazione dei componenti (vedi [roadmap](docs/roadmap.md))
 
@@ -24,7 +24,7 @@
 
 ## Il concept
 
-Un metronomo che è anche una scultura. Al posto dell'asta con il peso c'è un **tubo LED da 5 cm** fissato all'albero di un **motore brushless**, che oscilla come un pendolo e si accende a ogni battito. Tutta l'elettronica è a vista: i collegamenti non stanno su un circuito stampato ma sono **fili di rame da Ø 1 mm** piegati a 90° con precisione millimetrica, che fanno anche da struttura.
+Un metronomo che è anche una scultura. Al posto dell'asta con il peso c'è un **tubo LED da 5 cm** fissato all'albero di un **motore brushless**, che oscilla come un pendolo e si accende a ogni battito. Tutta l'elettronica è a vista: i collegamenti non stanno su un circuito stampato ma sono **segmenti dritti di rame da Ø 1 mm** saldati ad angolo retto con precisione millimetrica, che fanno anche da struttura.
 
 ## Come funziona
 
@@ -86,18 +86,19 @@ Funzioni previste: BPM 40–208 sulla scala Maelzel (39 posizioni), modalità im
 
 ## Il circuito in rame
 
-- Filo di rame Ø 1,0 mm, raddrizzato in trazione, solo tratti dritti e pieghe a 90°.
-- Ogni filo è una rete elettrica (GND, VBAT, 3V3, segnali…) e ha un codice.
-- Le lunghezze di taglio tengono conto della deduzione di piega, tarata con pieghe di prova: [fili/taratura.md](fili/taratura.md).
+- Filo di rame Ø 1,0 mm, raddrizzato in trazione. **Nessuna piega**: solo segmenti dritti tagliati a misura e saldati ad angolo retto (giunti a L e a T).
+- Ogni segmento appartiene a una rete elettrica (GND, VBAT, 3V3, segnali…) e ha un codice.
+- In ogni giunto un segmento è passante e l'altro è in battuta sul suo fianco: le lunghezze di taglio ne tengono conto e sono corrette con giunti di prova ([fili/prove-giunti.md](fili/prove-giunti.md)).
+- Le teste dei segmenti in battuta si limano in squadra con una battuta di fine corsa.
 - Reti diverse corrono su piani separati (≥ 3 mm in aria) e si scavalcano senza toccarsi.
 - Una dima incisa al laser tiene i fili in posizione durante la saldatura.
 
 ### Attrezzi
-Pinza a becchi piatti (o piegatrice per filo), calibro, tronchesino a taglio piano, saldatore e stagno, morsa per raddrizzare, dima.
+Calibro, tronchesino a taglio piano, lima fine e battuta di fine corsa per tagli in squadra, saldatore a punta fine e stagno, morsa per raddrizzare il filo, dima con squadre.
 
 ## Produzione: PDF 1:1
 
-Quando il progetto sarà definito, in `produzione/` ci sarà un PDF da stampare **al 100%** (controllare il righello di 100 mm in prima pagina) con, per ogni filo: codice, rete, lunghezza di taglio, disegno in scala reale con i punti di piega numerati e la direzione, ordine di montaggio e punti di saldatura.
+Quando il progetto sarà definito, in `produzione/` ci sarà un PDF da stampare **al 100%** (controllare il righello di 100 mm in prima pagina) con, per ogni filo: codice, rete, lunghezza di taglio, disegno in scala reale, tipo di ciascuna estremità (passante o in battuta), giunti a cui appartiene e ordine di saldatura.
 
 ## Uso
 
@@ -116,7 +117,7 @@ Metronomus/
 ├── firmware/              codice ESP32
 ├── fili/                  geometria del circuito in rame, taratura
 ├── foto/                  foto dei componenti (driver, motore, AS5600, encoder, TP4056, MT3608, Mini‑360)
-└── produzione/            PDF 1:1 di taglio, piegatura e saldatura
+└── produzione/            PDF 1:1 di taglio e saldatura
 ```
 
 ## Come lavoriamo: i ruoli
@@ -128,7 +129,7 @@ Il progetto è organizzato in quattro ruoli, definiti in `agenti/`. Per usarli c
 | **coordinatore** | Priorità, decisioni, roadmap, smistamento del lavoro |
 | **git-readme** | README sempre completo, CHANGELOG, commit |
 | **elettronica** | Componenti, schema, pinout, alimentazione, firmware |
-| **piano-fili** | Geometria dei fili, distinta di taglio, piegature, dima, PDF 1:1 |
+| **piano-fili** | Geometria dei segmenti, distinta di taglio, giunti, dima, PDF 1:1 |
 
 ## Roadmap e decisioni
 

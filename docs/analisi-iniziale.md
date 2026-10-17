@@ -61,7 +61,7 @@ Batteria + caricatore USB (probabilmente un TP4056) non bastano da soli:
 
 - **Ossidazione**: il rame nudo scurisce in poche settimane. Opzioni: filo stagnato, vernice trasparente (protettivo per rame o lacca nitro) a fine montaggio, oppure lasciarlo patinare volutamente.
 - **Raddrizzare il filo**: tirarlo in trazione (un capo in morsa, l'altro con una pinza o un trapano) lo raddrizza e lo incrudisce. Così i tratti sono perfettamente dritti e le pieghe stanno ferme.
-- **Precisione delle pieghe**: le lunghezze di taglio terranno conto della deduzione di piega (circa 0,4 mm a piega con raggio interno 0,5 mm), ma il valore vero va **misurato con pieghe di prova** con la tua pinza.
+- ✅ _Superato: niente pieghe, solo segmenti saldati (vedi decisioni)._ **Precisione delle pieghe**: le lunghezze di taglio terranno conto della deduzione di piega (circa 0,4 mm a piega con raggio interno 0,5 mm), ma il valore vero va **misurato con pieghe di prova** con la tua pinza.
 - **Dima**: hai LightBurn, quindi probabilmente un laser. Una base in multistrato o acrilico con le scanalature incise in scala 1:1 tiene i fili in posizione mentre saldi. È il modo per avere precisione "molto molto alta".
 - **Collegamento ai moduli**: i fori dei pin header sono da circa 1,0 mm, quindi il filo da 1 mm entra a fatica o non entra. Meglio saldare il filo di lato al pin (o usare header lunghi e saldare sopra) oppure assottigliare la punta. Da decidere dopo aver visto i moduli.
 - **Isolamento in aria**: le reti diverse corrono su piani paralleli separati (almeno 3 mm), gli incroci si fanno scavalcando su un altro livello. GND e VBAT conviene usarli come "telaio" strutturale.
