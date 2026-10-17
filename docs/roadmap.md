@@ -20,8 +20,8 @@
 - [ ] Prove di consumo e autonomia
 
 ## Fase 3 · Design del circuito in rame
-- [ ] Disposizione dei moduli nello spazio (layout 3D)
-- [ ] Geometria dei fili (`fili/geometria.yaml`)
+- [x] Disposizione dei moduli nello spazio (layout 3D, da confermare con le misure reali)
+- [x] Geometria dei fili con controlli (`fili/geometria.py`, misure in `fili/moduli.yaml`)
 - [ ] Prove di taglio e giunti saldati (`fili/prove-giunti.md`)
 - [ ] Distinta di taglio e sequenza di montaggio
 - [ ] Dima per laser/stampa 3D

@@ -2,7 +2,7 @@
 
 > Un metronomo artistico: un pendolo di luce mosso da un motore brushless, governato da un ESP32, con il circuito esposto in filo di rame da 1 mm, segmenti dritti saldati ad angolo retto.
 
-**Stato:** 🟡 Fase 1 · identificazione dei componenti (vedi [roadmap](docs/roadmap.md))
+**Stato:** 🟡 Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei moduli (vedi [stato](docs/STATO.md) e [roadmap](docs/roadmap.md))
 
 ---
 
@@ -132,8 +132,9 @@ Metronomus/
 ├── README.md              questa pagina
 ├── CHANGELOG.md           storico delle modifiche
 ├── CLAUDE.md              istruzioni per Claude in questo progetto
+├── .claude/               comandi /stato e /fine-sessione, ruoli dei subagenti per Claude Code
 ├── agenti/                i 4 ruoli (coordinatore, git-readme, elettronica, piano-fili)
-├── docs/                  analisi, decisioni, roadmap, domande aperte
+├── docs/                  stato attuale (STATO.md), decisioni, roadmap, domande aperte
 ├── hardware/              BOM, pinout, schema elettrico (schema.py lo rigenera)
 ├── firmware/              codice ESP32
 ├── modello/              modello 3D di controllo in OpenSCAD, generato da fili/geometria.py

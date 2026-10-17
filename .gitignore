@@ -10,3 +10,5 @@ desktop.ini
 # Temporanei
 *.tmp
 ~$*
+# Impostazioni locali di Claude Code
+.claude/settings.local.json
