@@ -1,0 +1,12 @@
+# Build firmware
+.pio/
+build/
+*.bin
+*.elf
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+# Temporanei
+*.tmp
+~$*
