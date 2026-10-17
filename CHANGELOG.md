@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-17
+- Step‑down Mini‑360 disponibile, da tarare a 3,3 V per l'ESP32.
 - Boost MT3608 disponibile, da tarare a 12 V.
 - Motore 1503 (7,4 V, 0,5 Ω) confermato, con limite di tensione FOC nel firmware.
 - Batteria 2 × 18350 (2S) e sensore AS5600 confermati; aggiornata la catena di alimentazione.

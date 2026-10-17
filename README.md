@@ -55,7 +55,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 ## Schema a blocchi
 
 ```
- USB‑C ──► [Caricatore 2S] ──► [2×18350 + BMS] ──► [Interruttore] ─┬─► [Buck 3,3 V] ──► ESP32
+ USB‑C ──► [Caricatore 2S] ──► [2×18350 + BMS] ──► [Interruttore] ─┬─► [Mini‑360 3,3 V] ──► ESP32
                                                                    └─► [Boost 12 V] ──► [SimpleFOC Mini] ──► Motore
                                                                                                │
  [Rotary encoder] ──► ESP32 ◄── [Sensore magnetico] ◄── magnete sull'albero ◄───────────────────┤
@@ -67,7 +67,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 **Driver:** SimpleFOC Mini v1.0, basato su DRV8313. Il motore va alimentato a 8–30 V (consigliati 10–12 V), la logica è a 3,3 V e si collega direttamente all'ESP32 con 3 PWM (IN1–IN3) più EN.
 
-**Alimentazione:** due 18350 in serie (2S, 6,0–8,4 V). Poiché il driver non funziona sotto 8 V, un boost MT3608 porta il motore a 12 V (tarare il trimmer prima di collegare il driver); un piccolo buck dà 3,3 V all'ESP32. Ricarica da USB‑C con un caricatore 2S, protezione con un BMS 2S.
+**Alimentazione:** due 18350 in serie (2S, 6,0–8,4 V). Poiché il driver non funziona sotto 8 V, un boost MT3608 porta il motore a 12 V (tarare il trimmer prima di collegare il driver); uno step‑down Mini‑360 tarato a 3,3 V alimenta l'ESP32 dal pin 3V3. Ricarica da USB‑C con un caricatore 2S, protezione con un BMS 2S.
 
 **Motore:** 1503 a bassa resistenza (0,5 Ω). Il driver lavora a 12 V ma il firmware limita la tensione di fase a circa 0,5–1 V, così la corrente resta entro 1–2 A e il motore non scalda.
 
