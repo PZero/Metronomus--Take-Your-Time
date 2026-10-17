@@ -133,7 +133,9 @@ Metronomus/
 ├── docs/                  analisi, decisioni, roadmap, domande aperte
 ├── hardware/              BOM, pinout, schema elettrico (schema.py lo rigenera)
 ├── firmware/              codice ESP32
-├── fili/                  geometria del circuito in rame, taratura
+├── modello/              modello 3D di controllo in OpenSCAD (metronomus.scad)
+├── render/               render di concept (concept.py, Blender come modulo Python)
+├── fili/                  geometria del circuito in rame, prove di taglio e giunto
 ├── foto/                  foto dei componenti (driver, motore, AS5600, encoder, TP4056, MT3608, Mini‑360)
 └── produzione/            PDF 1:1 di taglio e saldatura
 ```
