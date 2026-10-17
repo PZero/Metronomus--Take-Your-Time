@@ -15,6 +15,7 @@
 - [ ] Pinout ESP32
 - [ ] Firmware: motore in posizione con SimpleFOC
 - [ ] Firmware: pendolo sinusoidale a BPM variabili
+- [ ] Firmware: modalità impostazione (pendolo come lancetta sulla scala)
 - [ ] Firmware: encoder, pulsante, LED sincronizzato, batteria
 - [ ] Prove di consumo e autonomia
 
@@ -24,6 +25,7 @@
 - [ ] Taratura della deduzione di piega con pieghe di prova
 - [ ] Distinta di taglio e sequenza di montaggio
 - [ ] Dima per laser/stampa 3D
+- [ ] Scala Maelzel da incidere al laser (SVG generato dai dati del firmware)
 
 ## Fase 4 · Produzione
 - [ ] PDF 1:1 di taglio, piegatura e saldatura (`produzione/`)

@@ -28,7 +28,7 @@ Un metronomo che è anche una scultura. Al posto dell'asta con il peso c'è un *
 
 ## Come funziona
 
-- **Ruoti l'encoder** → cambia il tempo (BPM).
+- **Ruoti l'encoder** → cambia il tempo (BPM): il pendolo si ferma e fa da lancetta su una scala Maelzel incisa al laser sulla base. Quando lasci l'encoder riparte a battere il nuovo tempo. Niente display ([dettagli](docs/indicatore-tempo.md)).
 - **L'ESP32** calcola la traiettoria del pendolo e comanda il **driver** del motore.
 - **Il sensore magnetico** legge la posizione dell'albero, così il pendolo sa dove si trova e quando invertire.
 - **Il LED** si accende o pulsa sul battito.
@@ -73,7 +73,7 @@ Qui andranno: schema elettrico, pinout ESP32, alimentazione e autonomia.
 ## Firmware
 
 _Da scrivere._ Base prevista: Arduino/PlatformIO + libreria [SimpleFOC](https://simplefoc.com) per il controllo del brushless.
-Funzioni previste: BPM 40–208, start/stop e tap tempo dal pulsante dell'encoder, LED sincronizzato, accento, misura batteria, auto‑spegnimento.
+Funzioni previste: BPM 40–208 sulla scala Maelzel (39 posizioni), modalità impostazione con il pendolo come lancetta, start/stop e tap tempo dal pulsante dell'encoder, LED sincronizzato, accento, misura batteria, auto‑spegnimento.
 
 ## Il circuito in rame
 

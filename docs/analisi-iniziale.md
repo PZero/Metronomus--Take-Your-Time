@@ -52,10 +52,10 @@ Batteria + caricatore USB (probabilmente un TP4056) non bastano da soli:
 
 1. **Suono del tic** (il metronomo oggi è muto): un piezo passivo è minimo; un piccolo altoparlante con amplificatore I2S MAX98357A suona molto meglio e permette un "tic" e un "toc" diversi per l'accento.
 2. **Accento sul primo battito** (2/4, 3/4, 4/4, 6/8): il LED cambia intensità o colore.
-3. **Indicatore discreto dei BPM**: niente display per non rovinare l'estetica; si può mostrare il valore con il pendolo stesso (si ferma e "indica" una scala incisa sulla base) o con una app.
+3. ✅ _Scelto: vedi [indicatore-tempo.md](indicatore-tempo.md)._ **Indicatore discreto dei BPM**: niente display per non rovinare l'estetica; si può mostrare il valore con il pendolo stesso (si ferma e "indica" una scala incisa sulla base) o con una app.
 4. **Wi‑Fi/Bluetooth**: l'ESP32 li ha già. Una piccola pagina web o BLE MIDI per sincronizzarsi con una DAW.
 5. **Auto‑spegnimento** dopo X minuti fermo, deep sleep, risveglio con il click dell'encoder.
-6. **Scala graduata** incisa al laser sulla base dietro il pendolo, come i metronomi Wittner.
+6. ✅ _Inclusa nell'indicatore del tempo._ **Scala graduata** incisa al laser sulla base dietro il pendolo, come i metronomi Wittner.
 
 ## 7. Il circuito in rame da 1 mm
 
