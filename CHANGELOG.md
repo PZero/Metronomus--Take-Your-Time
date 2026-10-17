@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-17
+- Aggiunto il motorino a vibrazione per il tic (GPIO 8) e il secondo filamento LED.
 - Scelto l'ESP32‑C3 SuperMini; prima bozza del pinout in hardware/pinout.md.
 - LED identificato: filamento LED rigido.
 - Rame: niente pieghe, solo segmenti dritti saldati. Sostituita la taratura delle pieghe con le prove di taglio e giunto.

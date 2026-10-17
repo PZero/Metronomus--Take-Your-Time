@@ -2,7 +2,7 @@
 
 _17/10/2026 · prima proposta, da verificare su breadboard._
 
-Il C3 SuperMini ha 16 piedini, tutti sul bordo: 5V, GND, 3V3, GPIO 0–10, 20, 21. Ne servono 11 su 13.
+Il C3 SuperMini ha 16 piedini, tutti sul bordo: 5V, GND, 3V3, GPIO 0–10, 20, 21. Ne servono 12 su 13.
 
 | GPIO | Funzione | Collegato a | Note |
 |---|---|---|---|
@@ -18,13 +18,13 @@ Il C3 SuperMini ha 16 piedini, tutti sul bordo: 5V, GND, 3V3, GPIO 0–10, 20, 2
 | 1 | LED filamento | Gate MOSFET (100 Ω + 100 kΩ a GND) | |
 | 0 | Livello batteria | Partitore 100 k / 100 k | ADC1 |
 | 2 | **libero** | — | Strapping: non mettere pull‑down (niente MOSFET qui). Riservato al buzzer |
-| 8 | **libero** | — | Ha il LED blu di bordo; strapping |
+| 8 | Motorino a vibrazione | Modulo vibrazione IN | Ha il LED blu di bordo; strapping (conta solo in modalità download con BOOT premuto) |
 
 ## Alimentazione
 - **3V3** ← uscita del Mini‑360 tarato a 3,3 V. Non usare il pin 5V.
 - **GND** comune con driver, AS5600, MT3608 e batteria.
 - AS5600: VCC a 3V3, DIR a GND.
-- SimpleFOC Mini: nSP (sleep) e nRT (reset) hanno già pull‑up sulla scheda; nFT (fault) eventualmente su GPIO 8.
+- SimpleFOC Mini: nSP (sleep) e nRT (reset) hanno già pull‑up sulla scheda; nFT (fault) eventualmente su GPIO 2.
 
 ## Da verificare sul banco
 - Frequenza del ciclo FOC con l'AS5600 in I2C a 400 kHz (attesi alcune centinaia di Hz, sufficienti per un pendolo).

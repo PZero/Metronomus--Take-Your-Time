@@ -14,6 +14,8 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-17 | Sensore di posizione AS5600 | Angolo assoluto, necessario per il pendolo FOC e per l'indicatore del tempo | Hall semplice |
 | 2026-10-17 | Motore 1503 (7,4 V, 0,5 Ω) con limite di tensione FOC basso nel firmware | Motore già disponibile, carico leggero (LED da 5 cm) | Motore gimbal 2204: da valutare se il 1503 scalda o scatta troppo |
 | 2026-10-17 | Microcontrollore ESP32‑C3 SuperMini, pinout in [pinout.md](../hardware/pinout.md) | Piccolo, piedini tutti sul bordo (facile in rame), GPIO sufficienti, già usato da Fabio | ESP32 D1 Mini WROOM (40 pin su doppia fila) |
+| 2026-10-17 | Tic con motorino a vibrazione fissato sotto la base (impulsi ≥ 60 ms), su GPIO 8 | Suono meccanico del battito senza altoparlante, componente già disponibile | Piezo, altoparlante I2S |
+| 2026-10-17 | Due filamenti LED in parallelo sullo stesso MOSFET, ognuno con la sua resistenza | Più luce senza usare altri pin | Un solo filamento; due canali separati |
 
 ---
 

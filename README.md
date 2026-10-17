@@ -76,7 +76,11 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 **Encoder:** EC11 nudo con pulsante, pull‑up interne dell'ESP32 e debounce RC.
 
-**Microcontrollore:** ESP32‑C3 SuperMini. Usa 11 dei suoi 13 GPIO: tre PWM e l'abilitazione per il driver, I2C per l'AS5600, tre ingressi per l'encoder, un'uscita per il LED e un ingresso analogico per la batteria. Pinout completo in [hardware/pinout.md](hardware/pinout.md).
+**Microcontrollore:** ESP32‑C3 SuperMini. Usa 12 dei suoi 13 GPIO: tre PWM e l'abilitazione per il driver, I2C per l'AS5600, tre ingressi per l'encoder, un'uscita per i LED, una per il motorino a vibrazione e un ingresso analogico per la batteria.
+
+**Tic:** un motorino a vibrazione fissato sotto la base di legno dà un colpetto a ogni battito (impulsi da almeno 60 ms).
+
+**Luce:** due filamenti LED in parallelo sul pendolo, comandati da un solo MOSFET. Pinout completo in [hardware/pinout.md](hardware/pinout.md).
 
 _Il resto è in definizione._ Analisi di partenza, punti critici e parti mancanti: [docs/analisi-iniziale.md](docs/analisi-iniziale.md).
 Qui andranno: schema elettrico, pinout ESP32, alimentazione e autonomia.
