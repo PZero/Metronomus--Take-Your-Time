@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-17
+- Primo schema elettrico (hardware/schema.pdf/png/svg, generato da schema.py) e tabella delle reti.
 - Aggiunto il motorino a vibrazione per il tic (GPIO 8) e il secondo filamento LED.
 - Scelto l'ESP32‑C3 SuperMini; prima bozza del pinout in hardware/pinout.md.
 - LED identificato: filamento LED rigido.

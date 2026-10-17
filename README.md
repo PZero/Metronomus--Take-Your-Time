@@ -83,7 +83,9 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 **Luce:** due filamenti LED in parallelo sul pendolo, comandati da un solo MOSFET. Pinout completo in [hardware/pinout.md](hardware/pinout.md).
 
 _Il resto è in definizione._ Analisi di partenza, punti critici e parti mancanti: [docs/analisi-iniziale.md](docs/analisi-iniziale.md).
-Qui andranno: schema elettrico, pinout ESP32, alimentazione e autonomia.
+Schema elettrico completo in [hardware/schema.md](hardware/schema.md) (PDF A3 in [hardware/schema.pdf](hardware/schema.pdf)).
+
+![Schema elettrico](hardware/schema.png)
 
 ## Firmware
 
@@ -119,7 +121,7 @@ Metronomus/
 ├── CLAUDE.md              istruzioni per Claude in questo progetto
 ├── agenti/                i 4 ruoli (coordinatore, git-readme, elettronica, piano-fili)
 ├── docs/                  analisi, decisioni, roadmap, domande aperte
-├── hardware/              BOM, pinout (schema in arrivo)
+├── hardware/              BOM, pinout, schema elettrico (schema.py lo rigenera)
 ├── firmware/              codice ESP32
 ├── fili/                  geometria del circuito in rame, taratura
 ├── foto/                  foto dei componenti (driver, motore, AS5600, encoder, TP4056, MT3608, Mini‑360)

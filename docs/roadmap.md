@@ -11,7 +11,7 @@
 - [ ] Ordinare quello che manca
 
 ## Fase 2 · Elettronica e firmware su breadboard
-- [ ] Schema a blocchi e schema elettrico
+- [x] Schema a blocchi e schema elettrico (bozza)
 - [x] Pinout ESP32 (bozza)
 - [ ] Firmware: motore in posizione con SimpleFOC
 - [ ] Firmware: pendolo sinusoidale a BPM variabili
