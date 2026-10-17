@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-10-17
+- Scelto l'ESP32‑C3 SuperMini; prima bozza del pinout in hardware/pinout.md.
+- LED identificato: filamento LED rigido.
 - Rame: niente pieghe, solo segmenti dritti saldati. Sostituita la taratura delle pieghe con le prove di taglio e giunto.
 - Componenti identificati dalle foto; BOM riscritta. Batterie in parallelo (1S) con TP4056, MT3608 a 12 V e Mini‑360 alimentato dai 12 V.
 - Step‑down Mini‑360 disponibile, da tarare a 3,3 V per l'ESP32.

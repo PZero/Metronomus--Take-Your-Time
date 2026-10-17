@@ -13,6 +13,7 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-17 | ~~2 × 18350 in serie (2S)~~ → **2 × 18350 in parallelo (1S)**, ricarica con il TP4056 USB‑C, MT3608 a 12 V per il motore, Mini‑360 da 12 V a 3,3 V per l'ESP32 | Usa solo componenti già disponibili: il TP4056 è per una cella e il Mini‑360 non funziona sotto 4,75 V, quindi lo si alimenta dai 12 V del boost | 2S con caricatore e BMS 2S da comprare |
 | 2026-10-17 | Sensore di posizione AS5600 | Angolo assoluto, necessario per il pendolo FOC e per l'indicatore del tempo | Hall semplice |
 | 2026-10-17 | Motore 1503 (7,4 V, 0,5 Ω) con limite di tensione FOC basso nel firmware | Motore già disponibile, carico leggero (LED da 5 cm) | Motore gimbal 2204: da valutare se il 1503 scalda o scatta troppo |
+| 2026-10-17 | Microcontrollore ESP32‑C3 SuperMini, pinout in [pinout.md](../hardware/pinout.md) | Piccolo, piedini tutti sul bordo (facile in rame), GPIO sufficienti, già usato da Fabio | ESP32 D1 Mini WROOM (40 pin su doppia fila) |
 
 ---
 

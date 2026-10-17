@@ -6,7 +6,8 @@ _Aggiornata il 17/10/2026 con le foto in [`foto/`](../foto)._
 
 | Componente | Modello | Foto | Note |
 |---|---|---|---|
-| Microcontrollore | ESP32 — _modello da identificare_ | — | |
+| Microcontrollore | **ESP32‑C3 SuperMini** (lo stesso del YouTube Controller) | [foto](../foto/esp32-c3-supermini.jpg) | RISC‑V 160 MHz, USB‑C, 16 piedini sul bordo, 13 GPIO (ne servono 11). Pinout in [pinout.md](pinout.md) |
+| Microcontrollore (riserva) | ESP32 D1 Mini con modulo WROOM‑32 | [foto](../foto/esp32-d1-mini-wroom.jpg) | Più potente e con più pin, ma 40 piedini su doppia fila: scomodo da cablare in rame. Tenuto come alternativa |
 | Driver motore | **SimpleFOC Mini v1.0** (rev. 2024‑05‑13), chip DRV8313 | [foto](../foto/driver-simplefoc-mini.jpg) | Motore 8–35 V (serigrafia), condensatore 100 µF 35 V già montato. Pin: IN1, IN2, IN3, EN, GND (fila 1) · nFT, nSP (sleep), nRT (reset), GND, 3V3 (fila 2). Uscite M1/M2/M3. Il pin 3V3 eroga solo ~10 mA: non alimenta l'ESP32 |
 | Motore | **Outrunner 1503**, 7,4 V, 0,3 A, 0,5 Ω, 3 fili (bianco/blu/rosso) | [foto](../foto/motore-1503.jpg) | Base con 2 fori filettati M2 + 2 fori. L'estremità dell'albero sporge al centro della base: lì va incollato il magnete dell'AS5600, con il sensore dietro al motore. Il LED si monta sulla campana, davanti. Bassa resistenza: `voltage_limit` FOC ≈ 0,5–1 V |
 | Sensore di posizione | **AS5600** (modulo viola, 7 pin: VCC, OUT, GND, DIR, SCL, SDA, GPO) | [foto](../foto/sensore-as5600.jpg) | I2C 0x36, 12 bit. DIR a GND, GPO a GND o libero. Magnete diametrale 6 × 2,5 mm (da verificare se incluso), distanza 0,5–3 mm, centrato ±0,5 mm |

@@ -2,7 +2,7 @@
 
 | # | Domanda | Chi risponde | Stato |
 |---|---|---|---|
-| 1 | Modello esatto dell'ESP32 (DevKit 30/38 pin, C3, S3, WROOM/SuperMini…) | Foto | aperta |
+| 1 | Modello dell'ESP32 | Foto | ✅ ESP32‑C3 SuperMini |
 | 2 | Modello del driver brushless: ESC da drone o driver FOC/gimbal? | Fabio | ✅ SimpleFOC Mini v1.0 |
 | 3 | Motore brushless | Fabio | ✅ 1503, 7,4 V, 0,5 Ω. Da misurare la resistenza fase‑fase |
 | 4 | Batteria | Fabio | ✅ 2 × 18350, collegate in parallelo (1S) |

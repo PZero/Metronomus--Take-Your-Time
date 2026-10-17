@@ -5,14 +5,14 @@
 - [x] Analisi iniziale ([analisi-iniziale.md](analisi-iniziale.md))
 
 ## Fase 1 · Componenti
-- [ ] Identificare i modelli dalle foto (`foto/`)
+- [x] Identificare i modelli dalle foto (`foto/`)
 - [ ] Decidere driver/motore/sensore (FOC o no)
 - [ ] Completare la BOM con le parti mancanti
 - [ ] Ordinare quello che manca
 
 ## Fase 2 · Elettronica e firmware su breadboard
 - [ ] Schema a blocchi e schema elettrico
-- [ ] Pinout ESP32
+- [x] Pinout ESP32 (bozza)
 - [ ] Firmware: motore in posizione con SimpleFOC
 - [ ] Firmware: pendolo sinusoidale a BPM variabili
 - [ ] Firmware: modalità impostazione (pendolo come lancetta sulla scala)

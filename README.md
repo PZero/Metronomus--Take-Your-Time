@@ -42,7 +42,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 | Componente | Modello | Stato |
 |---|---|---|
-| ESP32 | da identificare | ✅ disponibile |
+| ESP32 | ESP32‑C3 SuperMini | ✅ disponibile |
 | Driver brushless | SimpleFOC Mini v1.0 (DRV8313, 8–30 V) | ✅ disponibile |
 | Motore brushless | 1503, 7,4 V, 0,3 A, 0,5 Ω | ✅ disponibile |
 | Batteria | 2 × 18350 in parallelo (1S, 3,7 V) | ✅ disponibile |
@@ -75,6 +75,8 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 **Sensore:** AS5600 (I2C, 12 bit) dietro al motore, con il magnete diametrale incollato sull'estremità dell'albero che sporge dalla base del 1503; pin DIR a GND. Il LED si monta sulla campana, davanti.
 
 **Encoder:** EC11 nudo con pulsante, pull‑up interne dell'ESP32 e debounce RC.
+
+**Microcontrollore:** ESP32‑C3 SuperMini. Usa 11 dei suoi 13 GPIO: tre PWM e l'abilitazione per il driver, I2C per l'AS5600, tre ingressi per l'encoder, un'uscita per il LED e un ingresso analogico per la batteria. Pinout completo in [hardware/pinout.md](hardware/pinout.md).
 
 _Il resto è in definizione._ Analisi di partenza, punti critici e parti mancanti: [docs/analisi-iniziale.md](docs/analisi-iniziale.md).
 Qui andranno: schema elettrico, pinout ESP32, alimentazione e autonomia.
@@ -113,7 +115,7 @@ Metronomus/
 ├── CLAUDE.md              istruzioni per Claude in questo progetto
 ├── agenti/                i 4 ruoli (coordinatore, git-readme, elettronica, piano-fili)
 ├── docs/                  analisi, decisioni, roadmap, domande aperte
-├── hardware/              BOM, schema, pinout
+├── hardware/              BOM, pinout (schema in arrivo)
 ├── firmware/              codice ESP32
 ├── fili/                  geometria del circuito in rame, taratura
 ├── foto/                  foto dei componenti (driver, motore, AS5600, encoder, TP4056, MT3608, Mini‑360)
