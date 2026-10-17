@@ -108,7 +108,10 @@ Funzioni previste: BPM 40–208 sulla scala Maelzel (39 posizioni), modalità im
 - Ogni segmento appartiene a una rete elettrica (GND, VBAT, 3V3, segnali…) e ha un codice.
 - In ogni giunto un segmento è passante e l'altro è in battuta sul suo fianco: le lunghezze di taglio ne tengono conto e sono corrette con giunti di prova ([fili/prove-giunti.md](fili/prove-giunti.md)).
 - Le teste dei segmenti in battuta si limano in squadra con una battuta di fine corsa.
-- Reti diverse corrono su piani separati (≥ 3 mm in aria) e si scavalcano senza toccarsi.
+- **Nessun pezzo più corto di 10 mm**, e assi di reti diverse ad almeno 2,5 mm. Reti diverse corrono su piani separati: masse su un anello a 6 mm dalla base, 12 V su una dorsale a 14 mm, ponti a U a 18 mm sotto le schede.
+- La geometria parte dai **fori reali dei moduli** ([fili/moduli.yaml](fili/moduli.yaml), da misurare col calibro: [fili/misure-da-prendere.md](fili/misure-da-prendere.md)). `python fili/geometria.py` dispone i moduli, traccia i fili, controlla le regole e scrive la distinta [fili/segmenti.csv](fili/segmenti.csv) e il modello [modello/metronomus.scad](modello/metronomus.scad).
+
+![Primo piano dei collegamenti](render/concept-vicino.png)
 - Una dima incisa al laser tiene i fili in posizione durante la saldatura.
 
 ### Attrezzi
@@ -133,9 +136,9 @@ Metronomus/
 ├── docs/                  analisi, decisioni, roadmap, domande aperte
 ├── hardware/              BOM, pinout, schema elettrico (schema.py lo rigenera)
 ├── firmware/              codice ESP32
-├── modello/              modello 3D di controllo in OpenSCAD (metronomus.scad)
+├── modello/              modello 3D di controllo in OpenSCAD, generato da fili/geometria.py
 ├── render/               render di concept (concept.py, Blender come modulo Python)
-├── fili/                  geometria del circuito in rame, prove di taglio e giunto
+├── fili/                  misure dei moduli, geometria del rame (geometria.py), distinta segmenti.csv
 ├── foto/                  foto dei componenti (driver, motore, AS5600, encoder, TP4056, MT3608, Mini‑360)
 └── produzione/            PDF 1:1 di taglio e saldatura
 ```

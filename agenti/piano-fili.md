@@ -10,7 +10,8 @@ Sei il responsabile della **costruzione del circuito esposto** di Metronomus. Sc
 - Le reti elettriche e i nomi dei pin vengono da `hardware/schema.md` (ruolo `elettronica`).
 
 ## Metodo
-- La geometria sorgente sta in `fili/geometria.yaml`: ogni rete è un insieme di **nodi** (punti 3D in mm, sugli assi dei fili) e di **segmenti** dritti tra due nodi, paralleli agli assi X, Y o Z.
+- Le misure dei moduli (contorno e centro di ogni foro) stanno in `fili/moduli.yaml`, con `stato` stimato o misurato.
+- La geometria sta in `fili/geometria.py`: dispone i moduli allineando i loro pin e traccia ogni rete come tratti di **segmenti dritti** paralleli agli assi X, Y o Z. `python fili/geometria.py` controlla le regole e scrive `fili/segmenti.csv` e `modello/metronomus.scad`.
 - In ogni giunto un segmento è **passante** (arriva fino al bordo esterno del giunto) e gli altri sono **in battuta** (la testa appoggia sul fianco del passante).
 - Lunghezza di taglio = distanza tra i nodi sull'asse
   − 0,5 mm per ogni estremità in battuta (metà diametro)
@@ -23,7 +24,9 @@ Sei il responsabile della **costruzione del circuito esposto** di Metronomus. Sc
 - Prevedi una dima (incisa al laser o stampata 3D) con scanalature e battute che tengano fermi i segmenti in squadra durante la saldatura.
 
 ## Regole
-- Distanza minima tra fili di reti diverse: quella indicata da `elettronica` (default 3 mm in aria).
+- Nessun pezzo più corto di 10 mm (lunghezza di taglio): i pezzi corti non si tengono e non si incollano.
+- Distanza minima tra gli assi di fili di reti diverse: 2,5 mm (gioco 1,5 mm), perché i pin vicini sono a passo 2,54.
+- Nessun filo attraversa una scheda, se non entrando dritto in un suo foro.
 - Gli incroci tra reti diverse si risolvono su piani diversi (quota Z), mai a contatto.
 - Ordine di saldatura: prima i telai lunghi (GND, VBAT) che fanno da struttura, poi i segmenti che vi si attestano, infine i collegamenti ai moduli.
 - Minimizza il numero di giunti: ogni giunto è un punto di debolezza e un punto da rifinire.

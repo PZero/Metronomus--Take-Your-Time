@@ -17,6 +17,7 @@ QUI = Path(__file__).resolve().parent
 MM = 0.001
 CAMPIONI = int(sys.argv[-1]) if sys.argv[-1].isdigit() else 96
 TECA = "teca" in sys.argv
+VICINO = "vicino" in sys.argv   # primo piano dei collegamenti, senza teca
 ANGOLO_PENDOLO = math.radians(-14)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -162,47 +163,69 @@ def scheda(c, d, mat, chip=(), nome="scheda"):
     return s
 
 
-# ------------------------------------------------------------------ scena
-# pavimento e base in legno
-scatola((0, 0, -21), (900, 900, 2), PAVIMENTO, "pavimento")
-if TECA:
-    base = scatola((0, 5, -11), (270, 170, 22), LEGNO, "base")
-else:
-    base = scatola((0, 5, -10), (230, 130, 20), LEGNO, "base")
+# ------------------------------------------------------------------ geometria (fili/geometria.py)
+sys.path.insert(0, str(QUI.parent / "fili"))
+_argv = sys.argv
+sys.argv = [sys.argv[0]]
+import geometria as G  # noqa: E402
+sys.argv = _argv
+PEZZI, _errori, _avvisi = G.analizza()
+from mathutils import Matrix  # noqa: E402
+
+
+def scheda_orientata(m, mat):
+    """Scheda di un modulo con i suoi assi u, v, n e un blocco scuro per i componenti."""
+    u, v, n = Vector(m.u), Vector(m.v), Vector(m.n)
+    w, h = m.dimensioni
+    o = Vector(m.origine)
+    for (dx, dy, dz, sx, sy, sz, materiale_) in ((w / 2, h / 2, -m.spessore / 2, w, h, m.spessore, mat),
+                                                 (w / 2, h / 2, m.altezza / 2, w * 0.45, h * 0.4, m.altezza, CHIP)):
+        c = o + u * dx + v * dy + n * dz
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        ob = bpy.context.object
+        ob.name = m.nome
+        k = MM
+        ob.matrix_world = Matrix(((u.x * sx * k, v.x * sy * k, n.x * sz * k, c.x * k),
+                                  (u.y * sx * k, v.y * sy * k, n.y * sz * k, c.y * k),
+                                  (u.z * sx * k, v.z * sy * k, n.z * sz * k, c.z * k), (0, 0, 0, 1)))
+        ob.data.materials.append(materiale_)
+
+
+MAT_SCHEDA = {"nero": PCB_NERO, "blu": PCB_BLU, "verde": PCB_VERDE, "bianco": materiale("pcb_bianco", (0.85, 0.85, 0.82), 0.0, 0.4),
+              "millefori": materiale("millefori", (0.55, 0.38, 0.15), 0.0, 0.45)}
+
+# base in legno (dimensioni da geometria)
+scatola((0, 0, lo_z - 1), (1200, 1200, 2), PAVIMENTO, "pavimento") if (lo_z := G.BASE["min"][2]) else None
+lo, hi = G.BASE["min"], G.BASE["max"]
+base = scatola(tuple((lo[i] + hi[i]) / 2 for i in range(3)), tuple(hi[i] - lo[i] for i in range(3)), LEGNO, "base")
 bpy.ops.object.modifier_add(type="BEVEL")
 base.modifiers["Bevel"].width = 2 * MM
 base.modifiers["Bevel"].segments = 3
 
-PERNO = Vector((0, -6, 78))  # asse del motore
+# moduli
+for m in G.MODULI.values():
+    scheda_orientata(m, MAT_SCHEDA[m.colore])
 
-# piedini in rame (4 colonne del telaio GND / VBAT)
-for x in (-100, 100):
-    for y in (-50, 60):
-        pass
-
-# telaio del motore: due colonne + traversi
-for x in (-16, 16):
-    filo([(x, 10, 0), (x, 10, 92)])
-filo([(-16, 10, 92), (16, 10, 92)])
-filo([(-16, 10, 62), (16, 10, 62)])
-filo([(-16, 10, 30), (16, 10, 30)])
+# fili di rame: un cilindro per pezzo, una goccia di stagno per giunto
+for p in PEZZI:
+    cilindro(p.a, p.b, G.R_FILO, RAME, 12, p.codice)
+for g in {pt for p in PEZZI for pt in (p.a, p.b)}:
+    if g[2] > 0.1:
+        sfera(g, G.R_FILO * 1.35, STAGNO)
 
 # motore 1503 (asse lungo y, campana verso lo spettatore)
-cilindro((0, 6, 78), (0, 0, 78), 9.5, ACCIAIO_SCURO, 48, "statore")
-cilindro((0, 0, 78), (0, -9, 78), 9.5, ACCIAIO, 48, "campana")
-cilindro((0, -9, 78), (0, -12, 78), 3.0, ACCIAIO, 24, "mozzo")
-for x, c in ((-3, (0.9, 0.9, 0.9)), (0, (0.1, 0.2, 0.8)), (3, (0.7, 0.05, 0.05))):
-    pass
-# AS5600 dietro al motore, scheda verticale
-scheda((0, 13, 78), (23, 23, 0), PCB_VIOLA, nome="as5600")
-o = bpy.data.objects["as5600"]
-o.rotation_euler = (math.radians(90), 0, 0)
-scatola((0, 11.6, 78), (5, 1.2, 5), CHIP)
+ax, ay, az = G.MOTORE["asse"]
+rm, lm = G.MOTORE["diametro"] / 2, G.MOTORE["lunghezza"]
+scatola((ax, ay + 0.5, az), (25, 1, 25), OTTONE, "piastra motore")
+cilindro((ax, ay, az), (ax, ay - 4, az), rm, ACCIAIO_SCURO, 48, "statore")
+cilindro((ax, ay - 4, az), (ax, ay - lm, az), rm, ACCIAIO, 48, "campana")
+cilindro((ax, ay - lm, az), (ax, ay - lm - 4, az), 3.0, ACCIAIO, 24, "mozzo")
+PERNO = Vector((ax, ay - lm - 4, az))
 
-# pendolo: due filamenti in fila, inclinati
+# pendolo: due filamenti in serie, inclinati
 asse = Vector((math.sin(ANGOLO_PENDOLO), 0, math.cos(ANGOLO_PENDOLO)))
-p0 = PERNO + Vector((0, -13, 0))
-cilindro(p0, p0 + Vector((0, 1.5, 0)), 3.5, ACCIAIO, 32, "flangia")
+p0 = PERNO + Vector((0, -1.5, 0))
+cilindro(PERNO, p0, 3.5, ACCIAIO, 32, "flangia")
 p1 = p0 + asse * 6
 p2 = p1 + asse * 50
 p3 = p2 + asse * 2
@@ -216,24 +239,21 @@ laterale = Vector((math.cos(ANGOLO_PENDOLO), 0, -math.sin(ANGOLO_PENDOLO))) * 2.
 cilindro(p0 + laterale, p4 + laterale + asse * 1, 0.18, RAME, 8, "ritorno")
 cilindro(p4, p4 + laterale + asse * 1, 0.18, RAME, 8, "ritorno")
 
-# pannello della scala (legno) sorretto da due colonne di rame
-PANNELLO_Y = 26
-scatola((0, PANNELLO_Y, 160), (170, 5, 70), LEGNO, "pannello")
-for x in (-70, 70):
-    filo([(x, PANNELLO_Y + 4, 0), (x, PANNELLO_Y + 4, 195)])
-    filo([(x, PANNELLO_Y + 4, 195), (x, PANNELLO_Y - 2.5, 195)])
-filo([(-70, PANNELLO_Y + 4, 195), (70, PANNELLO_Y + 4, 195)])
-# tacche della scala Maelzel (39 valori) incise sul pannello
+# pannello della scala
+c, d = G.PANNELLO["centro"], G.PANNELLO["dimensioni"]
+scatola(c, d, LEGNO, "pannello")
+PANNELLO_Y = c[1] + d[1] / 2
+FRONTE_PANNELLO = c[1] - d[1] / 2 - 0.1
 maelzel = list(range(40, 60, 2)) + list(range(60, 72, 3)) + list(range(72, 120, 4)) + list(range(120, 144, 6)) + list(range(144, 209, 8))
 for i, bpm in enumerate(maelzel):
     t = math.radians(-40 + 80 * i / (len(maelzel) - 1))
     lungo = bpm in (40, 60, 72, 96, 120, 144, 176, 208)
     r1, r2 = 92, (104 if lungo else 99)
-    a = Vector((PERNO.x + r1 * math.sin(t), PANNELLO_Y - 2.6, PERNO.z + r1 * math.cos(t)))
-    b = Vector((PERNO.x + r2 * math.sin(t), PANNELLO_Y - 2.6, PERNO.z + r2 * math.cos(t)))
-    tacca = cilindro(a, b, 0.45 if lungo else 0.3, INCISIONE, 6, "tacca")
+    a_ = Vector((PERNO.x + r1 * math.sin(t), FRONTE_PANNELLO, PERNO.z + r1 * math.cos(t)))
+    b_ = Vector((PERNO.x + r2 * math.sin(t), FRONTE_PANNELLO, PERNO.z + r2 * math.cos(t)))
+    cilindro(a_, b_, 0.45 if lungo else 0.3, INCISIONE, 6, "tacca")
     if lungo:
-        bpy.ops.object.text_add(location=(Vector((PERNO.x + 110 * math.sin(t), PANNELLO_Y - 2.55, PERNO.z + 110 * math.cos(t))) * MM))
+        bpy.ops.object.text_add(location=(Vector((PERNO.x + 110 * math.sin(t), FRONTE_PANNELLO, PERNO.z + 110 * math.cos(t))) * MM))
         tx = bpy.context.object
         tx.data.body = str(bpm)
         tx.data.size = 6 * MM
@@ -243,7 +263,7 @@ for i, bpm in enumerate(maelzel):
         tx.data.materials.append(INCISIONE)
 for nome, deg in (("Largo", -33), ("Andante", -8), ("Allegro", 14), ("Presto", 33)):
     t = math.radians(deg)
-    bpy.ops.object.text_add(location=(Vector((PERNO.x + 84 * math.sin(t), PANNELLO_Y - 2.55, PERNO.z + 84 * math.cos(t))) * MM))
+    bpy.ops.object.text_add(location=(Vector((PERNO.x + 84 * math.sin(t), FRONTE_PANNELLO, PERNO.z + 84 * math.cos(t))) * MM))
     tx = bpy.context.object
     tx.data.body = nome
     tx.data.size = 4 * MM
@@ -252,110 +272,41 @@ for nome, deg in (("Largo", -33), ("Andante", -8), ("Allegro", 14), ("Presto", 3
     tx.rotation_euler = (math.radians(90), -t, 0)
     tx.data.materials.append(INCISIONE)
 
-# ------------------------------------------------------------------ moduli su "palafitte" di rame
-moduli = {
-    # nome: (centro, dimensioni, materiale, chip)
-    "esp32": ((-55, -30, 26), (18, 23), PCB_NERO, [(0, 3, 9, 9, 1.2), (0, -10, 9, 3, 3)]),
-    "driver": ((52, -26, 26), (26, 21), PCB_NERO, [(-2, 0, 14, 6, 1.4), (8, 6, 6, 6, 8)]),
-    "tp4056": ((-92, 8, 14), (17, 26), PCB_BLU, [(0, 2, 5, 5, 1.2), (0, 11, 9, 7, 3.2)]),
-    "mt3608": ((55, 38, 16), (37, 17), PCB_BLU, [(-6, 0, 8, 8, 4), (10, 0, 7, 9, 7)]),
-    "mini360": ((-40, 38, 18), (22, 17), PCB_VERDE, [(4, 0, 8, 8, 3), (-6, 0, 5, 5, 1.2)]),
-}
-pos = {}
-for nome, (c, d, mat, chip) in moduli.items():
-    scheda(c, (d[0], d[1], 0), mat, chip, nome)
-    pos[nome] = Vector(c)
-    # quattro piedini di rame agli angoli: sono anche i collegamenti
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            a = (c[0] + sx * (d[0] / 2 - 1.5), c[1] + sy * (d[1] / 2 - 1.5), c[2] - 0.8)
-            filo([a, (a[0], a[1], 0)])
+# batterie 18350
+for bt in G.BATTERIE:
+    cx, cy, cz = bt["centro"]
+    l2 = bt["lunghezza"] / 2
+    cilindro((cx, cy - l2, cz), (cx, cy + l2, cz), bt["diametro"] / 2, BATTERIA, 48, "18350")
+    cilindro((cx, cy - l2 - 1, cz), (cx, cy - l2, cz), 4, ACCIAIO)
 
-# encoder EC11 con pomello in ottone
+# encoder sul bordo anteriore, prolunga USB-C sul retro
+FRONTE = lo[1]
+XE, ZE = 60.0, (lo[2] + hi[2]) / 2
+cilindro((XE, FRONTE, ZE), (XE, FRONTE - 6, ZE), 4.5, ACCIAIO, 32)
+cilindro((XE, FRONTE - 3, ZE), (XE, FRONTE - 16, ZE), 8, OTTONE, 48, "pomello")
+for k in range(24):
+    a = 2 * math.pi * k / 24
+    cilindro((XE + 8 * math.cos(a), FRONTE - 4, ZE + 8 * math.sin(a)),
+             (XE + 8 * math.cos(a), FRONTE - 15, ZE + 8 * math.sin(a)), 0.6, OTTONE, 6)
+scatola((-60, hi[1], ZE), (9.5, 1.5, 3.6), CHIP, "usb_c")
+
+# teca di vetro appoggiata nella scanalatura della base
 if TECA:
-    # sul bordo anteriore della base: corpo incassato nel legno, asse orizzontale,
-    # il pomello resta fuori dalla teca
-    FRONTE = 5 - 85
-    cilindro((92, FRONTE, -11), (92, FRONTE - 6, -11), 4.5, ACCIAIO, 32)
-    cilindro((92, FRONTE - 6, -11), (92, FRONTE - 9, -11), 3.0, ACCIAIO)
-    pomello = cilindro((92, FRONTE - 3, -11), (92, FRONTE - 16, -11), 8, OTTONE, 48, "pomello")
-    for k in range(24):
-        a = 2 * math.pi * k / 24
-        cilindro((92 + 8 * math.cos(a), FRONTE - 4, -11 + 8 * math.sin(a)),
-                 (92 + 8 * math.cos(a), FRONTE - 15, -11 + 8 * math.sin(a)), 0.6, OTTONE, 6)
-    # USB-C sul retro: feritoia nel bordo posteriore
-    scatola((-92, 5 + 85, -11), (9.5, 1.5, 3.6), CHIP, "usb_c")
-    ENCODER_A, ENCODER_B = (88, -50, 0), (96, -50, 0)
-else:
-    scatola((92, -40, 4), (12, 13, 8), ACCIAIO, "encoder")
-    cilindro((92, -40, 8), (92, -40, 15), 3.5, ACCIAIO)
-    cilindro((92, -40, 15), (92, -40, 30), 3.0, ACCIAIO)
-    pomello = cilindro((92, -40, 18), (92, -40, 31), 8, OTTONE, 48, "pomello")
-    for k in range(24):
-        a = 2 * math.pi * k / 24
-        cilindro((92 + 8 * math.cos(a), -40 + 8 * math.sin(a), 19), (92 + 8 * math.cos(a), -40 + 8 * math.sin(a), 30), 0.6, OTTONE, 6)
-    ENCODER_A, ENCODER_B = (88, -40, 8), (96, -40, 8)
-
-# batterie 18350 in parallelo (sdraiate) con fascette di rame
-for y in (-12, 34):
-    cilindro((-112, y, 10), (-77, y, 10), 9, BATTERIA, 48, "18350")
-    cilindro((-77, y, 10), (-76, y, 10), 4, ACCIAIO)
-    cilindro((-113, y, 10), (-112, y, 10), 7, ACCIAIO)
-    for x in (-105, -84):
-        filo([(x, y - 9.6, 0), (x, y - 9.6, 10), (x, y - 9.6, 19.6), (x, y + 9.6, 19.6), (x, y + 9.6, 0)])
-filo([(-75, -12, 10), (-72, -12, 10), (-72, 34, 10), (-75, 34, 10)])
-filo([(-114, -12, 10), (-117, -12, 10), (-117, 34, 10), (-114, 34, 10)])
-
-# ------------------------------------------------------------------ collegamenti ortogonali
-def pin(nome, dx, dy):
-    c = pos[nome]
-    return (c.x + dx, c.y + dy, c.z + 0.8)
-
-
-reti = [
-    # tre fasi + EN dall'ESP32 al driver, quote diverse
-    (pin("esp32", 7.5, 8), pin("driver", -11.5, 7), 34),
-    (pin("esp32", 7.5, 5.5), pin("driver", -11.5, 4.5), 37),
-    (pin("esp32", 7.5, 3), pin("driver", -11.5, 2), 40),
-    (pin("esp32", 7.5, 0.5), pin("driver", -11.5, -0.5), 43),
-    # fasi motore dal driver al motore
-    ((52 - 8, -26 + 9, 26.8), (-4, 8, 72), 50),
-    ((52 - 4, -26 + 9, 26.8), (0, 8, 70), 54),
-    ((52, -26 + 9, 26.8), (4, 8, 72), 58),
-    # I2C verso l'AS5600
-    (pin("esp32", -7.5, 8), (-8, 14, 70), 64),
-    (pin("esp32", -7.5, 5.5), (-6, 14, 66), 68),
-    # alimentazione
-    (pin("mini360", 9.5, 6.5), pin("esp32", -7.5, -8), 30),
-    (pin("mt3608", -16, 6.5), pin("mini360", 9.5, -6.5), 24),
-    (pin("mt3608", 16, 6.5), pin("driver", 11, 8.5), 32),
-    (pin("tp4056", 6.5, -11), pin("mt3608", -16, -6.5), 8),
-    # encoder
-    (ENCODER_A, pin("esp32", -2, -10), 12),
-    (ENCODER_B, pin("esp32", 2, -10), 15),
-    # LED: dal driver di potenza al mozzo
-    (pin("driver", 11, -8.5), (6, -10, 70), 46),
-]
-for a, b, z in reti:
-    filo(manhattan(a, b, z))
-
-# ------------------------------------------------------------------ teca di vetro
-if TECA:
-    LX, LY, H, S = 240, 140, 225, 3  # interno della teca e spessore del vetro
-    CY = 5
+    S, M_ = 3, 5
+    LX, LY, H = hi[0] - lo[0] - 2 * M_ - 2 * S, hi[1] - lo[1] - 2 * M_ - 2 * S, 225
+    CX, CY = (lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2
     lastre = [
-        ((0, CY - LY / 2 - S / 2, H / 2), (LX + 2 * S, S, H)),
-        ((0, CY + LY / 2 + S / 2, H / 2), (LX + 2 * S, S, H)),
-        ((-LX / 2 - S / 2, CY, H / 2), (S, LY, H)),
-        ((LX / 2 + S / 2, CY, H / 2), (S, LY, H)),
-        ((0, CY, H + S / 2), (LX + 2 * S, LY + 2 * S, S)),
+        ((CX, CY - LY / 2 - S / 2, H / 2), (LX + 2 * S, S, H)),
+        ((CX, CY + LY / 2 + S / 2, H / 2), (LX + 2 * S, S, H)),
+        ((CX - LX / 2 - S / 2, CY, H / 2), (S, LY, H)),
+        ((CX + LX / 2 + S / 2, CY, H / 2), (S, LY, H)),
+        ((CX, CY, H + S / 2), (LX + 2 * S, LY + 2 * S, S)),
     ]
-    for c, d in lastre:
-        o = scatola(c, d, VETRO, "vetro")
+    for c_, d_ in lastre:
+        o = scatola(c_, d_, VETRO, "vetro")
         o.visible_shadow = False
-    # scanalatura nella base dove appoggia il vetro
-    for c, d in lastre[:4]:
-        scatola((c[0], c[1], 0.15), (d[0] + 1, d[1] + 1, 0.4), CHIP, "scanalatura")
+    for c_, d_ in lastre[:4]:
+        scatola((c_[0], c_[1], 0.15), (d_[0] + 1, d_[1] + 1, 0.4), CHIP, "scanalatura")
 
 # ------------------------------------------------------------------ luci e camera
 mondo = bpy.data.worlds.new("mondo")
@@ -387,14 +338,14 @@ luce_area("chiave", (-260, -260, 380), (0, 0, 60), 9, 260, (1.0, 0.95, 0.9))
 luce_area("riempimento", (320, -200, 160), (0, 0, 60), 2.5, 300, (0.8, 0.88, 1.0))
 luce_area("controluce", (60, 350, 300), (0, 0, 100), 7, 200, (1.0, 0.85, 0.7))
 
-bpy.ops.object.camera_add(location=Vector((-290, -560, 270) if TECA else (-250, -470, 250)) * MM)
+bpy.ops.object.camera_add(location=Vector((-120, -175, 120) if VICINO else (-230, -440, 230) if TECA else (-200, -380, 210)) * MM)
 cam = bpy.context.object
 cam.data.lens = 50
 cam.data.dof.use_dof = True
-cam.data.dof.focus_distance = 0.63 if TECA else 0.53
-cam.data.dof.aperture_fstop = 5.6
+cam.data.dof.focus_distance = 0.21 if VICINO else 0.52 if TECA else 0.45
+cam.data.dof.aperture_fstop = 11 if VICINO else 5.6
 cam.data.clip_start = 0.01
-mira = Vector((0, 0, 85) if TECA else (0, 10, 92)) * MM
+mira = Vector((6, 18, 38) if VICINO else (0, 15, 90)) * MM
 cam.rotation_euler = (mira - cam.location).to_track_quat("-Z", "Y").to_euler()
 scena.camera = cam
 
@@ -409,6 +360,6 @@ scena.view_settings.look = "AgX - Medium High Contrast"
 scena.view_settings.exposure = -0.9 if TECA else -0.3
 scena.cycles.max_bounces = 16
 scena.cycles.transmission_bounces = 16
-scena.render.filepath = str(QUI / ("concept-teca.png" if TECA else "concept.png"))
+scena.render.filepath = str(QUI / ("concept-vicino.png" if VICINO else "concept-teca.png" if TECA else "concept.png"))
 bpy.ops.render.render(write_still=True)
 print("Render salvato in", scena.render.filepath)

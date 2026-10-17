@@ -20,6 +20,12 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-17 | Il metronomo starà su una base di legno dentro una piccola teca di vetro: encoder sul bordo della base (pomello fuori dal vetro), USB‑C sul retro, tic con il motorino a vibrazione sotto la base | Il clic di un relè sotto vetro si sentirebbe appena; la vibrazione passa dalla base | Relè a vista per il tic |
 | 2026-10-17 | Confermato il motorino a vibrazione come unico tic, niente relè | Fabio: i moduli relè recuperati (Songle JQC‑3FF‑S‑Z 5 V) non sono belli da vedere; la bobina da 5 V non scatta con la sola batteria 1S | Relè Songle dissaldato, alimentato dai 12 V con resistenza in serie |
 | 2026-10-17 | Niente portapile: le 18350 si tengono con un supporto in filo di rame saldato e colla a caldo | Scelta di Fabio, coerente con il circuito in rame a vista | Portapile commerciale |
+| 2026-10-17 | **Disposizione compatta**: geometria unica in `fili/geometria.py`, misure dei moduli in `fili/moduli.yaml` (stimato/misurato). Nessun pezzo di rame sotto 10 mm, assi di reti diverse ad almeno 2,5 mm | Richiesta di Fabio: pezzi corti difficili da tenere e incollare; lavorare sui fori reali dei moduli | Disposizione a occhio del primo concept |
+| 2026-10-17 | Prolunga USB‑C da pannello sul retro della base; TP4056, encoder (sul bordo anteriore) e motorino a vibrazione stanno sotto la base | USB usabile senza toccare la teca; meno fili a vista | TP4056 a vista con la presa dentro la teca |
+| 2026-10-17 | Filamenti LED **in serie** con una sola resistenza (R7 eliminata): servono solo due fili verso il pendolo | Il pendolo ha già il filo di ritorno lungo i filamenti; stessa corrente in entrambi | Due filamenti in parallelo con due resistenze |
+| 2026-10-17 | LDO, MOSFET del letargo e del LED e resistenze su una **scheda servizi** (millefori a passo 2,54) dietro all'ESP32 | I componenti SMD piccoli non si saldano bene sul filo da 1 mm; i pin della scheda stanno sulla griglia dei pin dell'ESP32 | Componenti volanti sul rame |
+| 2026-10-17 | Masse su un **anello di rame** a 6 mm dalla base; 12 V su una dorsale a 14 mm; ponti a U a 18 mm | Ogni modulo scende sul proprio piano senza incroci | Masse a stella |
+| 2026-10-17 | Motore su una piastrina di ottone saldata a un telaio quadro di rame, AS5600 dietro la piastrina; ESP32 messo in modo che SDA/SCL dell'AS5600 scendano dritti sui suoi pin | Ottone e rame non disturbano il magnete; I2C con due soli pezzi per filo | Motore sorretto dai soli fili |
 
 ---
 

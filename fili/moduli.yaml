@@ -1,0 +1,122 @@
+# Misure dei moduli: unica fonte per la geometria del rame.
+#
+# Convenzioni (uguali per tutti i moduli):
+# - Scheda vista dal LATO COMPONENTI, nell'orientamento della foto indicata in "vista".
+# - Origine (0, 0) nell'angolo IN BASSO A SINISTRA della scheda; x verso destra, y verso l'alto. Millimetri.
+# - Ogni pin è il CENTRO del foro (o della piazzola) dove entra il filo di rame.
+# - stato: "stimato" = ricavato da foto o da scheda tecnica; "misurato" = preso col calibro.
+#   Il PDF di produzione non si genera finché c'è anche un solo valore stimato.
+# - altezza = ingombro sopra la scheda (componente più alto); sotto = ingombro sotto la scheda.
+#
+# Come misurare col calibro (vedi fili/misure-da-prendere.md):
+#   1. larghezza e altezza della scheda;
+#   2. per ogni fila di pin: distanza del centro del PRIMO foro dal bordo sinistro e dal bordo inferiore;
+#      gli altri fori della fila seguono il passo 2,54 (verificalo misurando primo-ultimo).
+
+esp32c3:
+  nome: ESP32-C3 SuperMini
+  vista: USB in alto, chip verso l'osservatore
+  stato: stimato
+  fonte: dimensioni da scheda tecnica (22,52 x 18), file dei pin a 15,24 stimate dalla foto
+  dimensioni: [18.0, 22.52]
+  spessore: 1.0
+  altezza: 3.5            # USB-C e modulo
+  sotto: 0.5
+  passo: 2.54
+  file:
+    # [x del primo foro, y del primo foro, direzione (+y o -y), nomi in ordine]
+    - [1.38, 20.15, -y, [5V, GND, 3V3, GPIO4, GPIO3, GPIO2, GPIO1, GPIO0]]
+    - [16.62, 20.15, -y, [GPIO5, GPIO6, GPIO7, GPIO8, GPIO9, GPIO10, GPIO20, GPIO21]]
+  note: ordine dei pin da verificare sulla serigrafia (lato sinistro / destro con USB in alto)
+
+simplefoc_mini:
+  nome: SimpleFOC Mini v1.0 (2024-05-13)
+  vista: come foto/driver-simplefoc-mini.jpg (connettore 2x5 in alto, condensatore in basso a destra)
+  stato: stimato
+  fonte: foto, circa 42 px/mm
+  dimensioni: [23.8, 20.0]
+  spessore: 1.6
+  altezza: 8.5            # condensatore 100 uF
+  sotto: 0.5
+  passo: 2.54
+  file:
+    - [3.2, 18.45, +x, [EN, IN3, IN2, IN1, GND]]
+    - [3.2, 15.91, +x, [nFT, nSP, nRT, GND2, 3V3]]
+    - [6.2, 1.2, +x, [M1, M2, M3]]
+  pin:
+    PWR-: [20.4, 14.8]
+    PWR+: [20.1, 9.8]
+  note: morsetti di potenza a passo 5 mm circa
+
+tp4056:
+  nome: TP4056 USB-C con protezione
+  vista: come foto/caricatore-tp4056-usbc.jpg (USB-C a destra)
+  stato: stimato
+  fonte: foto, circa 29 px/mm
+  dimensioni: [27.0, 17.0]
+  spessore: 1.0
+  altezza: 3.3
+  sotto: 0.3
+  pin:
+    OUT-: [3.1, 15.2]
+    B-: [3.1, 11.8]
+    B+: [3.1, 4.8]
+    OUT+: [3.1, 1.7]
+    IN-: [25.8, 15.0]
+    IN+: [25.8, 1.6]
+
+mt3608:
+  nome: MT3608 boost
+  vista: come foto/boost-mt3608.jpg (VIN a sinistra, VOUT a destra)
+  stato: stimato
+  fonte: foto, circa 37,5 px/mm; dimensioni comuni 36 x 17
+  dimensioni: [36.0, 17.0]
+  spessore: 1.6
+  altezza: 10.0           # trimmer 3296
+  sotto: 0.3
+  pin:
+    VIN-: [3.0, 13.0]
+    VIN+: [3.0, 4.5]
+    VOUT-: [33.2, 12.1]
+    VOUT+: [33.2, 4.8]
+
+mini360:
+  nome: MH Mini-360 (MP2307)
+  vista: piazzole IN a sinistra, OUT a destra
+  stato: stimato
+  fonte: dimensioni comuni 17,2 x 11,2; piazzole agli angoli
+  dimensioni: [17.2, 11.2]
+  spessore: 1.0
+  altezza: 3.5
+  sotto: 0.3
+  pin:
+    IN+: [1.3, 9.9]
+    IN-: [1.3, 1.3]
+    OUT+: [15.9, 9.9]
+    OUT-: [15.9, 1.3]
+  note: verificare quale angolo è + e quale - sulla serigrafia
+
+as5600:
+  nome: AS5600 (modulo bianco, 4 fori di fissaggio)
+  vista: come la foto di dettaglio (VCC/OUT/GND a sinistra, DIR/SCL/SDA/GPO a destra)
+  stato: stimato
+  fonte: foto di dettaglio di Fabio, circa 46 px/mm
+  dimensioni: [23.5, 23.3]
+  spessore: 1.6
+  altezza: 1.8
+  sotto: 0.3
+  passo: 2.54
+  file:
+    - [4.85, 14.3, -y, [VCC, OUT, GND]]
+    - [18.2, 16.6, -y, [DIR, SCL, SDA, GPO]]
+  pin:
+    CHIP: [11.6, 11.9]    # centro del chip: va sull'asse del motore
+  note: DIR e le pull-up di SDA/SCL da verificare col tester
+
+motore_1503:
+  nome: Outrunner 1503
+  stato: stimato
+  diametro_campana: 19.0
+  lunghezza: 15.0         # dalla base alla fine della campana
+  mozzo: 3.5
+  note: misurare diametro e lunghezza, e i fori della base

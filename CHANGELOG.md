@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-17
+- Disposizione compatta: misure dei moduli in fili/moduli.yaml, geometria unica in fili/geometria.py con i controlli (pezzi ≥ 10 mm, distanze, schede attraversate), distinta fili/segmenti.csv. Modello OpenSCAD e render ora generati dalla stessa geometria.
 - Modello 3D di controllo in OpenSCAD (modello/metronomus.scad), stessa disposizione del render.
 - Tolti dalla lista acquisti portapile e magnete (incluso con l'AS5600); il modulo vibrazione ha già la pull‑down su IN.
 - Render con la teca di vetro (render/concept-teca.png: `python render/concept.py teca`), encoder sul bordo della base e venatura del legno migliorata.
