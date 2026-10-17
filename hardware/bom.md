@@ -21,7 +21,7 @@ _Da completare con i modelli esatti dopo le foto._
 |---|---|---|
 | Interruttore generale | Interruttore a levetta in metallo | Estetica in tema con il rame |
 | Regolatore 3,3 V | Piccolo buck 3,3 V (es. MP1584 o modulo Mini‑360) | Da 8,4 V un LDO scalderebbe e sprecherebbe energia |
-| Boost per il motore | MT3608 o simile, regolato a ~12 V | Con 2S la tensione scende sotto 8 V già a metà carica: il DRV8313 del SimpleFOC Mini **non funziona sotto 8 V** |
+| Boost per il motore | **MT3608 (disponibile)**, regolato a 12 V **prima** di collegare il driver | Con 2S la tensione scende sotto 8 V già a metà carica: il DRV8313 del SimpleFOC Mini **non funziona sotto 8 V** |
 | Caricatore 2S USB‑C | Modulo con chip IP2326 (5 V → 8,4 V) | Il TP4056 carica solo celle singole |
 | BMS 2S | Scheda protezione 2S (es. HX‑2S) | Sovrascarica, cortocircuito; se possibile con bilanciamento |
 | MOSFET per il LED | AO3400 / IRLZ44N logic‑level | PWM del LED dal pin ESP32 |
