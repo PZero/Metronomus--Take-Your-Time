@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-17
+- Motore 1503 (7,4 V, 0,5 Ω) confermato, con limite di tensione FOC nel firmware.
 - Batteria 2 × 18350 (2S) e sensore AS5600 confermati; aggiornata la catena di alimentazione.
 - Tutte le decisioni riunite nell'unico file docs/decisioni.md.
 - Deciso l'indicatore del tempo: il pendolo punta su una scala Maelzel incisa al laser.

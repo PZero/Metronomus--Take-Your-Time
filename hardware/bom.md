@@ -8,7 +8,7 @@ _Da completare con i modelli esatti dopo le foto._
 |---|---|---|
 | Microcontrollore | ESP32 — _da identificare_ | |
 | Driver motore brushless | **SimpleFOC Mini v1.0 (04/22)**, chip DRV8313 | Alimentazione motore 8–30 V, max ~2,5 A di picco. Ingressi IN1/IN2/IN3 (PWM), EN, nSLP, nRT, nFT. Logica 3,3 V compatibile con ESP32. Il pin 3,3 V della scheda eroga solo ~10 mA: non usarlo per l'ESP32 |
-| Motore brushless | _da identificare_ | Ideale un gimbal 2204/2804 |
+| Motore brushless | **1503** (statore 15 mm), 7,4 V, 0,3 A, 0,5 Ω | Resistenza bassa, da drone e non da gimbal: con il driver a 12 V il firmware **deve** limitare la tensione di fase (`voltage_limit` ≈ 0,5–1 V, quindi 1–2 A). Da misurare la resistenza tra due fasi con il multimetro. In alternativa un gimbal 2204 (~10 Ω), più silenzioso e fresco |
 | Batteria | **2 × 18350 Li‑ion in serie (2S)** | 6,0–8,4 V (nominale 7,4 V), circa 800–1200 mAh. Da verificare sulle celle: capacità e se sono protette |
 | Modulo di ricarica USB | _da identificare_ | Se è un TP4056 non va bene per 2S: vedi sotto |
 | Rotary encoder | _da identificare_ (KY‑040?) | |

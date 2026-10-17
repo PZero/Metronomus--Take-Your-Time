@@ -44,7 +44,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 |---|---|---|
 | ESP32 | da identificare | ✅ disponibile |
 | Driver brushless | SimpleFOC Mini v1.0 (DRV8313, 8–30 V) | ✅ disponibile |
-| Motore brushless | da identificare | ✅ disponibile |
+| Motore brushless | 1503, 7,4 V, 0,3 A, 0,5 Ω | ✅ disponibile |
 | Batteria | 2 × 18350 in serie (2S, 7,4 V) | ✅ disponibile |
 | Caricatore USB | da identificare | ✅ disponibile |
 | Rotary encoder | da identificare | ✅ disponibile |
@@ -68,6 +68,8 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 **Driver:** SimpleFOC Mini v1.0, basato su DRV8313. Il motore va alimentato a 8–30 V (consigliati 10–12 V), la logica è a 3,3 V e si collega direttamente all'ESP32 con 3 PWM (IN1–IN3) più EN.
 
 **Alimentazione:** due 18350 in serie (2S, 6,0–8,4 V). Poiché il driver non funziona sotto 8 V, un boost porta il motore a circa 12 V; un piccolo buck dà 3,3 V all'ESP32. Ricarica da USB‑C con un caricatore 2S, protezione con un BMS 2S.
+
+**Motore:** 1503 a bassa resistenza (0,5 Ω). Il driver lavora a 12 V ma il firmware limita la tensione di fase a circa 0,5–1 V, così la corrente resta entro 1–2 A e il motore non scalda.
 
 **Sensore:** AS5600 (I2C, 12 bit) sotto l'albero, magnete diametrale sull'albero, pin DIR a GND.
 
