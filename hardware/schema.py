@@ -250,11 +250,11 @@ sezione(30, 495, 1620, 670, "CONTROLLO E ATTUATORI", BLU)
 
 esp = modulo(740, 560, 230, 360, "ESP32-S3\nSuperMini",
              sx=[("5V", "n.c."), ("GND", "GND"), ("3V3", "3V3"), ("GPIO13", "ENC_B"), ("GPIO12", "ENC_A"),
-                 ("GPIO11", "ENC_SW"), ("GPIO10", "LED_PWM"), ("GPIO9", "VBAT_ADC"), ("GPIO8", "n.c.")],
+                 ("GPIO11", "n.c."), ("GPIO10", "LED_PWM"), ("GPIO9", "VBAT_ADC"), ("GPIO8", "ENC_SW")],
              dx=[("TX", "n.c."), ("RX", "n.c."), ("GPIO1", "SCL"), ("GPIO2", "SDA"), ("GPIO3", "VIB_IN"),
-                 ("GPIO4", "PWM_C"), ("GPIO5", "PWM_B"), ("GPIO6", "PWM_A"), ("GPIO7", "PWR_EN")],
+                 ("GPIO4", "PWR_EN"), ("GPIO5", "PWM_C"), ("GPIO6", "PWM_B"), ("GPIO7", "PWM_A")],
              passo=37, stub=60)
-testo(855, 945, "GPIO11 = pulsante, risveglia dal letargo · GPIO3 = strapping JTAG (innocuo)\nTogliere il LED rosso di alimentazione della SuperMini", GRIGIO, 12, "middle")
+testo(855, 945, "GPIO8 = pulsante, risveglia dal letargo · GPIO3 = strapping JTAG (innocuo)\nTogliere il LED rosso di alimentazione della SuperMini", GRIGIO, 12, "middle")
 
 drv = modulo(1200, 560, 200, 380, "SimpleFOC\nMini v1.0\n(DRV8313)",
              sx=[("IN1", "PWM_A"), ("IN2", "PWM_B"), ("IN3", "PWM_C"), ("EN", "DRV_3V3"), ("GND", "GND"),

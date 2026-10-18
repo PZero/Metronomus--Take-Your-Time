@@ -18,12 +18,7 @@ Le posizioni dei fori dei moduli sono la base di tutto il rame: un errore di 0,5
 | | primo foro fila sinistra (TX): x, y | 1,38 · 21,91 (disegno) | |
 | | primo foro fila destra (5V): x, y | 16,62 · 21,91 (disegno) | |
 | | sporgenza della USB‑C oltre il bordo | 1,2–2,2 (fonti divergenti) | |
-| SimpleFOC Mini | larghezza × altezza | 23,8 × 20,0 | |
-| | foro EN (fila alta, sinistra): x, y | 3,2 · 18,45 | |
-| | foro nFT (fila bassa, sinistra): x, y | 3,2 · 15,91 | |
-| | foro M1: x, y | 6,2 · 1,2 | |
-| | morsetto −: x, y · morsetto +: x, y | 20,4 · 14,8 · 20,1 · 9,8 | |
-| | altezza del condensatore | 8,5 | |
+| SimpleFOC Mini | ✅ dal disegno quotato: 26 × 21,5, fori Ø2 a 22 × 17,5, EN 5,08·20,2, nFT 5,08·17,66, M1 8,33·1,22, morsetti 22,75·15,52 / 22,75·10,32 | — | solo da confermare: ordine M1‑M3 e quale morsetto è + |
 | MT3608 | larghezza × altezza | 36,0 × 17,0 | |
 | | VIN−, VIN+, VOUT−, VOUT+: x, y | 3,0·13,0 · 3,0·4,5 · 33,2·12,1 · 33,2·4,8 | |
 | | altezza del trimmer | 10,0 | |

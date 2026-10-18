@@ -175,11 +175,12 @@ ESP = MODULI["esp32"]
 ESP.origine = (0, 0, DECK)
 ESP.allinea("GPIO1", (AS.pin("SCL")[0], Y_ESP_FRONTE, DECK))
 
-# --- Driver davanti all'ESP32: IN1..IN3 sotto GPIO6..4, collegati a U.
+# --- Driver davanti all'ESP32: IN1..IN3 sotto GPIO7..5, collegati a U (un passo più a destra
+#     di GPIO6..4: con le misure vere il driver toccherebbe il Mini-360).
 MODULI["driver"] = modulo("simplefoc_mini", "SimpleFOC Mini", rot=0, colore="nero")
 DRV = MODULI["driver"]
 DRV.origine = (0, 0, DECK)
-DRV.allinea("IN1", (ESP.pin("GPIO6")[0], Y_ESP_FRONTE - 11.0, DECK))
+DRV.allinea("IN1", (ESP.pin("GPIO7")[0], Y_ESP_FRONTE - 11.0, DECK))
 
 # --- Mini-360 a sinistra: OUT+ esattamente sotto la discesa del VCC dell'AS5600.
 Y_DISCESA_AS = Y_AS + 10.0       # i fili VCC e GND dell'AS5600 corrono 10 mm verso il retro e scendono
@@ -196,14 +197,15 @@ MT.allinea("VOUT+", (38.0 + 4.8, DRV.pin("PWR+")[1], DECK))
 
 # --- Scheda servizi (millefori a passo 2,54, da tagliare): LDO, MOSFET del letargo e del LED,
 #     resistenze. I suoi pin sono sulla stessa griglia dei pin dell'ESP32.
-#     Griglia contata dal pin 5V dell'S3 (k = 0), verso +x: 3V3 = 2, GPIO10 = 6, GPIO9 = 7, GPIO8 = 8.
+#     Griglia contata dal pin 5V dell'S3 (k = 0), verso +x: 3V3 = 2, GPIO11 = 5, GPIO10 = 6, GPIO9 = 7.
+#     PWR_EN passa dritto sotto GPIO11, che resta libero.
 Y_SERVIZI = ESP.pin("5V")[1] + 12.26
 X0 = ESP.pin("5V")[0]             # griglia x dei pin: X0 + 2,54 k
 def gx(k): return round(X0 + 2.54 * k, 3)
 
 
 PIN_SERVIZI = {
-    "3V3": gx(2), "LED_PWM": gx(6), "ADC": gx(7), "PWR_EN": gx(8), "LED_K": gx(9), "LED_A": gx(10),
+    "3V3": gx(2), "PWR_EN": gx(5), "LED_PWM": gx(6), "ADC": gx(7), "LED_K": gx(9), "LED_A": gx(10),
     "VBAT": gx(11), "GND": gx(12), "V12": gx(14), "VSW": gx(15), "VSW_VIB": gx(16),
 }
 servizi = Modulo("Scheda servizi", None, (gx(16) - gx(2) + 2 * 1.8, 10.16), origine=(gx(2) - 1.8, Y_SERVIZI - 5.08, DECK),
@@ -275,7 +277,7 @@ for nome, pa, pe in (("SCL", "SCL", "GPIO1"), ("SDA", "SDA", "GPIO2")):
     tratto(nome, p, (p[0], q[1], p[2]), q)
 
 # --- PWM: ponti a U sotto le schede
-for nome, pe, pd in (("PWM_A", "GPIO6", "IN1"), ("PWM_B", "GPIO5", "IN2"), ("PWM_C", "GPIO4", "IN3")):
+for nome, pe, pd in (("PWM_A", "GPIO7", "IN1"), ("PWM_B", "GPIO6", "IN2"), ("PWM_C", "GPIO5", "IN3")):
     rete(nome).pin += [("esp32", pe), ("driver", pd)]
     ponte(nome, ESP.pin(pe), DRV.pin(pd), Z_PONTI)
 
@@ -283,8 +285,8 @@ for nome, pe, pd in (("PWM_A", "GPIO6", "IN1"), ("PWM_B", "GPIO5", "IN2"), ("PWM
 for nome, pe, ps in (("3V3", "3V3", "3V3"), ("LED_PWM", "GPIO10", "LED_PWM"), ("VBAT_ADC", "GPIO9", "ADC")):
     rete(nome).pin += [("esp32", pe), ("servizi", ps)]
     ponte(nome, ESP.pin(pe), SRV.pin(ps), Z_PONTI)
-rete("PWR_EN").pin += [("esp32", "GPIO7"), ("servizi", "PWR_EN")]
-a, b = ESP.pin("GPIO7"), SRV.pin("PWR_EN")
+rete("PWR_EN").pin += [("esp32", "GPIO4"), ("servizi", "PWR_EN")]
+a, b = ESP.pin("GPIO4"), SRV.pin("PWR_EN")
 tratto("PWR_EN", a, (a[0], a[1], Z_PONTI), (b[0], a[1], Z_PONTI), (b[0], b[1], Z_PONTI), b)
 
 # --- VSW: scheda servizi -> MT3608 VIN+ ; e giù nella base verso il motorino a vibrazione
@@ -302,7 +304,7 @@ tratto("VBAT", (p[0], p[1], 0.0), p)
 rete("VBAT").fori.append((p[0], p[1], 0.0))
 
 # --- fili che scendono nella base: encoder (sotto la base, sul bordo anteriore) e motorino
-for nome, pe in (("ENC_SW", "GPIO11"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13"), ("VIB_IN", "GPIO3")):
+for nome, pe in (("ENC_SW", "GPIO8"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13"), ("VIB_IN", "GPIO3")):
     rete(nome).pin.append(("esp32", pe))
     p = ESP.pin(pe)
     tratto(nome, p, (p[0], p[1], 0.0))

@@ -39,20 +39,26 @@ simplefoc_mini:
   nome: SimpleFOC Mini v1.0 (2024-05-13)
   vista: come foto/driver-simplefoc-mini.jpg (connettore 2x5 in alto, condensatore in basso a destra)
   stato: stimato
-  fonte: foto, circa 42 px/mm
-  dimensioni: [23.8, 20.0]
+  fonte: >-
+    disegno quotato del produttore (18/10/2026), ruotato di 180 gradi: 26 x 21,5 (+-0,2), 4 fori
+    passanti Ø2 a interasse 22 x 17,5 (a 2,0 dai bordi), ingombro 11 in altezza con i pin.
+    Pin ricavati dal disegno in scala (15,4 px/mm, +-0,1): connettore 2x5 sulla griglia 2,54.
+  dimensioni: [26.0, 21.5]
   spessore: 1.6
-  altezza: 8.5            # condensatore 100 uF
-  sotto: 0.5
+  altezza: 8.0            # condensatore 100 uF e pin degli header (vista laterale)
+  sotto: 1.5              # code dei pin sotto la scheda
   passo: 2.54
   file:
-    - [3.2, 18.45, +x, [EN, IN3, IN2, IN1, GND]]
-    - [3.2, 15.91, +x, [nFT, nSP, nRT, GND2, 3V3]]
-    - [6.2, 1.2, +x, [M1, M2, M3]]
+    - [5.08, 20.2, +x, [EN, IN3, IN2, IN1, GND]]
+    - [5.08, 17.66, +x, [nFT, nSP, nRT, GND2, 3V3]]
+    - [8.33, 1.22, +x, [M1, M2, M3]]
   pin:
-    PWR-: [20.4, 14.8]
-    PWR+: [20.1, 9.8]
-  note: morsetti di potenza a passo 5 mm circa
+    PWR-: [22.75, 15.52]
+    PWR+: [22.75, 10.32]
+  fori: [[2.0, 2.0], [24.0, 2.0], [2.0, 19.5], [24.0, 19.5]]
+  note: >-
+    i lobi dei fori sporgono: tra i fori la scheda è larga 22 (lati sinistro e destro rientrati).
+    Morsetti di potenza a passo 5,2. Ordine M1-M2-M3 e quale morsetto è + da confermare sulla serigrafia.
 
 tp4056:
   nome: TP4056 USB-C con protezione
