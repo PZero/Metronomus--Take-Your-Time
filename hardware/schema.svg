@@ -54,20 +54,19 @@
 <circle cx="470" cy="330" r="4" fill="#222222"/>
 <polyline points="470,330 530,330 530,350" stroke="#222222" stroke-width="2" fill="none" stroke-linejoin="round"/>
 <line x1="530" y1="350" x2="530" y2="368" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="530" y1="368" x2="518" y2="368" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="530" y1="392" x2="518" y2="392" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="530" y1="368" x2="516" y2="376" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="516" y1="384" x2="530" y2="392" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="530" y1="392" x2="530" y2="410" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="518" y1="362" x2="518" y2="398" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
-<line x1="512" y1="366" x2="512" y2="394" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="500" y1="380" x2="512" y2="380" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<polyline points="520,392 527,388 527,396 520,392" stroke="#222222" stroke-width="2" fill="#222222" stroke-linejoin="round"/>
-<text x="542" y="390" fill="#222222" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Q3 AO3400</text>
+<line x1="516" y1="364" x2="516" y2="396" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
+<line x1="500" y1="380" x2="516" y2="380" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<polyline points="530,392 522,391 526,385 530,392" stroke="#222222" stroke-width="2" fill="#222222" stroke-linejoin="round"/>
+<text x="542" y="390" fill="#222222" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Q3 2N3904</text>
 <line x1="530" y1="410" x2="530" y2="422" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="516" y1="422" x2="544" y2="422" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="521" y1="427" x2="539" y2="427" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="526" y1="432" x2="534" y2="432" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <polyline points="440,380 450,380 453.3333333333333,387 460.0,373 466.6666666666667,387 473.3333333333333,373 480.0,387 486.6666666666667,373 490,380 500,380" stroke="#222222" stroke-width="2" fill="none" stroke-linejoin="round"/>
-<text x="470" y="405" fill="#222222" font-size="12" text-anchor="middle" font-weight="normal" font-family="Helvetica, Arial, sans-serif">100 Ω</text>
+<text x="470" y="405" fill="#222222" font-size="12" text-anchor="middle" font-weight="normal" font-family="Helvetica, Arial, sans-serif">10 kΩ</text>
 <circle cx="440" cy="380" r="4" fill="#222222"/>
 <polyline points="440,380 440,390 447,392.0833333333333 433,396.25 447,400.4166666666667 433,404.5833333333333 447,408.75 433,412.9166666666667 440,415 440,425" stroke="#222222" stroke-width="2" fill="none" stroke-linejoin="round"/>
 <line x1="440" y1="425" x2="440" y2="437" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
@@ -369,20 +368,19 @@
 <circle cx="180" cy="740" r="4" fill="#222222"/>
 <line x1="180" y1="740" x2="180" y2="760" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="180" y1="760" x2="180" y2="778" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="180" y1="778" x2="168" y2="778" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="180" y1="802" x2="168" y2="802" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="180" y1="778" x2="166" y2="786" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="166" y1="794" x2="180" y2="802" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="180" y1="802" x2="180" y2="820" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="168" y1="772" x2="168" y2="808" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
-<line x1="162" y1="776" x2="162" y2="804" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<line x1="150" y1="790" x2="162" y2="790" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<polyline points="170,802 177,798 177,806 170,802" stroke="#222222" stroke-width="2" fill="#222222" stroke-linejoin="round"/>
-<text x="192" y="795" fill="#222222" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Q1 AO3400</text>
+<line x1="166" y1="774" x2="166" y2="806" stroke="#222222" stroke-width="3" stroke-linecap="round"/>
+<line x1="150" y1="790" x2="166" y2="790" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<polyline points="180,802 172,801 176,795 180,802" stroke="#222222" stroke-width="2" fill="#222222" stroke-linejoin="round"/>
+<text x="192" y="795" fill="#222222" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Q1 2N3904</text>
 <line x1="180" y1="820" x2="180" y2="832" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="166" y1="832" x2="194" y2="832" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="171" y1="837" x2="189" y2="837" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="176" y1="842" x2="184" y2="842" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <polyline points="90,790 100,790 103.33333333333333,797 110.0,783 116.66666666666667,797 123.33333333333333,783 130.0,797 136.66666666666666,783 140,790 150,790" stroke="#222222" stroke-width="2" fill="none" stroke-linejoin="round"/>
-<text x="122" y="815" fill="#222222" font-size="12" text-anchor="middle" font-weight="normal" font-family="Helvetica, Arial, sans-serif">100 Ω</text>
+<text x="122" y="815" fill="#222222" font-size="12" text-anchor="middle" font-weight="normal" font-family="Helvetica, Arial, sans-serif">470 Ω</text>
 <circle cx="90" cy="790" r="4" fill="#222222"/>
 <polyline points="90,790 90,800 97,802.5 83,807.5 97,812.5 83,817.5 97,822.5 83,827.5 90,830 90,840" stroke="#222222" stroke-width="2" fill="none" stroke-linejoin="round"/>
 <text x="80" y="822" fill="#222222" font-size="12" text-anchor="end" font-weight="normal" font-family="Helvetica, Arial, sans-serif">100 kΩ</text>

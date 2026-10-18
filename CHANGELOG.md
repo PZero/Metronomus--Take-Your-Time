@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-18 (sera)
+- **Q1 e Q3 diventano 2N3904** del kit già in casa (al posto degli AO3400): millefori ridisposta e controllata, schema (simbolo NPN, solo SVG), pinout e BOM aggiornati, PDF 1:1 rigenerato. Da comprare resta solo l'AO3401.
+- Misure col calibro di ESP32, AS5600, MT3608, Mini‑360, SimpleFOC, TP4056, celle e filo in fili/moduli.yaml.
+- **PDF 1:1 del rame** (produzione/piano-rame.pdf, da fili/piano_pdf.py): righello, dima di foratura con fori passanti e ciechi, viste 1:1 per gruppo, pagina della millefori, giunti, distinta con i pezzi in scala reale.
+- **Verifiche OpenSCAD** (fili/verifica_scad.py): pezzi tagliati ricostruiti dai dati del PDF, controlli di lunghezze, giunti, corti e contatto delle celle; colori per isole saldate; nomi di schede e pin; verifiche per gradi `alimentazione` ed `esp32`.
+- Sotto la base: TP4056 ed encoder in scassi, cavetti in canaline, rame elettrico passante. Modulo vibrazione sopra la base. Barre delle batterie saldate sui poli (celle 35 × 18).
+- Scheda servizi su millefori 17 × 6 (fili/millefori.py, con controllo della netlist). Encoder senza RC: antirimbalzo nel firmware.
+- Geometria: 95 pezzi, 3,36 m, zero errori.
+
 ## 2026-10-18
 - Scala su ±30° (finecorsa ±35°): pannello e colonne ricavati dall'arco, larghi 124 mm. Base 150 × 90 mm: geometria senza errori (93 pezzi, 3,16 m).
 - Risposte di Fabio registrate (domande 7–18). Base 150 × 90 mm con controllo della teca; magnete da 2 mm a filo, AS5600 arretrato: risolti i contatti con motore e magnete. Driver v1.0 confermato dalla serigrafia. Ritorno di massa spostato vicino a driver e MT3608 (ruolo elettronica), condensatori aggiuntivi. Resta il pannello della scala, troppo largo (domanda 19).

@@ -27,7 +27,9 @@ R_FILO = 0.5
 PEZZO_MIN = 10.0          # nessun pezzo più corto di 1 cm (richiesta di Fabio)
 DISTANZA_MIN = 2.5        # tra gli assi di fili di reti diverse (gioco 1,5 mm; il passo dei pin è 2,54)
 INFILATA_PIN = 2.5        # filo che attraversa il foro di un modulo e sporge per la saldatura
-INFILATA_BASE = 5.0       # filo infilato in un foro della base di legno
+INFILATA_BASE = 5.0       # filo solo infilato in un foro cieco della base di legno (struttura, paletti)
+Z_CANALINE = -20.0        # il rame elettrico attraversa la base (22 mm) e sporge 2 mm nelle canaline sotto (profonde 4)
+RETI_ANCORATE = {"TELAIO", "PANNELLO", "STOP"}   # i loro piedi sono solo ancorati nel legno
 GIOCO_SCHEDE = 0.5        # distanza minima tra gli ingombri di due schede (o di una scheda e un ostacolo)
 TOL = 1e-6
 
@@ -235,15 +237,24 @@ X0 = ESP.pin("5V")[0]             # griglia x dei pin: X0 + 2,54 k
 def gx(k): return round(X0 + 2.54 * k, 3)
 
 
-PIN_SERVIZI = {
-    "3V3": gx(2), "PWR_EN": gx(5), "LED_PWM": gx(6), "ADC": gx(7), "LED_K": gx(9), "LED_A": gx(10),
-    "VBAT": gx(11), "GND": gx(12), "V12": gx(14), "VSW": gx(15), "VSW_VIB": gx(16),
-}
-servizi = Modulo("Scheda servizi", None, (gx(16) - gx(2) + 2 * 1.8, 10.16), origine=(gx(2) - 1.8, Y_SERVIZI - 5.08, DECK),
-                 spessore=1.6, altezza=6.0, sotto=1.0, colore="millefori", stato="progetto")
-servizi.pin_loc = {k: [x - servizi.origine[0], 5.08] for k, x in PIN_SERVIZI.items()}
+import millefori as MF                                          # disposizione dei componenti (fili/millefori.py)
+PIN_SERVIZI = {nome: gx(k) for nome, k in MF.USCITE.items()}
+# millefori tagliata a metà tra i fori: colonne k = 0..16, righe r = -3..+2 (r = 0 fila dei pin di uscita)
+_k0, _k1, _r0, _r1 = min(MF.COLONNE), max(MF.COLONNE), min(MF.RIGHE), max(MF.RIGHE)
+servizi = Modulo("Scheda servizi", None, ((_k1 - _k0 + 1) * 2.54, (_r1 - _r0 + 1) * 2.54),
+                 origine=(gx(_k0) - 1.27, Y_SERVIZI + _r0 * 2.54 - 1.27, DECK),
+                 spessore=1.6, altezza=9.0, sotto=1.0, colore="millefori", stato="progetto")   # resistenze in piedi
+servizi.pin_loc = {k: [x - servizi.origine[0], Y_SERVIZI - servizi.origine[1]] for k, x in PIN_SERVIZI.items()}
 MODULI["servizi"] = servizi
 SRV = servizi
+
+# --- Modulo vibrazione appoggiato e incollato sul legno (il tic passa alla base): fila GND-VCC-IN lungo y,
+#     IN esattamente sotto il GPIO3 dell'ESP32, così il filo di VIB_IN scende dritto sul pin.
+_V = MISURE["vibrazione"]
+MODULI["vibrazione"] = modulo("vibrazione", "Vibrazione", rot=0, colore="nero")
+VIB = MODULI["vibrazione"]
+VIB.origine = (0, 0, _V["spessore"] + _V["sotto"])              # appoggiato sul legno
+VIB.allinea("IN", (ESP.pin("GPIO3")[0], ESP.pin("GPIO3")[1], None))
 
 # ------------------------------------------------------------------ motore e telaio
 MOTORE = {"asse": ASSE, "diametro": MISURE["motore_1503"]["diametro_campana"],
@@ -271,7 +282,8 @@ PANNELLO = {"centro": (0.0, -5.0, 160.0), "dimensioni": (L_PANNELLO, 5.0, 70.0)}
 X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO = L_PANNELLO / 2 - 5, -1.5, 195.0
 
 # ------------------------------------------------------------------ batterie 18350 in parallelo
-BATTERIE = [{"centro": (x, 19.5, 9.15), "diametro": 18.3, "lunghezza": 35.0} for x in (-35.0, -56.0)]
+# 18350 misurate da Fabio (18/10): 35 mm polo + compreso, diametro 18; appoggiate sul legno
+BATTERIE = [{"centro": (x, 19.5, 9.0), "diametro": 18.0, "lunghezza": 35.0} for x in (-35.0, -56.0)]
 
 # ------------------------------------------------------------------ base
 BASE = {"min": (-75.0, -22.0, -22.0), "max": (75.0, 68.0, 0.0)}   # 150 x 90 mm (Fabio, 18/10: 15 x 8-10 cm)
@@ -280,7 +292,7 @@ TECA_BORDO = 5.0 + 3.0           # il vetro sta a 5 mm dal bordo della base ed �
 # ================================================================== RETI
 # Quote dei bus sopra la base (sollevati dal legno): massa, 12 V, segnali.
 Z_ANELLO, Z_DORSALE, Z_PONTI, Z_LED = 6.0, 14.0, 18.0, 95.0
-ANELLO = {"x": (-22.0, 37.5), "y": (1.0, ESP.pin("GND")[1] - 11.5)}
+ANELLO = {"x": (-22.0, 37.5), "y": (0.0, ESP.pin("GND")[1] - 11.5)}
 ax0, ax1 = ANELLO["x"]
 ay0, ay1 = ANELLO["y"]
 
@@ -330,7 +342,7 @@ for nome, ps in (("PWR_EN", "PWR_EN"), ("3V3", "3V3"), ("LED_PWM", "LED_PWM"), (
     discesa("servizi", ps, nome, Z_PONTI)
 p = SRV.pin("GND")
 discesa("servizi", "GND", "GND", Z_ANELLO, (p[0], ay1, Z_ANELLO))
-for nome, ps in (("VBAT", "VBAT"), ("VSW", "VSW_VIB")):          # nella base: TP4056 e motorino a vibrazione
+for nome, ps in (("VBAT", "VBAT"), ("VSW", "VSW_VIB")):          # nella base: TP4056 e, col cavetto, motorino a vibrazione
     discesa("servizi", ps, nome, 0.0)
     rete(nome).fori.append(tonda((SRV.pin(ps)[0], SRV.pin(ps)[1], 0.0)))
 # LED: due fili salgono fin sopra il motore; da lì 15-20 mm di filo flessibile fino ai filamenti
@@ -346,7 +358,13 @@ for nome, pe in (("PWM_A", "GPIO7"), ("PWM_B", "GPIO6"), ("PWM_C", "GPIO5"), ("P
     discesa("esp32", pe, nome, Z_PONTI)
 p = ESP.pin("GND")
 discesa("esp32", "GND", "GND", Z_ANELLO, (p[0], ay1, Z_ANELLO))
-for nome, pe in (("ENC_SW", "GPIO8"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13"), ("VIB_IN", "GPIO3")):
+discesa("esp32", "GPIO3", "VIB_IN", VIB.pin("IN")[2])           # dritto sul pin IN del modulo vibrazione
+rete("VIB_IN").pin.append(("vibrazione", "IN"))
+# Modulo vibrazione: VCC e GND scendono nella base (pezzi troppo corti verso l'anello), cavetti sotto
+for nome, pv in (("VSW", "VCC"), ("GND", "GND")):
+    discesa("vibrazione", pv, nome, 0.0)
+    rete(nome).fori.append(tonda((VIB.pin(pv)[0], VIB.pin(pv)[1], 0.0)))
+for nome, pe in (("ENC_SW", "GPIO8"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13")):
     discesa("esp32", pe, nome, 0.0)                                # nella base: encoder e motorino
     rete(nome).fori.append(tonda((ESP.pin(pe)[0], ESP.pin(pe)[1], 0.0)))
 
@@ -399,14 +417,75 @@ for x in (-X_COLONNE_PANNELLO, X_COLONNE_PANNELLO):
 tratto("PANNELLO", (-X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO),
        (X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO), gruppo="struttura")
 
-# --- portabatterie in rame: barra del + davanti, barra del - dietro, scendono nella base
-for nome, y in (("BATT+", 19.5 - 17.5 - 1.0), ("BATT-", 19.5 + 17.5 + 1.0)):
+# --- portabatterie in rame: barra del + davanti, barra del - dietro, a contatto dei poli (saldate sulle celle,
+#     decisione del 18/10); scendono nella base
+_cy, _l2 = BATTERIE[0]["centro"][1], BATTERIE[0]["lunghezza"] / 2
+for nome, y in (("BATT+", _cy - _l2 - R_FILO), ("BATT-", _cy + _l2 + R_FILO)):
     xa, xb = BATTERIE[0]["centro"][0], BATTERIE[1]["centro"][0]
-    tratto(nome, (xa, y, 0.0), (xa, y, 9.15), (xb, y, 9.15), (xb, y, 0.0), gruppo="alimentazione")
+    zc = BATTERIE[0]["centro"][2]              # le barre passano al centro dei poli
+    tratto(nome, (xa, y, 0.0), (xa, y, zc), (xb, y, zc), (xb, y, 0.0), gruppo="alimentazione")
     rete(nome).fori += [(xa, y, 0.0), (xb, y, 0.0)]
 
+# ================================================================== SOTTO LA BASE
+# Scassi nel lato inferiore della base per TP4056, modulo vibrazione ed encoder (sul bordo anteriore, pomello
+# fuori dal vetro); canaline profonde 4 mm per i cavetti isolati. Il rame elettrico attraversa il legno e sporge
+# nella canalina a Z_CANALINE, dove si salda il cavetto. I cavetti non sono nella distinta di taglio del rame.
+# Moduli con il lato componenti verso il basso (si vedono e si saldano da sotto).
+SOTTO = {}
+SOTTO["tp4056"] = modulo("tp4056", "TP4056", verticale=((0, 1, 0), (1, 0, 0)), colore="blu")   # USB verso il retro
+SOTTO["tp4056"].origine = (-28.0, BASE["max"][1] - 6.0 - MISURE["tp4056"]["dimensioni"][0], -18.5)
+SOTTO["encoder"] = modulo("encoder_ec11", "Encoder EC11", verticale=((1, 0, 0), (0, 1, 0)), colore="nero")
+SOTTO["encoder"].origine = (39.0, BASE["min"][1] + 1.5, -17.0)   # boccola nel bordo anteriore, pin verso il basso
+ALBERO_ENCODER = (tonda(add(SOTTO["encoder"].origine, (6.0, 0.0, 6.0))), 16.0)        # (punto, lunghezza verso -y)
+PROLUNGA_USB = ((-25.0, BASE["max"][1] - 4.0, -20.0), (-13.5, BASE["max"][1], -12.0))  # presa da pannello sul retro
+
+CAVETTI = []   # {"rete", "punti", "da": foro (x, y), "a": "modulo pin"}
+
+
+def foro(nome_rete, x=None):
+    """Foro elettrico della rete (il primo, o quello alla x data)."""
+    for f in rete(nome_rete).fori:
+        if x is None or abs(f[0] - x) < TOL:
+            return f
+    raise KeyError(nome_rete)
+
+
+def cavetto_fori(nome_rete, da, a, *corsia):
+    """Cavetto isolato nella canalina tra il rame che sporge da due fori della base."""
+    punti = [(da[0], da[1], Z_CANALINE)] + [(x, y, Z_CANALINE) for x, y in corsia] + [(a[0], a[1], Z_CANALINE)]
+    CAVETTI.append({"rete": nome_rete, "punti": [tonda(q) for q in punti], "da": (da[0], da[1]),
+                    "a": f"foro {nome_rete} ({a[0]:.1f}, {a[1]:.1f})", "a_foro": (a[0], a[1])})
+
+
+def cavetto(nome_rete, da, chiave, pin, *corsia):
+    """Cavetto isolato nella canalina: dal rame che sporge sotto il foro `da`, lungo la corsia (punti x, y a
+    Z_CANALINE, alternando x e y), fino al pin del modulo sotto la base."""
+    m = SOTTO[chiave]
+    p = m.pin(pin)
+    punti = [(da[0], da[1], Z_CANALINE)] + [(x, y, Z_CANALINE) for x, y in corsia] + [(p[0], p[1], Z_CANALINE), p]
+    CAVETTI.append({"rete": nome_rete, "punti": [tonda(q) for q in punti], "da": (da[0], da[1]), "a": f"{m.nome} {pin}"})
+
+
+TP, ENC = SOTTO["tp4056"], SOTTO["encoder"]
+# batteria e caricatore: i pin del TP4056 si raggiungono dal fronte (y minore), senza passare sotto la scheda
+cavetto("BATT+", foro("BATT+", -35.0), "tp4056", "B+", (TP.pin("B+")[0], foro("BATT+", -35.0)[1]))
+cavetto("BATT-", foro("BATT-", -35.0), "tp4056", "B-", (-35.0, 30.0), (TP.pin("B-")[0], 30.0))
+cavetto("VBAT", foro("VBAT"), "tp4056", "OUT+", (foro("VBAT")[0], 32.0), (TP.pin("OUT+")[0], 32.0))
+cavetto("GND", foro("GND"), "tp4056", "OUT-", (foro("GND")[0], 34.0), (TP.pin("OUT-")[0], 34.0))
+# motorino a vibrazione (sopra la base): VCC e GND arrivano dai fori sotto i suoi pin
+fv, fg = VIB.pin("VCC"), VIB.pin("GND")
+cavetto_fori("VSW", foro("VSW"), fv, (foro("VSW")[0], 45.0), (10.0, 45.0), (10.0, fv[1]))
+cavetto_fori("GND", foro("GND"), fg, (12.0, foro("GND")[1]), (12.0, fg[1]))
+# encoder: A, C, B dietro; pulsante davanti
+fa, fb, fs = foro("ENC_A"), foro("ENC_B"), foro("ENC_SW")
+cavetto("ENC_A", fa, "encoder", "A", (5.0, fa[1]), (5.0, -12.0), (ENC.pin("A")[0], -12.0))
+cavetto("ENC_B", fb, "encoder", "B", (fb[0], -14.0), (ENC.pin("B")[0], -14.0))
+cavetto("ENC_SW", fs, "encoder", "SW1", (fs[0], -17.0), (ENC.pin("SW1")[0], -17.0))
+cavetto("GND", foro("GND"), "encoder", "C", (foro("GND")[0], -8.0), (ENC.pin("C")[0], -8.0))
+cavetto("GND", foro("GND"), "encoder", "SW2", (50.0, foro("GND")[1]), (50.0, ENC.pin("SW2")[1]))
+
 # Ordine di montaggio: struttura e bus sulla dima, poi una scheda alla volta, alimentazione per prima.
-GRUPPI = ["struttura", "bus", "alimentazione", "mt3608", "mini360", "servizi", "esp32", "driver", "as5600"]
+GRUPPI = ["struttura", "bus", "alimentazione", "vibrazione", "mt3608", "mini360", "servizi", "esp32", "driver", "as5600"]
 NOMI_GRUPPI = {"struttura": "Struttura", "bus": "Bus", "alimentazione": "Batterie"} | {k: m.nome for k, m in MODULI.items()}
 
 
@@ -432,9 +511,14 @@ class Pezzo:
 
     @property
     def taglio(self):
-        extra = {"pin": INFILATA_PIN, "base": INFILATA_BASE, "passante": R_FILO, "battuta": -R_FILO,
-                 "libero": 0.0, "testa": 0.0, "?": 0.0}
-        return self.lunghezza + extra[self.tipo_a] + extra[self.tipo_b]
+        return self.lunghezza + sovrappiu(self.tipo_a, self.rete) + sovrappiu(self.tipo_b, self.rete)
+
+
+def sovrappiu(tipo, nome_rete):
+    """Quanto il pezzo vero va oltre il nodo (negativo: si ferma prima)."""
+    if tipo == "base":
+        return INFILATA_BASE if nome_rete in RETI_ANCORATE else -Z_CANALINE
+    return {"pin": INFILATA_PIN, "passante": R_FILO, "battuta": -R_FILO, "libero": 0.0, "testa": 0.0, "?": 0.0}[tipo]
 
 
 def sul_segmento(p, a, b):
@@ -629,6 +713,14 @@ def analizza():
                 if a in (c, d) or b in (c, d) or sul_segmento(a, c, d) or sul_segmento(b, c, d) \
                         or sul_segmento(c, a, b) or sul_segmento(d, a, b):
                     gruppi[radice(i)] = radice(j)
+        # un cavetto sotto la base tra due fori della rete unisce il rame che vi scende
+        for c in CAVETTI:
+            if c["rete"] != nome or "a_foro" not in c:
+                continue
+            capi = [[i for i, (a, b) in enumerate(segs) if any(abs(e[2]) < TOL and abs(e[0] - f[0]) < 1e-3
+                     and abs(e[1] - f[1]) < 1e-3 for e in (a, b))] for f in (c["da"], c["a_foro"])]
+            if capi[0] and capi[1]:
+                gruppi[radice(capi[0][0])] = radice(capi[1][0])
         # due pin della stessa rete sullo stesso modulo sono già collegati dentro la scheda
         for c1, p1 in r.pin:
             for c2, p2 in r.pin:
@@ -747,7 +839,7 @@ module scheda(o, u, v, n, d, sp, alt, col) {
     for i, bt in enumerate(BATTERIE):
         cx, cy, cz = bt["centro"]
         r.append(f'if (etichette) etichetta([{cx}, {cy - bt["lunghezza"] / 2}, {cz + bt["diametro"] / 2}], "18350", 8);')
-    r.append(f'if (etichette) etichetta([{BASE["min"][0] + 55}, {BASE["min"][1]}, 0], "TP4056, encoder e vibrazione sotto la base", 6);')
+    r.append(f'if (etichette) etichetta([{BASE["min"][0] + 55}, {BASE["min"][1]}, 0], "TP4056 ed encoder sotto la base", 6);')
     for nome, lo, hi in CRITICITA["zone"]:
         r.append(f"if (criticita) color([1, 0, 0, 0.45]) translate({[round(c, 3) for c in lo]}) "
                  f"cube({[round(hi[i] - lo[i], 3) for i in range(3)]});  // contatto {nome}")

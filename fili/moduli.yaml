@@ -16,31 +16,33 @@
 esp32s3:
   nome: ESP32-S3 SuperMini
   vista: USB in alto, chip verso l'osservatore
-  stato: stimato
+  stato: misurato
   fonte: >-
-    disegno quotato Nologo (wiki.nologo.tech, 10/08/2024) e footprint KiCad 9veedz, raccolti nel
-    YouTube Controller (enclosure/dimensioni.md). PCB 23,50 x 18,00 (18,00 confermato col calibro);
-    2 file da 9 pin, passo 2,54, primo pin a 1,59 dai bordi corti, file a 1,38 dai bordi lunghi
-    (interasse 15,24). Lato delle file letto sulla foto. Manca solo lo spessore del PCB.
-  dimensioni: [18.0, 23.5]
-  spessore: 1.0           # non pubblicato: da misurare
+    calibro di Fabio (18/10/2026, misure al centro del foro): PCB 18 x 24, 25 con la USB-C;
+    file a 1,0 dai bordi lunghi (interasse 16,0 misurato); GPIO7/GPIO8 a 1,2 dal bordo corto
+    lontano dalla USB, gli altri a passo 2,54 (TX e 5V a 2,48 dal bordo della USB).
+    Spessore 3 mm misurato da Fabio sul bordo.
+  dimensioni: [18.0, 24.0]
+  spessore: 3.0           # misurato da Fabio (atteso 1,0-1,2 per un PCB nudo)
   altezza: 3.2            # USB-C (HRO TYPE-C-31-M-12)
   sotto: 0.5              # gambe passanti della USB-C
+  sporgenza_usb: 1.0      # 25 - 24
   passo: 2.54
   file:
     # [x del primo foro, y del primo foro, direzione (+y o -y), nomi in ordine]
-    - [1.38, 21.91, -y, [GPIO43, GPIO44, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7]]
-    - [16.62, 21.91, -y, [5V, GND, 3V3, GPIO13, GPIO12, GPIO11, GPIO10, GPIO9, GPIO8]]
+    - [1.0, 21.52, -y, [GPIO43, GPIO44, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7]]
+    - [17.0, 21.52, -y, [5V, GND, 3V3, GPIO13, GPIO12, GPIO11, GPIO10, GPIO9, GPIO8]]
   note: >-
-    GPIO43 = TX, GPIO44 = RX. USB-C centrata sul lato corto in alto, sporge 1,2-2,2 (fonti
-    divergenti); antenna ceramica sul lato corto opposto, tenere lontano il rame (ultimi ~3 mm).
+    GPIO43 = TX, GPIO44 = RX. USB-C centrata sul lato corto in alto, sporge 1,0;
+    antenna ceramica sul lato corto opposto, tenere lontano il rame (ultimi ~3 mm).
 
 simplefoc_mini:
   nome: SimpleFOC Mini v1.0 (2024-05-13)
   vista: come foto/driver-simplefoc-mini.jpg (connettore 2x5 in alto, condensatore in basso a destra)
-  stato: stimato
+  stato: misurato
   fonte: >-
-    disegno quotato del produttore (18/10/2026), ruotato di 180 gradi: 26 x 21,5 (+-0,2), 4 fori
+    26 x 21,5 confermato col calibro da Fabio (18/10/2026).
+    Disegno quotato del produttore (18/10/2026), ruotato di 180 gradi: 26 x 21,5 (+-0,2), 4 fori
     passanti Ø2 a interasse 22 x 17,5 (a 2,0 dai bordi), ingombro 11 in altezza con i pin.
     Pin ricavati dal disegno in scala (15,4 px/mm, +-0,1): connettore 2x5 sulla griglia 2,54.
   dimensioni: [26.0, 21.5]
@@ -70,67 +72,104 @@ tp4056:
     foto quotata del venditore (modello HW-107 micro-USB, stessa disposizione delle piazzole):
     PCB 26,1 x 17,4, 27,9 con la presa sporgente. Piazzole d'angolo a ~1,4 dai bordi;
     B+ e B- in mezzo, ricavate in proporzione dalla foto (+-0,5). La scheda di Fabio è USB-C:
-    lunghezza e altezza della presa da confermare.
+    lunghezza e altezza della presa da confermare. Calibro di Fabio (18/10/2026): interasse
+    OUT+/OUT- 14,0 e B+/B- 7,5, centrati sull'altezza stimata del PCB.
   dimensioni: [26.1, 17.4]
   spessore: 1.0
   altezza: 3.3            # presa USB-C
   sotto: 0.3
   sporgenza_usb: 1.8      # 27,9 - 26,1
   pin:
-    OUT-: [1.4, 16.0]
-    B-: [1.4, 12.1]
-    B+: [1.4, 5.3]
-    OUT+: [1.4, 1.4]
-    IN-: [24.7, 16.0]
-    IN+: [24.7, 1.4]
+    OUT-: [1.4, 15.7]
+    B-: [1.4, 12.45]
+    B+: [1.4, 4.95]
+    OUT+: [1.4, 1.7]
+    IN-: [24.7, 15.7]
+    IN+: [24.7, 1.7]
 
 mt3608:
   nome: MT3608 boost
   vista: come foto/boost-mt3608.jpg (VIN a sinistra, VOUT a destra)
-  stato: stimato
-  fonte: foto, circa 37,5 px/mm; dimensioni comuni 36 x 17
-  dimensioni: [36.0, 17.0]
+  stato: misurato
+  fonte: >-
+    calibro di Fabio (18/10/2026, misure al centro del foro): PCB 37,5 x 18, fori a 2,5 dai lati
+    corti e a 4,0 dai lati lunghi; trimmer alto 6,5 compreso il PCB
+  dimensioni: [37.5, 18.0]
   spessore: 1.6
-  altezza: 10.0           # trimmer 3296
+  altezza: 4.9            # trimmer 3296: 6,5 misurati col PCB
   sotto: 0.3
   pin:
-    VIN-: [3.0, 13.0]
-    VIN+: [3.0, 4.5]
-    VOUT-: [33.2, 12.1]
-    VOUT+: [33.2, 4.8]
+    VIN-: [2.5, 14.0]
+    VIN+: [2.5, 4.0]
+    VOUT-: [35.0, 14.0]
+    VOUT+: [35.0, 4.0]
+  note: dalla foto l'interasse VIN- / VIN+ sembrava circa 8,5 invece di 10, da ricontrollare
 
 mini360:
   nome: MH Mini-360 (MP2307)
   vista: piazzole IN a sinistra, OUT a destra
-  stato: stimato
-  fonte: dimensioni comuni 17,2 x 11,2; piazzole agli angoli
-  dimensioni: [17.2, 11.2]
+  stato: misurato
+  fonte: >-
+    calibro di Fabio (18/10/2026): PCB 18 x 12, interassi 15,0 sul lato lungo e 10,0 sul lato
+    corto (fori centrati)
+  dimensioni: [18.0, 12.0]
   spessore: 1.0
   altezza: 3.5
   sotto: 0.3
   pin:
-    IN+: [1.3, 9.9]
-    IN-: [1.3, 1.3]
-    OUT+: [15.9, 9.9]
-    OUT-: [15.9, 1.3]
+    IN+: [1.5, 11.0]
+    IN-: [1.5, 1.0]
+    OUT+: [16.5, 11.0]
+    OUT-: [16.5, 1.0]
   note: verificare quale angolo è + e quale - sulla serigrafia
 
 as5600:
   nome: AS5600 (modulo bianco, 4 fori di fissaggio)
   vista: come la foto di dettaglio (VCC/OUT/GND a sinistra, DIR/SCL/SDA/GPO a destra)
-  stato: stimato
-  fonte: foto di dettaglio di Fabio, circa 46 px/mm
-  dimensioni: [23.5, 23.3]
+  stato: misurato
+  fonte: >-
+    calibro di Fabio (18/10/2026, misure al centro del foro): PCB 22,5 x 22,5; file a 5,0 dai bordi;
+    GND a 9,0 dal bordo inferiore, DIR a 6,0 dal bordo superiore; chip esattamente al centro
+  dimensioni: [22.5, 22.5]
   spessore: 1.6
   altezza: 1.8
   sotto: 0.3
   passo: 2.54
   file:
-    - [4.85, 14.3, -y, [VCC, OUT, GND]]
-    - [18.2, 16.6, -y, [DIR, SCL, SDA, GPO]]
+    - [5.0, 14.08, -y, [VCC, OUT, GND]]
+    - [17.5, 16.5, -y, [DIR, SCL, SDA, GPO]]
   pin:
-    CHIP: [11.6, 11.9]    # centro del chip: va sull'asse del motore
+    CHIP: [11.25, 11.25]  # centro del chip: va sull'asse del motore
   note: DIR e le pull-up di SDA/SCL da verificare col tester
+
+vibrazione:
+  nome: modulo motorino a vibrazione (GND/VCC/IN)
+  vista: lato componenti, pin a sinistra dall'alto in basso GND, VCC, IN
+  stato: stimato
+  fonte: dimensioni non misurate (sta sotto la base, non tocca il rame rigido)
+  dimensioni: [15.0, 10.0]
+  spessore: 1.0
+  altezza: 3.0
+  sotto: 0.3
+  passo: 2.54
+  file:
+    - [1.27, 2.0, +y, [GND, VCC, IN]]
+
+encoder_ec11:
+  nome: encoder EC11 con pulsante
+  vista: dall'alto con l'albero verso il fronte (-y); pin verso il basso
+  stato: stimato
+  fonte: ingombri tipici EC11 (corpo 12 x 12, A-C-B a passo 2,5 dietro, pulsante a 5 mm davanti); da misurare
+  dimensioni: [12.0, 12.0]
+  spessore: 0.0
+  altezza: 12.0           # corpo, dal piano dei pin in su
+  sotto: 0.0
+  pin:
+    A: [3.5, 10.5]
+    C: [6.0, 10.5]
+    B: [8.5, 10.5]
+    SW1: [3.5, 1.5]
+    SW2: [8.5, 1.5]
 
 motore_1503:
   nome: Outrunner 1503

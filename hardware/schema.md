@@ -12,7 +12,7 @@ Le etichette uguali indicano piedini collegati tra loro. Gli stessi nomi di rete
 |---|---|---|
 | **VBAT** | TP4056 B+/OUT+ ↔ + delle due 18350 → source Q2, R8, LDO IN | Sempre presente, 3,0–4,2 V |
 | **VSW** | drain Q2 → MT3608 VIN+, R1, modulo vibrazione VCC | Batteria dopo l'interruttore elettronico: spenta in letargo |
-| PWR_EN | ESP32 GPIO4 → 100 Ω → gate Q3 (100 kΩ a GND) | Q3 tira giù il gate di Q2 (R8 100 kΩ verso VBAT) |
+| PWR_EN | ESP32 GPIO4 → R3 10 kΩ → base Q3 2N3904 (R4 100 kΩ a GND) | Il collettore di Q3 tira giù il gate di Q2 (R8 100 kΩ verso VBAT) |
 | **V12** | MT3608 VOUT+ → SimpleFOC +, Mini‑360 IN+, R6, R7 | 12,0 V |
 | **3V3** | LDO OUT → ESP32 3V3 | Sempre acceso (anche in letargo) |
 | **3V3_SW** | Mini‑360 OUT+ → AS5600 VCC | Spento in letargo |
@@ -22,9 +22,9 @@ Le etichette uguali indicano piedini collegati tra loro. Gli stessi nomi di rete
 | **GND** | tutte le masse, AS5600 DIR, encoder C e SW | Comune |
 | PWM_A / PWM_B / PWM_C | ESP32 GPIO7 / 6 / 5 → SimpleFOC IN1 / IN2 / IN3 | |
 | SDA / SCL | ESP32 GPIO2 / 1 ↔ AS5600 SDA / SCL | I2C 400 kHz |
-| ENC_A / ENC_B / ENC_SW | EC11 A / B / SW → R 10 kΩ → ESP32 GPIO12 / 13 / 8 | 10 nF a GND su ogni ingresso. GPIO8 risveglia dal deep sleep |
-| LED_PWM | ESP32 GPIO10 → 100 Ω → gate Q1 (100 kΩ a GND) | |
-| LED_K | catodi LED1, LED2 → drain Q1 | Source di Q1 a GND |
+| ENC_A / ENC_B / ENC_SW | EC11 A / B / SW → ESP32 GPIO12 / 13 / 8 | Pull‑up interne, antirimbalzo nel firmware (niente RC, decisione del 18/10). GPIO8 risveglia dal deep sleep |
+| LED_PWM | ESP32 GPIO10 → R5 470 Ω → base Q1 2N3904 (R10 100 kΩ a GND) | Corrente di base ≈ 5 mA: Q1 saturo fino a ~100 mA |
+| LED_K | catodi LED1, LED2 → collettore Q1 | Emettitore di Q1 a GND |
 | VIB_IN | ESP32 GPIO3 → modulo vibrazione IN | |
 | VBAT_ADC | nodo R1/R2/C1 → ESP32 GPIO9 | Metà di VSW |
 | M1 / M2 / M3 | SimpleFOC → fili del motore 1503 | L'ordine si aggiusta in firmware |

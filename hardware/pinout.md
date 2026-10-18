@@ -14,13 +14,13 @@ In tutto 15 GPIO: ne servono 14. GPIO0 (BOOT), GPIO48 (LED RGB di bordo) e i pin
 | 7 | PWM fase A | SimpleFOC Mini IN1 | LEDC |
 | 6 | PWM fase B | SimpleFOC Mini IN2 | LEDC |
 | 5 | PWM fase C | SimpleFOC Mini IN3 | LEDC |
-| 4 | Accensione rail di potenza (PWR_EN) | Gate Q3 (100 Ω + 100 kΩ a GND) | 0 = letargo |
+| 4 | Accensione rail di potenza (PWR_EN) | Base Q3 2N3904 (10 kΩ + 100 kΩ a GND) | 0 = letargo |
 | 2 | I2C SDA | AS5600 SDA | |
 | 1 | I2C SCL | AS5600 SCL | |
-| 12 | Encoder A | EC11 A | Pull‑up interna + RC |
-| 13 | Encoder B | EC11 B | Pull‑up interna + RC |
-| 8 | Pulsante encoder (ENC_SW) | EC11 SW | Pull‑up interna + RC. Risveglia dal deep sleep (sull'S3 possono tutti i GPIO RTC 0–21) |
-| 10 | LED filamento | Gate MOSFET (100 Ω + 100 kΩ a GND) | |
+| 12 | Encoder A | EC11 A | Pull‑up interna, antirimbalzo nel firmware |
+| 13 | Encoder B | EC11 B | Pull‑up interna, antirimbalzo nel firmware |
+| 8 | Pulsante encoder (ENC_SW) | EC11 SW | Pull‑up interna, antirimbalzo nel firmware. Risveglia dal deep sleep (sull'S3 possono tutti i GPIO RTC 0–21) |
+| 10 | LED filamento | Base Q1 2N3904 (470 Ω + 100 kΩ a GND) | |
 | 9 | Livello batteria | Partitore 100 k / 100 k | ADC1 (canale 8) |
 | 3 | Motorino a vibrazione | Modulo vibrazione IN | Strapping JTAG: conta solo se l'eFuse è programmato (non lo è); il modulo ha già la pull‑down |
 | 43 | Stop di emergenza: lettura (STOP) | EN del SimpleFOC, paletti dei finecorsa | Solo ingresso, senza pull‑up (c'è R9 sul driver). È il TX di UART0: all'avvio emette i messaggi del bootloader, quando il driver è spento |

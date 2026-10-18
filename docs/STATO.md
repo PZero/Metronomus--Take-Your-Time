@@ -1,35 +1,38 @@
 # Stato del progetto
 
-_Aggiornato il 18/10/2026 (fine sessione)._
+_Aggiornato il 18/10/2026 (fine sessione, sera)._
 
 ## Fase attuale
-Fase 3 · disposizione del circuito in rame: la geometria passa tutti i controlli, ma 5 moduli sono ancora su misure stimate. In parallelo la fase 1 (parti da comprare).
+Fase 3 · piano del rame **pronto in PDF 1:1** (bozza solo per il modulo vibrazione, ancora da misurare). In parallelo la fase 1: parti da comprare.
 
 ## Fatto finora
-- Componenti e BOM ([hardware/bom.md](../hardware/bom.md)): **ESP32‑S3 SuperMini**, SimpleFOC Mini v1.0, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, 2 filamenti LED da 3 V, motorino a vibrazione (solo il tic, niente suono). Deve girare a batteria.
-- Pinout ([hardware/pinout.md](../hardware/pinout.md)): PWM 7/6/5, I2C SCL 1 / SDA 2, PWR_EN 4, vibrazione 3, encoder 12/13/8, LED 10, ADC 9, stop 43 (STOP) / 44 (ARMA). Schema rev. 0.2.2, aggiornato solo l'SVG.
-- Indicatore del tempo: il pendolo punta su una scala Maelzel su **±30°**; tic con motorino a vibrazione sotto la base; base di legno **150 × 90 mm** in una teca di vetro.
-- **Stop di emergenza**: paletti di rame a ±35° (finecorsa meccanici) e collare di ottone sul pendolo; con ARMA = 0 il contatto spegne il driver in hardware (EN a massa, R9 10 kΩ), ARMA = 1 solo all'avvio.
-- Rame **a bus** ([fili/geometria.py](../fili/geometria.py)): discese per scheda, bus sollevati con 3 mm di sporgenza per il gioco di montaggio, distinta in ordine di montaggio. 93 pezzi, 3,16 m, **zero errori** (pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede, schede senza sovrapposizioni, tutto dentro la teca).
-- AS5600 e magnete risolti: magnete da 2 mm a filo del motore, sensore a 1 mm. Driver v1.0 confermato dalla serigrafia (M1‑M2‑M3 da sinistra).
-- Masse: anello unico, foro del ritorno batteria tra MT3608 e driver (parere del ruolo elettronica). Modello OpenSCAD con criticità in rosso e cartellini.
+- Componenti e BOM ([hardware/bom.md](../hardware/bom.md)): ESP32‑S3 SuperMini, SimpleFOC Mini v1.0, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, filamenti LED, modulo vibrazione.
+- **Misure col calibro** in [fili/moduli.yaml](../fili/moduli.yaml): ESP32 (18 × 24, file a 16 mm), AS5600 (22,5², chip al centro), MT3608 (37,5 × 18), Mini‑360 (18 × 12), SimpleFOC (26 × 21,5), TP4056 (interassi), celle 35 × 18, filo 1,0.
+- Geometria ([fili/geometria.py](../fili/geometria.py)): 95 pezzi, 3,36 m, zero errori.
+- **PDF 1:1** ([produzione/piano-rame.pdf](../produzione/piano-rame.pdf), da `fili/piano_pdf.py`, 24 pagine): righello, dima di foratura (fori passanti/ciechi), viste 1:1 per gruppo, millefori, giunti, distinta con i pezzi in scala reale.
+- **Verifiche in OpenSCAD** (`fili/verifica_scad.py`): ricostruiscono i pezzi tagliati dai dati del PDF e controllano lunghezze, giunti, corti, contatto delle celle; colori per isole saldate; per gradi: `alimentazione`, `esp32` (modello/verifica-*.scad).
+- **Sotto la base**: TP4056 ed encoder in scassi, cavetti isolati in canaline da 4 mm; il rame elettrico attraversa la base e sporge 2 mm nella canalina.
+- Modulo vibrazione **sopra** la base, incollato al legno, IN sotto il GPIO3.
+- Batterie: barre di rame **saldate direttamente** sui poli.
+- **Scheda servizi** su millefori 17 × 6 fori ([fili/millefori.py](../fili/millefori.py), netlist controllata): LDO MCP1700 TO‑92, Q1 e Q3 2N3904 TO‑92 (già in casa), AO3401 su adattatore SOT‑23, 2 ponticelli.
+- Encoder senza RC: antirimbalzo nel firmware.
 
 ## Prossimi passi
-1. Misure reali dei moduli col calibro (AS5600 senza datasheet, Mini‑360 e MT3608 per le piazzole, spessore PCB dell'S3, diametro del filo, fori del motore): [fili/misure-da-prendere.md](../fili/misure-da-prendere.md).
-2. Schema rev. 0.3: filamenti in serie (via R7), scheda servizi, DIR dell'AS5600, i condensatori 220–470 µF e 100 nF già scritti in schema.md; rigenerare PDF/PNG (serve cairosvg).
-3. Ordinare le parti mancanti (LDO, AO3401/AO3400, resistenza R9, condensatori, prolunga USB‑C, filo di rame, ottone per il collare).
-4. Pagine del PDF 1:1 per ogni gruppo di montaggio; poi montaggio una scheda alla volta, alimentazione per prima.
-5. Firmware su breadboard: SimpleFOC in posizione, pendolo, scala Maelzel, letargo, armamento dello stop.
+1. Misure del modulo vibrazione → PDF definitivo (non più bozza).
+2. Schema rev. 0.3: filamenti in serie (R6), scheda servizi con le sigle di millefori.py, DIR dell'AS5600, condensatori; rigenerare PDF/PNG (serve cairosvg).
+3. Ordinare: MCP1700‑3302E TO‑92, AO3401 + 1 adattatore SOT‑23 (i 2N3904 ci sono già), resistenze (470 Ω, 10 kΩ, 100 kΩ), 1 µF × 2, 100 nF, R9, millefori, prolunga USB‑C, filo, ottone.
+4. Prove: stampa del PDF al 100 %, giunti di prova, poi montaggio per gruppi (alimentazione per prima).
+5. Firmware su breadboard: SimpleFOC in posizione, pendolo, scala Maelzel, letargo, stop, encoder a stati.
 
 ## In attesa da Fabio
-- Domanda 14: datasheet o misure dell'AS5600; interasse dei fori M2 del motore.
-- Misure di Mini‑360 e MT3608; spessore del PCB dell'S3; diametro reale del filo.
-- Modulo vibrazione (pin header a passo 2,54).
-- Col tester: pull‑up SDA/SCL e DIR dell'AS5600; Vf dei filamenti LED.
-- Fili flessibili verso il pendolo (29–35 mm) e mozzo/collare: li progetta Fabio.
+- Modulo vibrazione: dimensioni, centro dei fori GND/VCC/IN, altezza col motorino.
+- Col tester: continuità VIN−/VOUT− (MT3608) e IN−/OUT− (Mini‑360); pull‑up SDA/SCL e DIR dell'AS5600; Vf dei filamenti.
+- Ricontrollo: spessore del PCB dell'ESP32 (3 mm misurati, atteso 1–1,2) e interasse VIN−/VIN+ dell'MT3608 (10 mm, la foto dava ~8,5).
+- Misure dell'encoder EC11 (oggi tipiche) e interasse dei fori M2 del motore.
 
 ## Problemi aperti
-- Moduli ancora su misure stimate: AS5600, ESP32‑S3, MT3608, Mini‑360, SimpleFOC Mini. Il PDF di produzione non si genera finché lo sono.
+- Saldatura diretta sulle celle: rapida, celle a ~3,6 V e alla stessa tensione (vedi decisioni).
 - Render in `render/` e schema PDF/PNG fermi alla versione C3: servono `bpy` e `cairosvg`.
-- Rigidità del telaio del motore in filo da 1 mm: forse serve filo più grosso o ottone.
-- GPIO43 (TX di UART0) usato per STOP: da provare su breadboard che l'avvio non disturbi il driver.
+- Rigidità del telaio del motore in filo da 1 mm.
+- GPIO43 (TX di UART0) per STOP: da provare che l'avvio non disturbi il driver.
+- Il modello principale `modello/metronomus.scad` non mostra ancora cosa c'è sotto la base: usare i modelli di verifica.

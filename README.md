@@ -2,7 +2,7 @@
 
 > Un metronomo artistico: un pendolo di luce mosso da un motore brushless, governato da un ESP32, con il circuito esposto in filo di rame da 1 mm, segmenti dritti saldati ad angolo retto.
 
-**Stato:** 🟡 Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei moduli (vedi [stato](docs/STATO.md) e [roadmap](docs/roadmap.md))
+**Stato:** 🟡 Fase 3 · piano del rame pronto in PDF 1:1 (manca solo la misura del modulo vibrazione) (vedi [stato](docs/STATO.md) e [roadmap](docs/roadmap.md))
 
 ---
 
@@ -57,7 +57,8 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 | LED a tubo 5 cm | Filamento LED rigido (~3 V) | ✅ disponibile |
 | Sensore magnetico | AS5600, encoder magnetico assoluto I2C | ✅ disponibile |
 | Boost MT3608, step‑down Mini‑360 | — | ✅ disponibili |
-| LDO 3,3 V, MOSFET (AO3401, AO3400), partitore, debounce | proposti | 🛒 da comprare |
+| LDO 3,3 V, MOSFET AO3401, partitore | proposti | 🛒 da comprare |
+| Transistor 2N3904 (Q1 LED, Q3 comando del letargo) | kit TO‑92 | ✅ in possesso |
 
 ## Schema a blocchi
 
@@ -123,7 +124,7 @@ Calibro, tronchesino a taglio piano, lima fine e battuta di fine corsa per tagli
 
 ## Produzione: PDF 1:1
 
-Quando il progetto sarà definito, in `produzione/` ci sarà un PDF da stampare **al 100%** (controllare il righello di 100 mm in prima pagina) con, per ogni filo: codice, rete, lunghezza di taglio, disegno in scala reale, tipo di ciascuna estremità (passante o in battuta), giunti a cui appartiene e ordine di saldatura.
+[produzione/piano-rame.pdf](produzione/piano-rame.pdf) (`python fili/piano_pdf.py`) va stampato **al 100%**: righello di controllo, dima di foratura della base, viste 1:1 di ogni gruppo di montaggio, scheda servizi su millefori, giunti e distinta di taglio con ogni pezzo disegnato in scala reale. Prima di tagliare, `python fili/verifica_scad.py` (anche `alimentazione` o `esp32`) ricostruisce in OpenSCAD i pezzi tagliati come dice il PDF e controlla che combacino.
 
 ## Uso
 

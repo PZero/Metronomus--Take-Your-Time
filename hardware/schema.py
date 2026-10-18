@@ -99,6 +99,17 @@ def nmos(x, y):
     poli([(x - 10, y + 42), (x - 3, y + 38), (x - 3, y + 46), (x - 10, y + 42)], fill=NERO)
 
 
+def npn(x, y):
+    """Transistor NPN: collettore in (x, y), emettitore in (x, y + 60), base in (x - 30, y + 30)."""
+    linea(x, y, x, y + 18)
+    linea(x, y + 18, x - 14, y + 26)
+    linea(x - 14, y + 34, x, y + 42)
+    linea(x, y + 42, x, y + 60)
+    linea(x - 14, y + 14, x - 14, y + 46, w=3)
+    linea(x - 30, y + 30, x - 14, y + 30)
+    poli([(x, y + 42), (x - 8, y + 41), (x - 4, y + 35), (x, y + 42)], fill=NERO)
+
+
 def pmos(x, y):
     """MOSFET P orizzontale: source in (x, y), drain in (x + 60, y), gate in (x + 30, y + 30)."""
     poli([(x, y), (x + 18, y), (x + 18, y + 12)], ROSSO)
@@ -183,11 +194,11 @@ linea(460, oy + 50, 470, oy + 50)
 linea(470, oy + 30, 470, oy + 50)
 punto(470, oy + 50)
 poli([(470, oy + 50), (530, oy + 50), (530, oy + 70)])
-nmos(530, oy + 70)
-testo(542, oy + 110, "Q3 AO3400", NERO, 12)
+npn(530, oy + 70)
+testo(542, oy + 110, "Q3 2N3904", NERO, 12)
 massa(530, oy + 130)
 resistenza(440, oy + 100, 60, verticale=False)
-testo(470, oy + 125, "100 Ω", NERO, 12, "middle")
+testo(470, oy + 125, "10 kΩ", NERO, 12, "middle")
 punto(440, oy + 100)
 resistenza(440, oy + 100, 45)
 massa(440, oy + 145)
@@ -291,11 +302,11 @@ for k, x in enumerate((130, 230)):
 linea(130, 740, 230, 740)
 punto(180, 740)
 linea(180, 740, 180, 760)
-nmos(180, 760)
-testo(192, 795, "Q1 AO3400", NERO, 12)
+npn(180, 760)
+testo(192, 795, "Q1 2N3904", NERO, 12)
 massa(180, 820)
 resistenza(90, 790, 60, verticale=False)
-testo(122, 815, "100 Ω", NERO, 12, "middle")
+testo(122, 815, "470 Ω", NERO, 12, "middle")
 punto(90, 790)
 resistenza(90, 790, 50)
 testo(80, 822, "100 kΩ", NERO, 12, "end")

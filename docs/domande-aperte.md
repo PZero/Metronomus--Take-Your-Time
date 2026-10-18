@@ -15,9 +15,14 @@
 | 10 | Hai un laser (LightBurn) o una stampante 3D per la dima? | Fabio | ✅ non indispensabile (18/10): stampa 1:1 su un piano di sughero con spilli e squadrette; per le discese fa da dima la base forata |
 | 11 | Dimensioni indicative dell'oggetto (altezza, ingombro della base) | Fabio | ✅ base di legno circa 150 × 90 mm (18/10) |
 | 13 | Quanto sporge l'albero del motore dal retro della base (dove va il magnete)? | Fabio | ✅ non sporge; magnete da 2 mm già fissato sulla parte che ruota (18/10) |
-| 14 | Datasheet o misure del modulo AS5600 (fori, file dei pin, centro del chip) | Fabio | aperta |
+| 14 | Datasheet o misure del modulo AS5600 (fori, file dei pin, centro del chip) | Fabio | ✅ misurato col calibro: 22,5 × 22,5, file a 5 mm dai bordi, chip al centro (18/10) |
 | 15 | SimpleFOC Mini: ordine M1‑M2‑M3 e quale morsetto è + (serigrafia) | Fabio | ✅ dalla serigrafia della v1.0: M1‑M2‑M3 da sinistra, − verso la fila dei pin, + sotto (18/10). La v1.1 ha la fila IN invertita |
 | 16 | Stop di emergenza: finecorsa meccanici in rame a ±(arco + 5°) e, in più, contatto elettrico che spegne il driver da solo (EN a massa) e avvisa l'ESP32? | Fabio | ✅ sì, meccanico + elettrico con armamento (18/10) |
 | 18 | Fili flessibili verso il pendolo: con i fili che arrivano dove sono ora servono 30–36 mm (decisi 15–20). Avvicinare le uscite dei LED all'asse? E come sono fatti mozzo e collare sul pendolo? | Fabio / piano fili | ✅ ci pensa Fabio |
 | 17 | Massa del motore e massa della logica separate e unite in un solo punto vicino alla batteria? Oggi l'anello è unico, con il ritorno della batteria vicino a driver e MT3608 | Fabio / elettronica | ✅ elettronica (18/10): non serve separare; foro del ritorno batteria spostato tra MT3608 e driver |
 | 19 | Pannello della scala: con la base da 150 mm il pannello (170 mm) non entra nella teca. Arco ±30° invece di ±40°, pendolo più corto o base più larga? | Fabio | ✅ scala su ±30°, finecorsa ±35°, pannello 124 mm (18/10) |
+| 20 | Modulo vibrazione (ora sopra la base): dimensioni, centro dei fori GND/VCC/IN, altezza col motorino | Fabio | aperta: blocca il PDF definitivo |
+| 21 | Col tester: continuità VIN−/VOUT− dell'MT3608 e IN−/OUT− del Mini‑360 (un solo filo di massa per modulo) | Fabio | aperta |
+| 22 | Ricontrollo: spessore del PCB dell'ESP32 sul bordo nudo (3 mm misurati, atteso 1–1,2) e interasse VIN−/VIN+ dell'MT3608 (10 mm; dalla foto ~8,5) | Fabio | aperta |
+| 23 | Encoder EC11: misure reali (corpo, pin A‑C‑B e pulsante); oggi ingombri tipici | Fabio | aperta |
+| 24 | LDO: va bene l'MCP1700‑3302E in TO‑92 (250 mA, regge l'ESP32 solo col WiFi spento) al posto dell'RT9080 SMD? | Fabio / elettronica | aperta |
