@@ -7,10 +7,10 @@ Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei mo
 
 ## Fatto finora
 - Componenti e BOM ([hardware/bom.md](../hardware/bom.md)): **ESP32‑S3 SuperMini** (non C3, corretto il 18/10), SimpleFOC Mini, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, 2 filamenti LED, motorino a vibrazione.
-- Pinout dell'S3 ([hardware/pinout.md](../hardware/pinout.md)): PWM 7/6/5, I2C SCL 1 / SDA 2, PWR_EN 4, vibrazione 3, encoder 12/13/8, LED 10, ADC 9. Schema rev. 0.2.1 (aggiornato solo l'SVG).
+- Pinout dell'S3 ([hardware/pinout.md](../hardware/pinout.md)): PWM 7/6/5, I2C SCL 1 / SDA 2, PWR_EN 4, vibrazione 3, encoder 12/13/8, LED 10, ADC 9, stop 43 (STOP) / 44 (ARMA). Schema rev. 0.2.2 (aggiornato solo l'SVG).
 - Indicatore del tempo: il pendolo punta su una scala Maelzel incisa. Tic: motorino a vibrazione sotto la base. Base di legno in una teca di vetro.
 - Misure dai disegni quotati: ESP32‑S3 (Nologo), SimpleFOC Mini (produttore), TP4056 (foto quotata del venditore), in [fili/moduli.yaml](../fili/moduli.yaml).
-- Rame **a bus** (decisione del 18/10): discese per scheda e bus sollevati con 3 mm di sporgenza per il gioco; distinta in ordine di montaggio. [fili/geometria.py](../fili/geometria.py), 84 pezzi, 2,72 m. Controlli: pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede, **schede che non si sovrappongono** (gioco 0,5 mm, anche con motore, magnete, batterie e pannello).
+- Rame **a bus** (decisione del 18/10): discese per scheda e bus sollevati con 3 mm di sporgenza per il gioco; distinta in ordine di montaggio. [fili/geometria.py](../fili/geometria.py), 93 pezzi, 3,19 m. Stop di emergenza con paletti a ±45° e collare armato da GPIO44 (schema rev. 0.2.2). Controlli: pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede, **schede che non si sovrappongono** (gioco 0,5 mm, anche con motore, magnete, batterie e pannello).
 - Modello OpenSCAD ([modello/metronomus.scad](../modello/metronomus.scad)): criticità in rosso e cartellini con i nomi (interruttori `criticita` ed `etichette`); anteprima in `modello/criticita.png`.
 - Ruoli con il modello adatto: elettronica Opus, coordinatore e piano‑fili Sonnet, git‑readme Haiku.
 
@@ -27,7 +27,7 @@ Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei mo
 - Datasheet o misure di AS5600, Mini‑360, MT3608; spessore del PCB dell'S3; diametro reale del filo.
 - Serigrafia del SimpleFOC: ordine M1‑M2‑M3 e quale morsetto è +.
 - Modulo vibrazione (pin header standard a passo 2,54).
-- Stop di emergenza (domanda 16) e masse separate (domanda 17).
+- Masse separate (domanda 17); fili flessibili e mozzo del pendolo (domanda 18).
 - Col tester: pull‑up SDA/SCL e DIR dell'AS5600; Vf dei filamenti LED.
 
 ## Problemi aperti

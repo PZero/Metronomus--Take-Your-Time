@@ -247,6 +247,17 @@ MOTORE = {"asse": ASSE, "diametro": MISURE["motore_1503"]["diametro_campana"],
 # sporgenza = quanto l'albero esce dal retro della base (da misurare: per ora a filo).
 MAGNETE = {"diametro": 6.0, "spessore": 2.5, "sporgenza": MISURE["motore_1503"].get("sporgenza_albero", 0.0)}
 Y_TELAIO_RETRO, Y_TELAIO_FRONTE, X_TELAIO = 8.5, -8.0, 11.5
+
+# ------------------------------------------------------------------ pendolo e finecorsa
+Y_PENDOLO = ASSE[1] - MOTORE["lunghezza"] - 5.5     # piano in cui oscilla il pendolo
+Y_FLESSIBILI = Y_PENDOLO + 8.0                      # dove finisce il rame e comincia il filo flessibile
+ANGOLO_FC = 45.0                                    # arco della scala ±40°, finecorsa 5° oltre
+R_COLLARE = 3.0                                     # collare di ottone sul LED: tocca il paletto per primo
+X_FC = 20.0
+# la cima del paletto tocca il collare quando il pendolo è a ANGOLO_FC
+_a = math.radians(ANGOLO_FC)
+Z_FC = round(ASSE[2] + (X_FC * math.cos(_a) - R_COLLARE - R_FILO) / math.sin(_a), 1)
+R_CONTATTO = round(X_FC * math.sin(_a) + (Z_FC - ASSE[2]) * math.cos(_a), 1)   # raggio del collare
 Z_TELAIO_ALTO, Z_TELAIO_BASSO = 84.0, 60.0
 
 # ------------------------------------------------------------------ pannello della scala
@@ -317,7 +328,7 @@ for nome, ps in (("VBAT", "VBAT"), ("VSW", "VSW_VIB")):          # nella base: T
 # LED: due fili salgono fin sopra il motore; da lì 15-20 mm di filo flessibile fino ai filamenti
 for nome in ("LED_A", "LED_K"):
     p = SRV.pin(nome)
-    fine = (p[0], Y_DISCESA_AS + 3.0, Z_LED)
+    fine = (p[0], Y_FLESSIBILI, Z_LED)
     discesa("servizi", nome, nome, Z_LED, fine)
     rete(nome).liberi.append(tonda(fine))
 
@@ -348,6 +359,24 @@ p = AS.pin("VCC")
 tratto("3V3_SW", p, (p[0], Y_DISCESA_AS, p[2]), MINI.pin("OUT+"), gruppo="as5600")
 p = AS.pin("GND")
 discesa("as5600", "GND", "GND", p[2], (p[0], Y_DISCESA_AS, p[2]), (p[0], Y_DISCESA_AS, Z_ANELLO), (p[0], ay0, Z_ANELLO))
+
+# Finecorsa (stop di emergenza): due paletti verticali nel piano del pendolo a ±ANGOLO_FC, uniti
+# dal bus STOP, che va all'EN del driver e a GPIO43. Il collare di ottone del pendolo (rete ARMA,
+# GPIO44 con filo flessibile) tocca la cima del paletto: il paletto è anche il finecorsa meccanico.
+for nome, x in (("STOP", -X_FC), ("STOP", X_FC)):
+    tratto(nome, (x, Y_PENDOLO, 0.0), (x, Y_PENDOLO, Z_FC), gruppo="struttura")
+    rete(nome).fori.append((x, Y_PENDOLO, 0.0))
+    rete(nome).teste.append(tonda((x, Y_PENDOLO, Z_FC)))
+bus("STOP", (-X_FC, Y_PENDOLO, Z_PONTI), (X_FC, Y_PENDOLO, Z_PONTI), sporgenze=(0, 0))
+for chiave, pin in (("driver", "EN"), ("esp32", "GPIO43")):
+    p = MODULI[chiave].pin(pin)
+    bus("STOP", (p[0], p[1], Z_PONTI), (p[0], Y_PENDOLO, Z_PONTI), sporgenze=(SPORGENZA, 0))
+    discesa(chiave, pin, "STOP", Z_PONTI)
+
+# Fili verso il pendolo: salgono a Z_LED e arrivano 8 mm dietro al piano del pendolo; da lì filo flessibile.
+p = ESP.pin("GPIO44")
+discesa("esp32", "GPIO44", "ARMA", Z_LED, (p[0], Y_FLESSIBILI, Z_LED))
+rete("ARMA").liberi.append(tonda((p[0], Y_FLESSIBILI, Z_LED)))
 
 # --- struttura (non è una rete elettrica): telaio del motore e colonne del pannello
 xt, yr, yf, za, zb = X_TELAIO, Y_TELAIO_RETRO, Y_TELAIO_FRONTE, Z_TELAIO_ALTO, Z_TELAIO_BASSO
@@ -662,7 +691,8 @@ module scheda(o, u, v, n, d, sp, alt, col) {
     r.append(f"color([0.75, 0.75, 0.78]) seg([{ax}, {ay - ll}, {az}], [{ax}, {ay - ll - 4}, {az}], 3);")
     yp = ay - ll - 5.5
     r.append(f"translate([{ax}, {yp}, {az}]) rotate([0, angolo_pendolo, 0]) {{ color([1, 0.75, 0.25]) "
-             f"cylinder(r = 1.1, h = 108); color([0.85, 0.45, 0.25]) translate([2.2, 0, 0]) cylinder(r = 0.2, h = 108); }}")
+             f"cylinder(r = 1.1, h = 108); color([0.85, 0.45, 0.25]) translate([2.2, 0, 0]) cylinder(r = 0.2, h = 108); "
+             f"color([0.8, 0.65, 0.3]) translate([0, 0, {R_CONTATTO - 5}]) cylinder(r = {R_COLLARE}, h = 10); }}  // collare ARMA")
     for i, bt in enumerate(BATTERIE):
         cx, cy, cz = bt["centro"]
         r.append(f"color({rosso(f'batteria {i + 1}', [0.25, 0.55, 0.95])}) seg([{cx}, {cy - bt['lunghezza'] / 2}, {cz}], "
@@ -703,6 +733,21 @@ module scheda(o, u, v, n, d, sp, alt, col) {
     (RADICE / "modello" / "metronomus.scad").write_text("\n".join(r) + "\n", encoding="utf-8")
 
 
+def fili_flessibili():
+    """Lunghezza consigliata dei fili flessibili: distanza massima tra la fine del rame e l'attacco
+    sul pendolo nell'arco ±ANGOLO_FC, più 5 mm di lasco. LED attaccati alla base del tubo (raggio 8),
+    ARMA al collare (raggio R_CONTATTO)."""
+    ax, _, az = ASSE
+    out = {}
+    for nome in ("LED_A", "LED_K", "ARMA"):
+        fine = rete(nome).liberi[0]
+        raggio = R_CONTATTO if nome == "ARMA" else 8.0
+        dmax = max(norma(sub(fine, (ax + raggio * math.sin(math.radians(t)), Y_PENDOLO, az + raggio * math.cos(math.radians(t)))))
+                   for t in range(-int(ANGOLO_FC), int(ANGOLO_FC) + 1))
+        out[nome] = math.ceil(dmax + 5)
+    return out
+
+
 def costruisci():
     return analizza()
 
@@ -719,6 +764,8 @@ if __name__ == "__main__":
     for g in GRUPPI:
         sel = [p for p in pezzi if p.gruppo == g]
         print(f"  {NOMI_GRUPPI[g]:<16} {len(sel):3d} pezzi  {sum(p.taglio for p in sel) / 10:6.1f} cm")
+    print("  fili flessibili (mm): " + ", ".join(f"{k} {v}" for k, v in fili_flessibili().items())
+          + f"; finecorsa a ±{ANGOLO_FC:.0f}°, paletti alti {Z_FC} mm, collare a {R_CONTATTO} mm dall'asse")
     for a in avvisi:
         print("AVVISO:", a)
     for e in errori:

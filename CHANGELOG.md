@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-18
+- Stop di emergenza: paletti di rame a ±45° (finecorsa meccanici, rete STOP verso EN del driver e GPIO43) e collare di ottone sul pendolo (rete ARMA da GPIO44). Schema rev. 0.2.2 (solo SVG), pinout, BOM, rame (93 pezzi, 3,19 m) e modello 3D aggiornati.
 - Rame a bus: geometria.py divisa in bus (sollevati, con 3 mm di sporgenza per il gioco di montaggio) e discese per scheda; distinta segmenti.csv in ordine di montaggio (colonna `gruppo`). 84 pezzi, 2,72 m.
 - Decisioni: AS5600 collegato direttamente, filamenti LED con 15–20 mm di filo flessibile. Nuove domande: stop di emergenza, masse separate.
 - Fine sessione: STATO riscritto, nuove domande aperte (sporgenza dell'albero, AS5600, serigrafia del SimpleFOC).

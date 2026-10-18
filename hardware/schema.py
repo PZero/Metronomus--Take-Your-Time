@@ -149,7 +149,7 @@ def sezione(x, y, w, h, titolo, c):
 
 # ------------------------------------------------------------------ cartiglio
 testo(40, 48, "METRONOMUS · schema elettrico", NERO, 26, "start", "bold")
-testo(40, 74, "rev. 0.2.1 · 18/10/2026 · ESP32-S3 · bozza da verificare su breadboard · "
+testo(40, 74, "rev. 0.2.2 · 18/10/2026 · ESP32-S3 · stop di emergenza · bozza da verificare su breadboard · "
       "le etichette uguali indicano piedini collegati tra loro", GRIGIO, 14)
 
 # ------------------------------------------------------------------ ALIMENTAZIONE
@@ -251,13 +251,13 @@ sezione(30, 495, 1620, 670, "CONTROLLO E ATTUATORI", BLU)
 esp = modulo(740, 560, 230, 360, "ESP32-S3\nSuperMini",
              sx=[("5V", "n.c."), ("GND", "GND"), ("3V3", "3V3"), ("GPIO13", "ENC_B"), ("GPIO12", "ENC_A"),
                  ("GPIO11", "n.c."), ("GPIO10", "LED_PWM"), ("GPIO9", "VBAT_ADC"), ("GPIO8", "ENC_SW")],
-             dx=[("TX", "n.c."), ("RX", "n.c."), ("GPIO1", "SCL"), ("GPIO2", "SDA"), ("GPIO3", "VIB_IN"),
+             dx=[("GPIO43", "STOP"), ("GPIO44", "ARMA"), ("GPIO1", "SCL"), ("GPIO2", "SDA"), ("GPIO3", "VIB_IN"),
                  ("GPIO4", "PWR_EN"), ("GPIO5", "PWM_C"), ("GPIO6", "PWM_B"), ("GPIO7", "PWM_A")],
              passo=37, stub=60)
 testo(855, 945, "GPIO8 = pulsante, risveglia dal letargo · GPIO3 = strapping JTAG (innocuo)\nTogliere il LED rosso di alimentazione della SuperMini", GRIGIO, 12, "middle")
 
 drv = modulo(1200, 560, 200, 380, "SimpleFOC\nMini v1.0\n(DRV8313)",
-             sx=[("IN1", "PWM_A"), ("IN2", "PWM_B"), ("IN3", "PWM_C"), ("EN", "DRV_3V3"), ("GND", "GND"),
+             sx=[("IN1", "PWM_A"), ("IN2", "PWM_B"), ("IN3", "PWM_C"), ("EN", "STOP"), ("GND", "GND"),
                  ("nFT", "n.c."), ("nSP", "n.c."), ("nRT", "n.c."), ("3V3", "DRV_3V3")],
              dx=[("+", "V12"), ("−", "GND"), ("M1", ""), ("M2", ""), ("M3", "")], passo=42, stub=40)
 mx, my = 1540, drv["M2"][1]
@@ -320,6 +320,30 @@ for i, (pin_, rete, rn) in enumerate((("A", "ENC_A", "R3"), ("B", "ENC_B", "R4")
     testo(504, y + 30, "10 nF", NERO, 12)
     massa(490, y + 45)
 testo(360, 920, "C (comune) e secondo piedino del pulsante a GND.\nPull-up interne dell'ESP32 attive.", GRIGIO, 12)
+
+# finecorsa: stop di emergenza
+testo(60, 985, "Finecorsa · stop di emergenza", NERO, 14, "start", "bold")
+nx, ny = 200, 1075
+testo(nx, 1007, "DRV_3V3", BLU, 13, "middle", "bold")
+linea(nx, 1012, nx, 1020)
+resistenza(nx, 1020, ny - 1020)
+testo(nx + 14, 1050, "R9 10 kΩ (al posto del ponticello EN–3V3)", NERO, 12)
+punto(nx, ny)
+linea(120, ny, nx + 40, ny, BLU)
+testo(116, ny + 5, "STOP", BLU, 13, "end", "bold")
+for yy, lato in ((ny, "sx"), (ny + 45, "dx")):
+    interruttore(nx + 40, yy, 80, NERO)
+    testo(nx + 80, yy + 22, f"paletto {lato}", GRIGIO, 12, "middle")
+linea(nx + 40, ny, nx + 40, ny + 45)
+linea(nx + 120, ny, nx + 120, ny + 45)
+punto(nx + 40, ny)
+punto(nx + 120, ny)
+linea(nx + 120, ny, nx + 170, ny, BLU)
+testo(nx + 176, ny + 5, "ARMA", BLU, 13, "start", "bold")
+testo(470, 1000, "Paletti di rame a ±45° (rete STOP) e collare di ottone sul pendolo (rete ARMA, filo flessibile).\n"
+      "ARMA = 0: se il pendolo tocca un paletto, EN va a 0 V e il driver si spegne anche se il firmware sbaglia.\n"
+      "ARMA = 1 solo all'avvio, per staccare il pendolo dal finecorsa su cui cade in letargo.\n"
+      "GPIO43 legge STOP: il firmware spegne anche PWR_EN e segnala l'errore. I paletti fanno da finecorsa meccanici.", GRIGIO, 12)
 
 el[INIZIO_CONTROLLO:] = ['<g transform="translate(0,100)">'] + el[INIZIO_CONTROLLO:] + ["</g>"]
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'

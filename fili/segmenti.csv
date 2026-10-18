@@ -1,4 +1,6 @@
 gruppo,codice,rete,asse,lunghezza_assi_mm,taglio_mm,estremo_A,estremo_B,A_x,A_y,A_z,B_x,B_y,B_z
+Struttura,STOP-01,STOP,Z,87.1,92.1,base,testa,-20.0,-11.5,0.0,-20.0,-11.5,87.1
+Struttura,STOP-02,STOP,Z,87.1,92.1,base,testa,20.0,-11.5,0.0,20.0,-11.5,87.1
 Struttura,TELAIO-01,TELAIO,Z,84.0,88.5,base,battuta,-11.5,8.5,0.0,-11.5,8.5,84.0
 Struttura,TELAIO-02,TELAIO,Z,84.0,88.5,base,battuta,-11.5,-8.0,0.0,-11.5,-8.0,84.0
 Struttura,TELAIO-03,TELAIO,Z,84.0,88.5,base,battuta,11.5,-8.0,0.0,11.5,-8.0,84.0
@@ -28,6 +30,9 @@ Bus,LED_PWM-01,LED_PWM,Y,18.3,18.3,testa,testa,8.0,37.24,18.0,8.0,55.5,18.0
 Bus,VBAT_ADC-01,VBAT_ADC,Y,18.3,18.3,testa,testa,10.54,37.24,18.0,10.54,55.5,18.0
 Bus,VSW-01,VSW,Y,21.2,21.7,testa,passante,30.86,55.5,18.0,30.86,34.32,18.0
 Bus,VSW-02,VSW,X,14.6,14.1,battuta,testa,30.86,34.32,18.0,45.5,34.32,18.0
+Bus,STOP-03,STOP,X,40.0,39.0,battuta,battuta,-20.0,-11.5,18.0,20.0,-11.5,18.0
+Bus,STOP-04,STOP,Y,28.5,28.0,testa,battuta,5.46,17.0,18.0,5.46,-11.5,18.0
+Bus,STOP-06,STOP,Y,39.5,39.0,testa,battuta,-7.24,28.0,18.0,-7.24,-11.5,18.0
 Batterie,BATT+-01,BATT+,Z,9.2,14.7,base,passante,-35.0,1.0,0.0,-35.0,1.0,9.15
 Batterie,BATT+-02,BATT+,X,21.0,21.0,battuta,passante,-35.0,1.0,9.15,-56.0,1.0,9.15
 Batterie,BATT+-03,BATT+,Z,9.2,13.7,battuta,base,-56.0,1.0,9.15,-56.0,1.0,0.0
@@ -52,9 +57,9 @@ Scheda servizi,VSW-04,VSW,Z,12.0,14.0,pin,battuta,30.86,52.5,30.0,30.86,52.5,18.
 Scheda servizi,VSW-05,VSW,Z,30.0,37.5,pin,base,33.4,52.5,30.0,33.4,52.5,0.0
 Scheda servizi,VBAT-01,VBAT,Z,30.0,37.5,pin,base,20.7,52.5,30.0,20.7,52.5,0.0
 Scheda servizi,LED_A-01,LED_A,Z,65.0,68.0,pin,passante,18.16,52.5,30.0,18.16,52.5,95.0
-Scheda servizi,LED_A-02,LED_A,Y,28.5,28.0,battuta,libero,18.16,52.5,95.0,18.16,24.0,95.0
+Scheda servizi,LED_A-02,LED_A,Y,56.0,55.5,battuta,libero,18.16,52.5,95.0,18.16,-3.5,95.0
 Scheda servizi,LED_K-01,LED_K,Z,65.0,68.0,pin,passante,15.62,52.5,30.0,15.62,52.5,95.0
-Scheda servizi,LED_K-02,LED_K,Y,28.5,28.0,battuta,libero,15.62,52.5,95.0,15.62,24.0,95.0
+Scheda servizi,LED_K-02,LED_K,Y,56.0,55.5,battuta,libero,15.62,52.5,95.0,15.62,-3.5,95.0
 ESP32-S3,GND-12,GND,Z,24.0,27.0,pin,passante,-4.7,40.24,30.0,-4.7,40.24,6.0
 ESP32-S3,GND-13,GND,Y,11.5,10.5,battuta,battuta,-4.7,40.24,6.0,-4.7,28.74,6.0
 ESP32-S3,PWM_A-02,PWM_A,Z,12.0,14.0,pin,battuta,13.08,25.0,30.0,13.08,25.0,18.0
@@ -68,12 +73,16 @@ ESP32-S3,ENC_SW-01,ENC_SW,Z,30.0,37.5,pin,base,13.08,40.24,30.0,13.08,40.24,0.0
 ESP32-S3,ENC_A-01,ENC_A,Z,30.0,37.5,pin,base,2.92,40.24,30.0,2.92,40.24,0.0
 ESP32-S3,ENC_B-01,ENC_B,Z,30.0,37.5,pin,base,0.38,40.24,30.0,0.38,40.24,0.0
 ESP32-S3,VIB_IN-01,VIB_IN,Z,30.0,37.5,pin,base,2.92,25.0,30.0,2.92,25.0,0.0
+ESP32-S3,STOP-07,STOP,Z,12.0,14.0,pin,battuta,-7.24,25.0,30.0,-7.24,25.0,18.0
+ESP32-S3,ARMA-01,ARMA,Z,65.0,68.0,pin,passante,-4.7,25.0,30.0,-4.7,25.0,95.0
+ESP32-S3,ARMA-02,ARMA,Y,28.5,28.0,battuta,libero,-4.7,25.0,95.0,-4.7,-3.5,95.0
 SimpleFOC Mini,GND-14,GND,Z,24.0,27.0,pin,passante,23.13,9.32,30.0,23.13,9.32,6.0
 SimpleFOC Mini,GND-15,GND,X,14.4,13.4,battuta,battuta,23.13,9.32,6.0,37.5,9.32,6.0
 SimpleFOC Mini,V12-07,V12,Z,16.0,18.0,pin,battuta,23.13,4.12,30.0,23.13,4.12,14.0
 SimpleFOC Mini,PWM_A-03,PWM_A,Z,12.0,14.0,pin,battuta,13.08,14.0,30.0,13.08,14.0,18.0
 SimpleFOC Mini,PWM_B-03,PWM_B,Z,12.0,14.0,pin,battuta,10.54,14.0,30.0,10.54,14.0,18.0
 SimpleFOC Mini,PWM_C-03,PWM_C,Z,12.0,14.0,pin,battuta,8.0,14.0,30.0,8.0,14.0,18.0
+SimpleFOC Mini,STOP-05,STOP,Z,12.0,14.0,pin,battuta,5.46,14.0,30.0,5.46,14.0,18.0
 AS5600,GND-16,GND,Y,10.0,13.0,pin,passante,2.68,11.0,65.25,2.68,21.0,65.25
 AS5600,GND-17,GND,Z,59.2,59.2,battuta,passante,2.68,21.0,65.25,2.68,21.0,6.0
 AS5600,GND-18,GND,Y,20.0,19.0,battuta,battuta,2.68,21.0,6.0,2.68,1.0,6.0

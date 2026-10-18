@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1290" viewBox="0 0 1680 1290"><rect width="1680" height="1290" fill="white"/><text x="40" y="48" fill="#222222" font-size="26" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">METRONOMUS · schema elettrico</text>
-<text x="40" y="74" fill="#6b6b6b" font-size="14" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">rev. 0.2.1 · 18/10/2026 · ESP32-S3 · bozza da verificare su breadboard · le etichette uguali indicano piedini collegati tra loro</text>
+<text x="40" y="74" fill="#6b6b6b" font-size="14" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">rev. 0.2.2 · 18/10/2026 · ESP32-S3 · stop di emergenza · bozza da verificare su breadboard · le etichette uguali indicano piedini collegati tra loro</text>
 <rect x="30" y="95" width="1620" height="485" fill="none" stroke="#b3261e" stroke-width="1.2" stroke-dasharray="6 5" rx="8"/>
 <text x="42" y="117" fill="#b3261e" font-size="15" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">ALIMENTAZIONE</text>
 <rect x="110" y="140" width="220" height="240" fill="#fbf7f0" stroke="#222222" stroke-width="2.2" rx="4"/>
@@ -209,12 +209,12 @@
 <text x="748" y="891" fill="#222222" font-size="13" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GPIO8</text>
 <line x1="680" y1="886" x2="740" y2="886" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <text x="674" y="891" fill="#1f4e9c" font-size="13" text-anchor="end" font-weight="bold" font-family="Helvetica, Arial, sans-serif">ENC_SW</text>
-<text x="962" y="595" fill="#222222" font-size="13" text-anchor="end" font-weight="normal" font-family="Helvetica, Arial, sans-serif">TX</text>
+<text x="962" y="595" fill="#222222" font-size="13" text-anchor="end" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GPIO43</text>
 <line x1="970" y1="590" x2="1030" y2="590" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<text x="1036" y="595" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">n.c.</text>
-<text x="962" y="632" fill="#222222" font-size="13" text-anchor="end" font-weight="normal" font-family="Helvetica, Arial, sans-serif">RX</text>
+<text x="1036" y="595" fill="#1f4e9c" font-size="13" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">STOP</text>
+<text x="962" y="632" fill="#222222" font-size="13" text-anchor="end" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GPIO44</text>
 <line x1="970" y1="627" x2="1030" y2="627" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<text x="1036" y="632" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">n.c.</text>
+<text x="1036" y="632" fill="#1f4e9c" font-size="13" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">ARMA</text>
 <text x="962" y="669" fill="#222222" font-size="13" text-anchor="end" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GPIO1</text>
 <line x1="970" y1="664" x2="1030" y2="664" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <text x="1036" y="669" fill="#1f4e9c" font-size="13" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">SCL</text>
@@ -253,7 +253,7 @@
 <text x="1154" y="679" fill="#1f4e9c" font-size="13" text-anchor="end" font-weight="bold" font-family="Helvetica, Arial, sans-serif">PWM_C</text>
 <text x="1208" y="721" fill="#222222" font-size="13" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">EN</text>
 <line x1="1160" y1="716" x2="1200" y2="716" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
-<text x="1154" y="721" fill="#1f4e9c" font-size="13" text-anchor="end" font-weight="bold" font-family="Helvetica, Arial, sans-serif">DRV_3V3</text>
+<text x="1154" y="721" fill="#1f4e9c" font-size="13" text-anchor="end" font-weight="bold" font-family="Helvetica, Arial, sans-serif">STOP</text>
 <text x="1208" y="763" fill="#222222" font-size="13" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GND</text>
 <line x1="1160" y1="758" x2="1200" y2="758" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <line x1="1160" y1="758" x2="1160" y2="770" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
@@ -446,4 +446,34 @@
 <line x1="486" y1="862" x2="494" y2="862" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
 <text x="360" y="920" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">C (comune) e secondo piedino del pulsante a GND.</text>
 <text x="360" y="935" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Pull-up interne dell'ESP32 attive.</text>
+<text x="60" y="985" fill="#222222" font-size="14" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Finecorsa · stop di emergenza</text>
+<text x="200" y="1007" fill="#1f4e9c" font-size="13" text-anchor="middle" font-weight="bold" font-family="Helvetica, Arial, sans-serif">DRV_3V3</text>
+<line x1="200" y1="1012" x2="200" y2="1020" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<polyline points="200,1020 200,1030 207,1032.9166666666667 193,1038.75 207,1044.5833333333333 193,1050.4166666666667 207,1056.25 193,1062.0833333333333 200,1065 200,1075" stroke="#222222" stroke-width="2" fill="none" stroke-linejoin="round"/>
+<text x="214" y="1050" fill="#222222" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">R9 10 kΩ (al posto del ponticello EN–3V3)</text>
+<circle cx="200" cy="1075" r="4" fill="#222222"/>
+<line x1="120" y1="1075" x2="240" y2="1075" stroke="#1f4e9c" stroke-width="2" stroke-linecap="round"/>
+<text x="116" y="1080" fill="#1f4e9c" font-size="13" text-anchor="end" font-weight="bold" font-family="Helvetica, Arial, sans-serif">STOP</text>
+<line x1="240" y1="1075" x2="255" y2="1075" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<circle cx="255" cy="1075" r="4" fill="#222222"/>
+<line x1="255" y1="1075" x2="305" y2="1059" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<circle cx="305" cy="1075" r="4" fill="white" stroke="#222222" stroke-width="2"/>
+<line x1="309" y1="1075" x2="320" y2="1075" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<text x="280" y="1097" fill="#6b6b6b" font-size="12" text-anchor="middle" font-weight="normal" font-family="Helvetica, Arial, sans-serif">paletto sx</text>
+<line x1="240" y1="1120" x2="255" y2="1120" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<circle cx="255" cy="1120" r="4" fill="#222222"/>
+<line x1="255" y1="1120" x2="305" y2="1104" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<circle cx="305" cy="1120" r="4" fill="white" stroke="#222222" stroke-width="2"/>
+<line x1="309" y1="1120" x2="320" y2="1120" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<text x="280" y="1142" fill="#6b6b6b" font-size="12" text-anchor="middle" font-weight="normal" font-family="Helvetica, Arial, sans-serif">paletto dx</text>
+<line x1="240" y1="1075" x2="240" y2="1120" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="320" y1="1075" x2="320" y2="1120" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<circle cx="240" cy="1075" r="4" fill="#222222"/>
+<circle cx="320" cy="1075" r="4" fill="#222222"/>
+<line x1="320" y1="1075" x2="370" y2="1075" stroke="#1f4e9c" stroke-width="2" stroke-linecap="round"/>
+<text x="376" y="1080" fill="#1f4e9c" font-size="13" text-anchor="start" font-weight="bold" font-family="Helvetica, Arial, sans-serif">ARMA</text>
+<text x="470" y="1000" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Paletti di rame a ±45° (rete STOP) e collare di ottone sul pendolo (rete ARMA, filo flessibile).</text>
+<text x="470" y="1015" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">ARMA = 0: se il pendolo tocca un paletto, EN va a 0 V e il driver si spegne anche se il firmware sbaglia.</text>
+<text x="470" y="1030" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">ARMA = 1 solo all'avvio, per staccare il pendolo dal finecorsa su cui cade in letargo.</text>
+<text x="470" y="1045" fill="#6b6b6b" font-size="12" text-anchor="start" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GPIO43 legge STOP: il firmware spegne anche PWR_EN e segnala l'errore. I paletti fanno da finecorsa meccanici.</text>
 </g></svg>

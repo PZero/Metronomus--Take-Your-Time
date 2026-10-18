@@ -34,6 +34,7 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-18 | **Circuito a bus**: ogni scheda ha le sue *discese* (fili dritti dal pin fino alla quota del bus); i bus corrono sollevati sopra la base (massa a 6 mm, 12 V a 14 mm, segnali a 18 mm) e sporgono 3 mm oltre l'ultima discesa, che si salda in T dove cade davvero. Montaggio a gruppi: struttura e bus sulla dima, poi una scheda alla volta, l'alimentazione per prima | Proposta di Fabio: gioco di montaggio, una scheda alla volta, correzioni sul bus se una misura non torna | Collegamenti a U chiusi tra i pin (nessun gioco) |
 | 2026-10-18 | AS5600 collegato **direttamente** all'ESP32 (SCL, SDA) e al Mini‑360 (VCC), fuori dai bus | I2C corto e lontano dalle fasi del motore | I2C nel bus con massa in mezzo |
 | 2026-10-18 | I filamenti LED che oscillano si collegano con 15–20 mm di filo flessibile, fermato prima della saldatura | Il pendolo si muove: il filo flessibile lavora al posto del giunto | Rame rigido fino al LED |
+| 2026-10-18 | **Stop di emergenza**: due paletti di rame a ±45° nel piano del pendolo (finecorsa meccanici, rete STOP verso l'EN del driver con R9 10 kΩ di pull‑up e verso GPIO43) e collare di ottone sul pendolo (rete ARMA da GPIO44, filo flessibile). Con ARMA = 0 il contatto spegne il driver in hardware; ARMA = 1 solo all'avvio | In letargo il pendolo rovesciato cade su un finecorsa: con il percussore a massa il driver non potrebbe più ripartire | Percussore a massa (blocco al risveglio); solo firmware; solo finecorsa meccanici |
 
 ---
 
