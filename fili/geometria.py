@@ -5,7 +5,10 @@ Uso:  python fili/geometria.py
   - dispone i moduli e traccia le reti con segmenti dritti (nessuna piega);
   - controlla: pezzi >= 10 mm, distanza tra fili di reti diverse, fili che attraversano le schede,
     schede che si sovrappongono (gioco 0,5 mm), reti tutte collegate;
-  - scrive fili/segmenti.csv (distinta di taglio) e modello/metronomus.scad.
+  - scrive fili/segmenti.csv (distinta di taglio, in ordine di montaggio) e modello/metronomus.scad.
+
+Struttura a bus: ogni scheda ha le sue discese (fili dritti dal pin fino alla quota del bus); i bus
+corrono sollevati sopra la base e sporgono oltre l'ultima discesa, che si salda in T dove cade.
 
 Assi in mm: x verso destra, y verso il retro, z verso l'alto; z = 0 è il piano della base di legno.
 """
@@ -116,9 +119,11 @@ def modulo(chiave, nome, rot=0, verticale=None, colore="nero", **extra):
 class Rete:
     nome: str
     tratti: list = field(default_factory=list)   # liste di punti
+    gruppi: list = field(default_factory=list)   # gruppo di montaggio di ogni tratto (una scheda, "bus", "struttura")
     pin: list = field(default_factory=list)      # (modulo, pin) che la rete deve toccare
     fori: list = field(default_factory=list)     # fori nella base (punti a z = 0)
     liberi: list = field(default_factory=list)   # estremità libere (attacco di un filo flessibile)
+    teste: list = field(default_factory=list)    # estremità del bus oltre l'ultima discesa (nessun giunto)
 
 
 RETI = {}
@@ -132,7 +137,7 @@ def rete(nome):
     return RETI.setdefault(nome, Rete(nome))
 
 
-def tratto(nome_rete, *punti):
+def tratto(nome_rete, *punti, gruppo="bus"):
     pts = [tonda(p) for p in punti]
     # unisce i punti allineati (un pezzo dritto resta un pezzo solo)
     pulito = [pts[0]]
@@ -147,16 +152,32 @@ def tratto(nome_rete, *punti):
                 continue
         pulito.append(p)
     rete(nome_rete).tratti.append(pulito)
+    rete(nome_rete).gruppi.append(gruppo)
     return pulito
 
 
-def ponte(nome_rete, a, b, z):
-    """Collegamento a U (o a gradino) tra due pin: scende/sale a quota z, corre, torna su/giù."""
-    pts = [a, (a[0], a[1], z)]
-    if a[0] != b[0] and a[1] != b[1]:
-        pts.append((b[0], a[1], z))
-    pts += [(b[0], b[1], z), b]
-    return tratto(nome_rete, *pts)
+# Struttura a bus (decisione del 18/10/2026): ogni scheda ha le sue DISCESE, fili dritti dal pin
+# fino alla quota del bus; i BUS corrono sollevati sopra la base e proseguono di SPORGENZA oltre
+# l'ultima discesa, così ogni discesa si salda in T dove cade davvero (gioco di montaggio).
+SPORGENZA = 3.0
+
+
+def discesa(chiave, pin, nome_rete, z, *piede):
+    """Filo dritto dal pin fino alla quota z; `piede` = eventuali punti successivi fino al bus."""
+    rete(nome_rete).pin.append((chiave, pin))
+    p = MODULI[chiave].pin(pin)
+    return tratto(nome_rete, p, (p[0], p[1], z), *piede, gruppo=chiave)
+
+
+def bus(nome_rete, *punti, sporgenze=(SPORGENZA, SPORGENZA)):
+    """Linea del bus tra i punti dati, allungata alle due estremità (0 = estremità su un giunto)."""
+    pts = [tonda(p) for p in punti]
+    for i, (k, vicino) in enumerate(((0, 1), (-1, -2))):
+        if sporgenze[i]:
+            d = sub(pts[k], pts[vicino])
+            pts[k] = tonda(add(pts[k], mul(d, sporgenze[i] / norma(d))))
+            rete(nome_rete).teste.append(pts[k])
+    return tratto(nome_rete, *pts, gruppo="bus")
 
 
 # ================================================================== DISPOSIZIONE
@@ -239,111 +260,117 @@ BATTERIE = [{"centro": (x, 19.5, 9.15), "diametro": 18.3, "lunghezza": 35.0} for
 BASE = {"min": (-95.0, -25.0, -22.0), "max": (95.0, 65.0, 0.0)}
 
 # ================================================================== RETI
+# Quote dei bus sopra la base (sollevati dal legno): massa, 12 V, segnali.
 Z_ANELLO, Z_DORSALE, Z_PONTI, Z_LED = 6.0, 14.0, 18.0, 95.0
 ANELLO = {"x": (-22.0, 37.5), "y": (1.0, ESP.pin("GND")[1] - 11.5)}
 ax0, ax1 = ANELLO["x"]
 ay0, ay1 = ANELLO["y"]
 
-# --- GND: anello di massa vicino alla base, ogni massa ci scende
-rete("GND").pin += [("as5600", "GND"), ("mini360", "OUT-"), ("esp32", "GND"), ("driver", "PWR-"),
-                    ("mt3608", "VOUT-"), ("servizi", "GND")]
+# ------------------------------------------------------------------ bus
+# GND: anello chiuso vicino alla base; il ritorno della batteria scende nella base vicino al driver
+# e al MT3608 (le correnti del motore non passano sotto la logica).
 tratto("GND", (ax0, ay0, Z_ANELLO), (ax1, ay0, Z_ANELLO), (ax1, ay1, Z_ANELLO), (ax0, ay1, Z_ANELLO), (ax0, ay0, Z_ANELLO))
 foro_gnd = (ax0, (ay0 + ay1) / 2, 0.0)
 tratto("GND", (ax0, foro_gnd[1], Z_ANELLO), foro_gnd)            # al TP4056 OUT- sotto la base
 rete("GND").fori.append(foro_gnd)
-p = AS.pin("GND")
-tratto("GND", p, (p[0], Y_DISCESA_AS, p[2]), (p[0], Y_DISCESA_AS, Z_ANELLO), (p[0], ay0, Z_ANELLO))
-p = MINI.pin("OUT-")
-tratto("GND", p, (p[0], p[1], Z_ANELLO), (p[0], ay0, Z_ANELLO))
-p = ESP.pin("GND")
-tratto("GND", p, (p[0], p[1], Z_ANELLO), (p[0], ay1, Z_ANELLO))
-p = SRV.pin("GND")
-tratto("GND", p, (p[0], p[1], Z_ANELLO), (p[0], ay1, Z_ANELLO))
-p = DRV.pin("PWR-")
-tratto("GND", p, (p[0], p[1], Z_ANELLO), (ax1, p[1], Z_ANELLO))
+
+# V12: dorsale lungo il fronte dal MT3608 al Mini-360, ramo verso la scheda servizi
+Y_DORSALE = MT.pin("VOUT+")[1]
+X_RAMO_V12 = SRV.pin("V12")[0]
+bus("V12", (MT.pin("VOUT+")[0], Y_DORSALE, Z_DORSALE), (MINI.pin("IN+")[0], Y_DORSALE, Z_DORSALE),
+    (MINI.pin("IN+")[0], MINI.pin("IN+")[1], Z_DORSALE))
+bus("V12", (X_RAMO_V12, Y_DORSALE, Z_DORSALE), (X_RAMO_V12, SRV.pin("V12")[1], Z_DORSALE), sporgenze=(0, SPORGENZA))
+
+# Segnali tra ESP32 e driver / scheda servizi: linee lungo y sotto i pin allineati
+for nome, a, b in (("PWM_A", DRV.pin("IN1"), ESP.pin("GPIO7")), ("PWM_B", DRV.pin("IN2"), ESP.pin("GPIO6")),
+                   ("PWM_C", DRV.pin("IN3"), ESP.pin("GPIO5")), ("PWR_EN", ESP.pin("GPIO4"), SRV.pin("PWR_EN")),
+                   ("3V3", ESP.pin("3V3"), SRV.pin("3V3")), ("LED_PWM", ESP.pin("GPIO10"), SRV.pin("LED_PWM")),
+                   ("VBAT_ADC", ESP.pin("GPIO9"), SRV.pin("ADC"))):
+    bus(nome, (a[0], a[1], Z_PONTI), (b[0], b[1], Z_PONTI))
+
+# VSW: dalla scheda servizi lungo y fino all'altezza del MT3608, poi lungo x sotto il suo VIN+
+a, b = SRV.pin("VSW"), MT.pin("VIN+")
+bus("VSW", (a[0], a[1], Z_PONTI), (a[0], b[1], Z_PONTI), (b[0], b[1], Z_PONTI))
+
+# ------------------------------------------------------------------ discese, scheda per scheda
+# MT3608
+discesa("mt3608", "VOUT+", "V12", Z_DORSALE)
+discesa("mt3608", "VIN+", "VSW", Z_PONTI)
 p = MT.pin("VOUT-")
-tratto("GND", p, (p[0], p[1], Z_ANELLO), (ax1, p[1], Z_ANELLO))
+discesa("mt3608", "VOUT-", "GND", Z_ANELLO, (ax1, p[1], Z_ANELLO))
 
-# --- V12: dorsale dal MT3608 verso sinistra, sale al driver, al Mini-360 e alla scheda servizi
-rete("V12").pin += [("mt3608", "VOUT+"), ("driver", "PWR+"), ("mini360", "IN+"), ("servizi", "V12")]
-a, b = MT.pin("VOUT+"), MINI.pin("IN+")
-tratto("V12", a, (a[0], a[1], Z_DORSALE), (b[0], a[1], Z_DORSALE), (b[0], b[1], Z_DORSALE), b)
-p = DRV.pin("PWR+")
-tratto("V12", (p[0], p[1], Z_DORSALE), p)
-p = SRV.pin("V12")
-tratto("V12", (p[0], a[1], Z_DORSALE), (p[0], p[1], Z_DORSALE), p)
+# Mini-360 (OUT+ va dritto all'AS5600: vedi sotto)
+discesa("mini360", "IN+", "V12", Z_DORSALE)
+p = MINI.pin("OUT-")
+discesa("mini360", "OUT-", "GND", Z_ANELLO, (p[0], ay0, Z_ANELLO))
 
-# --- 3V3_SW: Mini-360 OUT+ -> AS5600 VCC (10 mm verso il retro, poi giù)
-rete("3V3_SW").pin += [("as5600", "VCC"), ("mini360", "OUT+")]
-p = AS.pin("VCC")
-tratto("3V3_SW", p, (p[0], Y_DISCESA_AS, p[2]), MINI.pin("OUT+"))
+# Scheda servizi
+discesa("servizi", "V12", "V12", Z_DORSALE)
+discesa("servizi", "VSW", "VSW", Z_PONTI)
+for nome, ps in (("PWR_EN", "PWR_EN"), ("3V3", "3V3"), ("LED_PWM", "LED_PWM"), ("VBAT_ADC", "ADC")):
+    discesa("servizi", ps, nome, Z_PONTI)
+p = SRV.pin("GND")
+discesa("servizi", "GND", "GND", Z_ANELLO, (p[0], ay1, Z_ANELLO))
+for nome, ps in (("VBAT", "VBAT"), ("VSW", "VSW_VIB")):          # nella base: TP4056 e motorino a vibrazione
+    discesa("servizi", ps, nome, 0.0)
+    rete(nome).fori.append(tonda((SRV.pin(ps)[0], SRV.pin(ps)[1], 0.0)))
+# LED: due fili salgono fin sopra il motore; da lì 15-20 mm di filo flessibile fino ai filamenti
+for nome in ("LED_A", "LED_K"):
+    p = SRV.pin(nome)
+    fine = (p[0], Y_DISCESA_AS + 3.0, Z_LED)
+    discesa("servizi", nome, nome, Z_LED, fine)
+    rete(nome).liberi.append(tonda(fine))
 
-# --- I2C: dall'AS5600 verso il retro e giù, dritti sui pin dell'ESP32
+# ESP32-S3
+for nome, pe in (("PWM_A", "GPIO7"), ("PWM_B", "GPIO6"), ("PWM_C", "GPIO5"), ("PWR_EN", "GPIO4"),
+                 ("3V3", "3V3"), ("LED_PWM", "GPIO10"), ("VBAT_ADC", "GPIO9")):
+    discesa("esp32", pe, nome, Z_PONTI)
+p = ESP.pin("GND")
+discesa("esp32", "GND", "GND", Z_ANELLO, (p[0], ay1, Z_ANELLO))
+for nome, pe in (("ENC_SW", "GPIO8"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13"), ("VIB_IN", "GPIO3")):
+    discesa("esp32", pe, nome, 0.0)                                # nella base: encoder e motorino
+    rete(nome).fori.append(tonda((ESP.pin(pe)[0], ESP.pin(pe)[1], 0.0)))
+
+# SimpleFOC Mini
+for nome, pd in (("PWM_A", "IN1"), ("PWM_B", "IN2"), ("PWM_C", "IN3")):
+    discesa("driver", pd, nome, Z_PONTI)
+discesa("driver", "PWR+", "V12", Z_DORSALE)
+p = DRV.pin("PWR-")
+discesa("driver", "PWR-", "GND", Z_ANELLO, (ax1, p[1], Z_ANELLO))
+
+# AS5600: collegamenti diretti, senza bus (I2C corto, lontano dalle fasi del motore)
 for nome, pa, pe in (("SCL", "SCL", "GPIO1"), ("SDA", "SDA", "GPIO2")):
     rete(nome).pin += [("as5600", pa), ("esp32", pe)]
     p, q = AS.pin(pa), ESP.pin(pe)
-    tratto(nome, p, (p[0], q[1], p[2]), q)
-
-# --- PWM: ponti a U sotto le schede
-for nome, pe, pd in (("PWM_A", "GPIO7", "IN1"), ("PWM_B", "GPIO6", "IN2"), ("PWM_C", "GPIO5", "IN3")):
-    rete(nome).pin += [("esp32", pe), ("driver", pd)]
-    ponte(nome, ESP.pin(pe), DRV.pin(pd), Z_PONTI)
-
-# --- ESP32 <-> scheda servizi
-for nome, pe, ps in (("3V3", "3V3", "3V3"), ("LED_PWM", "GPIO10", "LED_PWM"), ("VBAT_ADC", "GPIO9", "ADC")):
-    rete(nome).pin += [("esp32", pe), ("servizi", ps)]
-    ponte(nome, ESP.pin(pe), SRV.pin(ps), Z_PONTI)
-rete("PWR_EN").pin += [("esp32", "GPIO4"), ("servizi", "PWR_EN")]
-a, b = ESP.pin("GPIO4"), SRV.pin("PWR_EN")
-tratto("PWR_EN", a, (a[0], a[1], Z_PONTI), (b[0], a[1], Z_PONTI), (b[0], b[1], Z_PONTI), b)
-
-# --- VSW: scheda servizi -> MT3608 VIN+ ; e giù nella base verso il motorino a vibrazione
-rete("VSW").pin += [("servizi", "VSW"), ("mt3608", "VIN+"), ("servizi", "VSW_VIB")]
-a, b = SRV.pin("VSW"), MT.pin("VIN+")
-tratto("VSW", a, (a[0], a[1], Z_PONTI), (b[0], a[1], Z_PONTI), (b[0], b[1], Z_PONTI), b)
-p = SRV.pin("VSW_VIB")
-tratto("VSW", p, (p[0], p[1], 0.0))
-rete("VSW").fori.append((p[0], p[1], 0.0))
-
-# --- VBAT: dal TP4056 (sotto la base) alla scheda servizi
-rete("VBAT").pin.append(("servizi", "VBAT"))
-p = SRV.pin("VBAT")
-tratto("VBAT", (p[0], p[1], 0.0), p)
-rete("VBAT").fori.append((p[0], p[1], 0.0))
-
-# --- fili che scendono nella base: encoder (sotto la base, sul bordo anteriore) e motorino
-for nome, pe in (("ENC_SW", "GPIO8"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13"), ("VIB_IN", "GPIO3")):
-    rete(nome).pin.append(("esp32", pe))
-    p = ESP.pin(pe)
-    tratto(nome, p, (p[0], p[1], 0.0))
-    rete(nome).fori.append((p[0], p[1], 0.0))
-
-# --- LED: due fili salgono dalla scheda servizi e arrivano sopra il motore (poi filo flessibile)
-for nome in ("LED_A", "LED_K"):
-    rete(nome).pin.append(("servizi", nome))
-    p = SRV.pin(nome)
-    fine = (p[0], Y_DISCESA_AS + 3.0, Z_LED)
-    tratto(nome, p, (p[0], p[1], Z_LED), fine)
-    rete(nome).liberi.append(fine)
+    tratto(nome, p, (p[0], q[1], p[2]), q, gruppo="as5600")
+rete("3V3_SW").pin += [("as5600", "VCC"), ("mini360", "OUT+")]
+p = AS.pin("VCC")
+tratto("3V3_SW", p, (p[0], Y_DISCESA_AS, p[2]), MINI.pin("OUT+"), gruppo="as5600")
+p = AS.pin("GND")
+discesa("as5600", "GND", "GND", p[2], (p[0], Y_DISCESA_AS, p[2]), (p[0], Y_DISCESA_AS, Z_ANELLO), (p[0], ay0, Z_ANELLO))
 
 # --- struttura (non è una rete elettrica): telaio del motore e colonne del pannello
 xt, yr, yf, za, zb = X_TELAIO, Y_TELAIO_RETRO, Y_TELAIO_FRONTE, Z_TELAIO_ALTO, Z_TELAIO_BASSO
 for x, y in ((-xt, yr), (-xt, yf), (xt, yf)):
-    tratto("TELAIO", (x, y, 0.0), (x, y, za))
+    tratto("TELAIO", (x, y, 0.0), (x, y, za), gruppo="struttura")
     rete("TELAIO").fori.append((x, y, 0.0))
-tratto("TELAIO", (-xt, yr, za), (xt, yr, za), (xt, yr, zb), (-xt, yr, zb))
-tratto("TELAIO", (-xt, yr, za), (-xt, yf, za), (xt, yf, za), (xt, yr, za))
+tratto("TELAIO", (-xt, yr, za), (xt, yr, za), (xt, yr, zb), (-xt, yr, zb), gruppo="struttura")
+tratto("TELAIO", (-xt, yr, za), (-xt, yf, za), (xt, yf, za), (xt, yr, za), gruppo="struttura")
 for x in (-X_COLONNE_PANNELLO, X_COLONNE_PANNELLO):
-    tratto("PANNELLO", (x, Y_COLONNE_PANNELLO, 0.0), (x, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO))
+    tratto("PANNELLO", (x, Y_COLONNE_PANNELLO, 0.0), (x, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO), gruppo="struttura")
     rete("PANNELLO").fori.append((x, Y_COLONNE_PANNELLO, 0.0))
 tratto("PANNELLO", (-X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO),
-       (X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO))
+       (X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO), gruppo="struttura")
 
 # --- portabatterie in rame: barra del + davanti, barra del - dietro, scendono nella base
 for nome, y in (("BATT+", 19.5 - 17.5 - 1.0), ("BATT-", 19.5 + 17.5 + 1.0)):
     xa, xb = BATTERIE[0]["centro"][0], BATTERIE[1]["centro"][0]
-    tratto(nome, (xa, y, 0.0), (xa, y, 9.15), (xb, y, 9.15), (xb, y, 0.0))
+    tratto(nome, (xa, y, 0.0), (xa, y, 9.15), (xb, y, 9.15), (xb, y, 0.0), gruppo="alimentazione")
     rete(nome).fori += [(xa, y, 0.0), (xb, y, 0.0)]
+
+# Ordine di montaggio: struttura e bus sulla dima, poi una scheda alla volta, alimentazione per prima.
+GRUPPI = ["struttura", "bus", "alimentazione", "mt3608", "mini360", "servizi", "esp32", "driver", "as5600"]
+NOMI_GRUPPI = {"struttura": "Struttura", "bus": "Bus", "alimentazione": "Batterie"} | {k: m.nome for k, m in MODULI.items()}
 
 
 # ================================================================== CONTROLLI
@@ -355,6 +382,7 @@ class Pezzo:
     b: tuple
     tipo_a: str = ""
     tipo_b: str = ""
+    gruppo: str = ""
 
     @property
     def lunghezza(self):
@@ -368,7 +396,7 @@ class Pezzo:
     @property
     def taglio(self):
         extra = {"pin": INFILATA_PIN, "base": INFILATA_BASE, "passante": R_FILO, "battuta": -R_FILO,
-                 "libero": 0.0, "?": 0.0}
+                 "libero": 0.0, "testa": 0.0, "?": 0.0}
         return self.lunghezza + extra[self.tipo_a] + extra[self.tipo_b]
 
 
@@ -444,7 +472,7 @@ def analizza():
             if sum(1 for c in d if abs(c) > TOL) != 1:
                 errori.append(f"{nome}: segmento non parallelo a un asse {a} -> {b}")
         for k, i, a, b in segs:
-            p = Pezzo(f"{nome}-{len([q for q in pezzi if q.rete == nome]) + 1:02d}", nome, a, b)
+            p = Pezzo(f"{nome}-{len([q for q in pezzi if q.rete == nome]) + 1:02d}", nome, a, b, gruppo=r.gruppi[k])
             t = r.tratti[k]
             for lato, punto, vicino in (("a", a, i - 1 if i > 0 else None), ("b", b, i + 1 if i + 1 < len(t) - 1 else None)):
                 tipo = None
@@ -461,6 +489,8 @@ def analizza():
                     tipo = "base"
                 elif punto in [tonda(f) for f in r.liberi]:
                     tipo = "libero"
+                elif punto in r.teste:
+                    tipo = "testa"
                 else:
                     for k2, i2, a2, b2 in segs:
                         if (k2, i2) != (k, i) and (sul_segmento(punto, a2, b2) or punto in (a2, b2)):
@@ -569,10 +599,10 @@ def analizza():
 def scrivi_csv(pezzi):
     with open(QUI / "segmenti.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["codice", "rete", "asse", "lunghezza_assi_mm", "taglio_mm", "estremo_A", "estremo_B",
+        w.writerow(["gruppo", "codice", "rete", "asse", "lunghezza_assi_mm", "taglio_mm", "estremo_A", "estremo_B",
                     "A_x", "A_y", "A_z", "B_x", "B_y", "B_z"])
-        for p in pezzi:
-            w.writerow([p.codice, p.rete, p.asse, f"{p.lunghezza:.1f}", f"{p.taglio:.1f}", p.tipo_a, p.tipo_b,
+        for p in sorted(pezzi, key=lambda p: GRUPPI.index(p.gruppo)):
+            w.writerow([NOMI_GRUPPI[p.gruppo], p.codice, p.rete, p.asse, f"{p.lunghezza:.1f}", f"{p.taglio:.1f}", p.tipo_a, p.tipo_b,
                         *p.a, *p.b])
 
 
@@ -686,6 +716,9 @@ if __name__ == "__main__":
     print(f"{len(pezzi)} pezzi ({sum(1 for p in pezzi if p.rete in reti_el)} elettrici), "
           f"{sum(p.taglio for p in pezzi) / 1000:.2f} m di filo, pezzo più corto "
           f"{min(p.taglio for p in pezzi):.1f} mm, {len(reti_el)} reti")
+    for g in GRUPPI:
+        sel = [p for p in pezzi if p.gruppo == g]
+        print(f"  {NOMI_GRUPPI[g]:<16} {len(sel):3d} pezzi  {sum(p.taglio for p in sel) / 10:6.1f} cm")
     for a in avvisi:
         print("AVVISO:", a)
     for e in errori:

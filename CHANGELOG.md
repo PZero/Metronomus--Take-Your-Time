@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-10-18
+- Rame a bus: geometria.py divisa in bus (sollevati, con 3 mm di sporgenza per il gioco di montaggio) e discese per scheda; distinta segmenti.csv in ordine di montaggio (colonna `gruppo`). 84 pezzi, 2,72 m.
+- Decisioni: AS5600 collegato direttamente, filamenti LED con 15–20 mm di filo flessibile. Nuove domande: stop di emergenza, masse separate.
 - Fine sessione: STATO riscritto, nuove domande aperte (sporgenza dell'albero, AS5600, serigrafia del SimpleFOC).
 - Modello OpenSCAD: cartellini con il nome di schede e componenti (interruttore `etichette`).
 - Modello assegnato a ogni ruolo e comando (Opus per l'elettronica, Sonnet per coordinatore, piano fili e /fine-sessione, Haiku per git-readme e /stato).

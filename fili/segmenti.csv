@@ -1,85 +1,85 @@
-codice,rete,asse,lunghezza_assi_mm,taglio_mm,estremo_A,estremo_B,A_x,A_y,A_z,B_x,B_y,B_z
-GND-01,GND,X,59.5,60.5,passante,passante,-22.0,1.0,6.0,37.5,1.0,6.0
-GND-02,GND,Y,27.7,27.7,battuta,passante,37.5,1.0,6.0,37.5,28.74,6.0
-GND-03,GND,X,59.5,59.5,battuta,passante,37.5,28.74,6.0,-22.0,28.74,6.0
-GND-04,GND,Y,27.7,26.7,battuta,battuta,-22.0,28.74,6.0,-22.0,1.0,6.0
-GND-05,GND,Z,6.0,10.5,battuta,base,-22.0,14.87,6.0,-22.0,14.87,0.0
-GND-06,GND,Y,10.0,13.0,pin,passante,2.68,11.0,65.25,2.68,21.0,65.25
-GND-07,GND,Z,59.2,59.2,battuta,passante,2.68,21.0,65.25,2.68,21.0,6.0
-GND-08,GND,Y,20.0,19.0,battuta,battuta,2.68,21.0,6.0,2.68,1.0,6.0
-GND-09,GND,Z,24.0,27.0,pin,passante,-2.4,12.4,30.0,-2.4,12.4,6.0
-GND-10,GND,Y,11.4,10.4,battuta,battuta,-2.4,12.4,6.0,-2.4,1.0,6.0
-GND-11,GND,Z,24.0,27.0,pin,passante,-4.7,40.24,30.0,-4.7,40.24,6.0
-GND-12,GND,Y,11.5,10.5,battuta,battuta,-4.7,40.24,6.0,-4.7,28.74,6.0
-GND-13,GND,Z,24.0,27.0,pin,passante,23.24,52.5,30.0,23.24,52.5,6.0
-GND-14,GND,Y,23.8,22.8,battuta,battuta,23.24,52.5,6.0,23.24,28.74,6.0
-GND-15,GND,Z,24.0,27.0,pin,passante,23.13,9.32,30.0,23.13,9.32,6.0
-GND-16,GND,X,14.4,13.4,battuta,battuta,23.13,9.32,6.0,37.5,9.32,6.0
-GND-17,GND,Z,24.0,27.0,pin,passante,50.1,4.12,30.0,50.1,4.12,6.0
-GND-18,GND,X,12.6,11.6,battuta,battuta,50.1,4.12,6.0,37.5,4.12,6.0
-V12-01,V12,Z,16.0,19.0,pin,passante,42.8,4.12,30.0,42.8,4.12,14.0
-V12-02,V12,X,59.8,59.8,battuta,passante,42.8,4.12,14.0,-17.0,4.12,14.0
-V12-03,V12,Y,16.9,16.9,battuta,passante,-17.0,4.12,14.0,-17.0,21.0,14.0
-V12-04,V12,Z,16.0,18.0,battuta,pin,-17.0,21.0,14.0,-17.0,21.0,30.0
-V12-05,V12,Z,16.0,18.0,battuta,pin,23.13,4.12,14.0,23.13,4.12,30.0
-V12-06,V12,Y,48.4,48.4,battuta,passante,28.32,4.12,14.0,28.32,52.5,14.0
-V12-07,V12,Z,16.0,18.0,battuta,pin,28.32,52.5,14.0,28.32,52.5,30.0
-3V3_SW-01,3V3_SW,Y,10.0,13.0,pin,passante,-2.4,11.0,65.25,-2.4,21.0,65.25
-3V3_SW-02,3V3_SW,Z,35.2,37.2,battuta,pin,-2.4,21.0,65.25,-2.4,21.0,30.0
-SCL-01,SCL,Y,14.0,17.0,pin,passante,-2.16,11.0,78.6,-2.16,25.0,78.6
-SCL-02,SCL,Z,48.6,50.6,battuta,pin,-2.16,25.0,78.6,-2.16,25.0,30.0
-SDA-01,SDA,Y,14.0,17.0,pin,passante,0.38,11.0,78.6,0.38,25.0,78.6
-SDA-02,SDA,Z,48.6,50.6,battuta,pin,0.38,25.0,78.6,0.38,25.0,30.0
-PWM_A-01,PWM_A,Z,12.0,15.0,pin,passante,13.08,25.0,30.0,13.08,25.0,18.0
-PWM_A-02,PWM_A,Y,11.0,11.0,battuta,passante,13.08,25.0,18.0,13.08,14.0,18.0
-PWM_A-03,PWM_A,Z,12.0,14.0,battuta,pin,13.08,14.0,18.0,13.08,14.0,30.0
-PWM_B-01,PWM_B,Z,12.0,15.0,pin,passante,10.54,25.0,30.0,10.54,25.0,18.0
-PWM_B-02,PWM_B,Y,11.0,11.0,battuta,passante,10.54,25.0,18.0,10.54,14.0,18.0
-PWM_B-03,PWM_B,Z,12.0,14.0,battuta,pin,10.54,14.0,18.0,10.54,14.0,30.0
-PWM_C-01,PWM_C,Z,12.0,15.0,pin,passante,8.0,25.0,30.0,8.0,25.0,18.0
-PWM_C-02,PWM_C,Y,11.0,11.0,battuta,passante,8.0,25.0,18.0,8.0,14.0,18.0
-PWM_C-03,PWM_C,Z,12.0,14.0,battuta,pin,8.0,14.0,18.0,8.0,14.0,30.0
-3V3-01,3V3,Z,12.0,15.0,pin,passante,-2.16,40.24,30.0,-2.16,40.24,18.0
-3V3-02,3V3,Y,12.3,12.3,battuta,passante,-2.16,40.24,18.0,-2.16,52.5,18.0
-3V3-03,3V3,Z,12.0,14.0,battuta,pin,-2.16,52.5,18.0,-2.16,52.5,30.0
-LED_PWM-01,LED_PWM,Z,12.0,15.0,pin,passante,8.0,40.24,30.0,8.0,40.24,18.0
-LED_PWM-02,LED_PWM,Y,12.3,12.3,battuta,passante,8.0,40.24,18.0,8.0,52.5,18.0
-LED_PWM-03,LED_PWM,Z,12.0,14.0,battuta,pin,8.0,52.5,18.0,8.0,52.5,30.0
-VBAT_ADC-01,VBAT_ADC,Z,12.0,15.0,pin,passante,10.54,40.24,30.0,10.54,40.24,18.0
-VBAT_ADC-02,VBAT_ADC,Y,12.3,12.3,battuta,passante,10.54,40.24,18.0,10.54,52.5,18.0
-VBAT_ADC-03,VBAT_ADC,Z,12.0,14.0,battuta,pin,10.54,52.5,18.0,10.54,52.5,30.0
-PWR_EN-01,PWR_EN,Z,12.0,15.0,pin,passante,5.46,25.0,30.0,5.46,25.0,18.0
-PWR_EN-02,PWR_EN,Y,27.5,27.5,battuta,passante,5.46,25.0,18.0,5.46,52.5,18.0
-PWR_EN-03,PWR_EN,Z,12.0,14.0,battuta,pin,5.46,52.5,18.0,5.46,52.5,30.0
-VSW-01,VSW,Z,12.0,15.0,pin,passante,30.86,52.5,30.0,30.86,52.5,18.0
-VSW-02,VSW,X,11.6,11.6,battuta,passante,30.86,52.5,18.0,42.5,52.5,18.0
-VSW-03,VSW,Y,18.2,18.2,battuta,passante,42.5,52.5,18.0,42.5,34.32,18.0
-VSW-04,VSW,Z,12.0,14.0,battuta,pin,42.5,34.32,18.0,42.5,34.32,30.0
-VSW-05,VSW,Z,30.0,37.5,pin,base,33.4,52.5,30.0,33.4,52.5,0.0
-VBAT-01,VBAT,Z,30.0,37.5,base,pin,20.7,52.5,0.0,20.7,52.5,30.0
-ENC_SW-01,ENC_SW,Z,30.0,37.5,pin,base,13.08,40.24,30.0,13.08,40.24,0.0
-ENC_A-01,ENC_A,Z,30.0,37.5,pin,base,2.92,40.24,30.0,2.92,40.24,0.0
-ENC_B-01,ENC_B,Z,30.0,37.5,pin,base,0.38,40.24,30.0,0.38,40.24,0.0
-VIB_IN-01,VIB_IN,Z,30.0,37.5,pin,base,2.92,25.0,30.0,2.92,25.0,0.0
-LED_A-01,LED_A,Z,65.0,68.0,pin,passante,18.16,52.5,30.0,18.16,52.5,95.0
-LED_A-02,LED_A,Y,28.5,28.0,battuta,libero,18.16,52.5,95.0,18.16,24.0,95.0
-LED_K-01,LED_K,Z,65.0,68.0,pin,passante,15.62,52.5,30.0,15.62,52.5,95.0
-LED_K-02,LED_K,Y,28.5,28.0,battuta,libero,15.62,52.5,95.0,15.62,24.0,95.0
-TELAIO-01,TELAIO,Z,84.0,88.5,base,battuta,-11.5,8.5,0.0,-11.5,8.5,84.0
-TELAIO-02,TELAIO,Z,84.0,88.5,base,battuta,-11.5,-8.0,0.0,-11.5,-8.0,84.0
-TELAIO-03,TELAIO,Z,84.0,88.5,base,battuta,11.5,-8.0,0.0,11.5,-8.0,84.0
-TELAIO-04,TELAIO,X,23.0,23.0,battuta,passante,-11.5,8.5,84.0,11.5,8.5,84.0
-TELAIO-05,TELAIO,Z,24.0,24.0,battuta,passante,11.5,8.5,84.0,11.5,8.5,60.0
-TELAIO-06,TELAIO,X,23.0,22.0,battuta,battuta,11.5,8.5,60.0,-11.5,8.5,60.0
-TELAIO-07,TELAIO,Y,16.5,16.5,battuta,passante,-11.5,8.5,84.0,-11.5,-8.0,84.0
-TELAIO-08,TELAIO,X,23.0,23.0,battuta,passante,-11.5,-8.0,84.0,11.5,-8.0,84.0
-TELAIO-09,TELAIO,Y,16.5,15.5,battuta,battuta,11.5,-8.0,84.0,11.5,8.5,84.0
-PANNELLO-01,PANNELLO,Z,195.0,199.5,base,battuta,-72.0,-1.5,0.0,-72.0,-1.5,195.0
-PANNELLO-02,PANNELLO,Z,195.0,199.5,base,battuta,72.0,-1.5,0.0,72.0,-1.5,195.0
-PANNELLO-03,PANNELLO,X,144.0,143.0,battuta,battuta,-72.0,-1.5,195.0,72.0,-1.5,195.0
-BATT+-01,BATT+,Z,9.2,14.7,base,passante,-35.0,1.0,0.0,-35.0,1.0,9.15
-BATT+-02,BATT+,X,21.0,21.0,battuta,passante,-35.0,1.0,9.15,-56.0,1.0,9.15
-BATT+-03,BATT+,Z,9.2,13.7,battuta,base,-56.0,1.0,9.15,-56.0,1.0,0.0
-BATT--01,BATT-,Z,9.2,14.7,base,passante,-35.0,38.0,0.0,-35.0,38.0,9.15
-BATT--02,BATT-,X,21.0,21.0,battuta,passante,-35.0,38.0,9.15,-56.0,38.0,9.15
-BATT--03,BATT-,Z,9.2,13.7,battuta,base,-56.0,38.0,9.15,-56.0,38.0,0.0
+gruppo,codice,rete,asse,lunghezza_assi_mm,taglio_mm,estremo_A,estremo_B,A_x,A_y,A_z,B_x,B_y,B_z
+Struttura,TELAIO-01,TELAIO,Z,84.0,88.5,base,battuta,-11.5,8.5,0.0,-11.5,8.5,84.0
+Struttura,TELAIO-02,TELAIO,Z,84.0,88.5,base,battuta,-11.5,-8.0,0.0,-11.5,-8.0,84.0
+Struttura,TELAIO-03,TELAIO,Z,84.0,88.5,base,battuta,11.5,-8.0,0.0,11.5,-8.0,84.0
+Struttura,TELAIO-04,TELAIO,X,23.0,23.0,battuta,passante,-11.5,8.5,84.0,11.5,8.5,84.0
+Struttura,TELAIO-05,TELAIO,Z,24.0,24.0,battuta,passante,11.5,8.5,84.0,11.5,8.5,60.0
+Struttura,TELAIO-06,TELAIO,X,23.0,22.0,battuta,battuta,11.5,8.5,60.0,-11.5,8.5,60.0
+Struttura,TELAIO-07,TELAIO,Y,16.5,16.5,battuta,passante,-11.5,8.5,84.0,-11.5,-8.0,84.0
+Struttura,TELAIO-08,TELAIO,X,23.0,23.0,battuta,passante,-11.5,-8.0,84.0,11.5,-8.0,84.0
+Struttura,TELAIO-09,TELAIO,Y,16.5,15.5,battuta,battuta,11.5,-8.0,84.0,11.5,8.5,84.0
+Struttura,PANNELLO-01,PANNELLO,Z,195.0,199.5,base,battuta,-72.0,-1.5,0.0,-72.0,-1.5,195.0
+Struttura,PANNELLO-02,PANNELLO,Z,195.0,199.5,base,battuta,72.0,-1.5,0.0,72.0,-1.5,195.0
+Struttura,PANNELLO-03,PANNELLO,X,144.0,143.0,battuta,battuta,-72.0,-1.5,195.0,72.0,-1.5,195.0
+Bus,GND-01,GND,X,59.5,60.5,passante,passante,-22.0,1.0,6.0,37.5,1.0,6.0
+Bus,GND-02,GND,Y,27.7,27.7,battuta,passante,37.5,1.0,6.0,37.5,28.74,6.0
+Bus,GND-03,GND,X,59.5,59.5,battuta,passante,37.5,28.74,6.0,-22.0,28.74,6.0
+Bus,GND-04,GND,Y,27.7,26.7,battuta,battuta,-22.0,28.74,6.0,-22.0,1.0,6.0
+Bus,GND-05,GND,Z,6.0,10.5,battuta,base,-22.0,14.87,6.0,-22.0,14.87,0.0
+Bus,V12-01,V12,X,62.8,63.3,testa,passante,45.8,4.12,14.0,-17.0,4.12,14.0
+Bus,V12-02,V12,Y,19.9,19.4,battuta,testa,-17.0,4.12,14.0,-17.0,24.0,14.0
+Bus,V12-03,V12,Y,51.4,50.9,battuta,testa,28.32,4.12,14.0,28.32,55.5,14.0
+Bus,PWM_A-01,PWM_A,Y,17.0,17.0,testa,testa,13.08,11.0,18.0,13.08,28.0,18.0
+Bus,PWM_B-01,PWM_B,Y,17.0,17.0,testa,testa,10.54,11.0,18.0,10.54,28.0,18.0
+Bus,PWM_C-01,PWM_C,Y,17.0,17.0,testa,testa,8.0,11.0,18.0,8.0,28.0,18.0
+Bus,PWR_EN-01,PWR_EN,Y,33.5,33.5,testa,testa,5.46,22.0,18.0,5.46,55.5,18.0
+Bus,3V3-01,3V3,Y,18.3,18.3,testa,testa,-2.16,37.24,18.0,-2.16,55.5,18.0
+Bus,LED_PWM-01,LED_PWM,Y,18.3,18.3,testa,testa,8.0,37.24,18.0,8.0,55.5,18.0
+Bus,VBAT_ADC-01,VBAT_ADC,Y,18.3,18.3,testa,testa,10.54,37.24,18.0,10.54,55.5,18.0
+Bus,VSW-01,VSW,Y,21.2,21.7,testa,passante,30.86,55.5,18.0,30.86,34.32,18.0
+Bus,VSW-02,VSW,X,14.6,14.1,battuta,testa,30.86,34.32,18.0,45.5,34.32,18.0
+Batterie,BATT+-01,BATT+,Z,9.2,14.7,base,passante,-35.0,1.0,0.0,-35.0,1.0,9.15
+Batterie,BATT+-02,BATT+,X,21.0,21.0,battuta,passante,-35.0,1.0,9.15,-56.0,1.0,9.15
+Batterie,BATT+-03,BATT+,Z,9.2,13.7,battuta,base,-56.0,1.0,9.15,-56.0,1.0,0.0
+Batterie,BATT--01,BATT-,Z,9.2,14.7,base,passante,-35.0,38.0,0.0,-35.0,38.0,9.15
+Batterie,BATT--02,BATT-,X,21.0,21.0,battuta,passante,-35.0,38.0,9.15,-56.0,38.0,9.15
+Batterie,BATT--03,BATT-,Z,9.2,13.7,battuta,base,-56.0,38.0,9.15,-56.0,38.0,0.0
+MT3608,GND-06,GND,Z,24.0,27.0,pin,passante,50.1,4.12,30.0,50.1,4.12,6.0
+MT3608,GND-07,GND,X,12.6,11.6,battuta,battuta,50.1,4.12,6.0,37.5,4.12,6.0
+MT3608,V12-04,V12,Z,16.0,18.0,pin,battuta,42.8,4.12,30.0,42.8,4.12,14.0
+MT3608,VSW-03,VSW,Z,12.0,14.0,pin,battuta,42.5,34.32,30.0,42.5,34.32,18.0
+Mini-360,GND-08,GND,Z,24.0,27.0,pin,passante,-2.4,12.4,30.0,-2.4,12.4,6.0
+Mini-360,GND-09,GND,Y,11.4,10.4,battuta,battuta,-2.4,12.4,6.0,-2.4,1.0,6.0
+Mini-360,V12-05,V12,Z,16.0,18.0,pin,battuta,-17.0,21.0,30.0,-17.0,21.0,14.0
+Scheda servizi,GND-10,GND,Z,24.0,27.0,pin,passante,23.24,52.5,30.0,23.24,52.5,6.0
+Scheda servizi,GND-11,GND,Y,23.8,22.8,battuta,battuta,23.24,52.5,6.0,23.24,28.74,6.0
+Scheda servizi,V12-06,V12,Z,16.0,18.0,pin,battuta,28.32,52.5,30.0,28.32,52.5,14.0
+Scheda servizi,PWR_EN-02,PWR_EN,Z,12.0,14.0,pin,battuta,5.46,52.5,30.0,5.46,52.5,18.0
+Scheda servizi,3V3-02,3V3,Z,12.0,14.0,pin,battuta,-2.16,52.5,30.0,-2.16,52.5,18.0
+Scheda servizi,LED_PWM-02,LED_PWM,Z,12.0,14.0,pin,battuta,8.0,52.5,30.0,8.0,52.5,18.0
+Scheda servizi,VBAT_ADC-02,VBAT_ADC,Z,12.0,14.0,pin,battuta,10.54,52.5,30.0,10.54,52.5,18.0
+Scheda servizi,VSW-04,VSW,Z,12.0,14.0,pin,battuta,30.86,52.5,30.0,30.86,52.5,18.0
+Scheda servizi,VSW-05,VSW,Z,30.0,37.5,pin,base,33.4,52.5,30.0,33.4,52.5,0.0
+Scheda servizi,VBAT-01,VBAT,Z,30.0,37.5,pin,base,20.7,52.5,30.0,20.7,52.5,0.0
+Scheda servizi,LED_A-01,LED_A,Z,65.0,68.0,pin,passante,18.16,52.5,30.0,18.16,52.5,95.0
+Scheda servizi,LED_A-02,LED_A,Y,28.5,28.0,battuta,libero,18.16,52.5,95.0,18.16,24.0,95.0
+Scheda servizi,LED_K-01,LED_K,Z,65.0,68.0,pin,passante,15.62,52.5,30.0,15.62,52.5,95.0
+Scheda servizi,LED_K-02,LED_K,Y,28.5,28.0,battuta,libero,15.62,52.5,95.0,15.62,24.0,95.0
+ESP32-S3,GND-12,GND,Z,24.0,27.0,pin,passante,-4.7,40.24,30.0,-4.7,40.24,6.0
+ESP32-S3,GND-13,GND,Y,11.5,10.5,battuta,battuta,-4.7,40.24,6.0,-4.7,28.74,6.0
+ESP32-S3,PWM_A-02,PWM_A,Z,12.0,14.0,pin,battuta,13.08,25.0,30.0,13.08,25.0,18.0
+ESP32-S3,PWM_B-02,PWM_B,Z,12.0,14.0,pin,battuta,10.54,25.0,30.0,10.54,25.0,18.0
+ESP32-S3,PWM_C-02,PWM_C,Z,12.0,14.0,pin,battuta,8.0,25.0,30.0,8.0,25.0,18.0
+ESP32-S3,PWR_EN-03,PWR_EN,Z,12.0,14.0,pin,battuta,5.46,25.0,30.0,5.46,25.0,18.0
+ESP32-S3,3V3-03,3V3,Z,12.0,14.0,pin,battuta,-2.16,40.24,30.0,-2.16,40.24,18.0
+ESP32-S3,LED_PWM-03,LED_PWM,Z,12.0,14.0,pin,battuta,8.0,40.24,30.0,8.0,40.24,18.0
+ESP32-S3,VBAT_ADC-03,VBAT_ADC,Z,12.0,14.0,pin,battuta,10.54,40.24,30.0,10.54,40.24,18.0
+ESP32-S3,ENC_SW-01,ENC_SW,Z,30.0,37.5,pin,base,13.08,40.24,30.0,13.08,40.24,0.0
+ESP32-S3,ENC_A-01,ENC_A,Z,30.0,37.5,pin,base,2.92,40.24,30.0,2.92,40.24,0.0
+ESP32-S3,ENC_B-01,ENC_B,Z,30.0,37.5,pin,base,0.38,40.24,30.0,0.38,40.24,0.0
+ESP32-S3,VIB_IN-01,VIB_IN,Z,30.0,37.5,pin,base,2.92,25.0,30.0,2.92,25.0,0.0
+SimpleFOC Mini,GND-14,GND,Z,24.0,27.0,pin,passante,23.13,9.32,30.0,23.13,9.32,6.0
+SimpleFOC Mini,GND-15,GND,X,14.4,13.4,battuta,battuta,23.13,9.32,6.0,37.5,9.32,6.0
+SimpleFOC Mini,V12-07,V12,Z,16.0,18.0,pin,battuta,23.13,4.12,30.0,23.13,4.12,14.0
+SimpleFOC Mini,PWM_A-03,PWM_A,Z,12.0,14.0,pin,battuta,13.08,14.0,30.0,13.08,14.0,18.0
+SimpleFOC Mini,PWM_B-03,PWM_B,Z,12.0,14.0,pin,battuta,10.54,14.0,30.0,10.54,14.0,18.0
+SimpleFOC Mini,PWM_C-03,PWM_C,Z,12.0,14.0,pin,battuta,8.0,14.0,30.0,8.0,14.0,18.0
+AS5600,GND-16,GND,Y,10.0,13.0,pin,passante,2.68,11.0,65.25,2.68,21.0,65.25
+AS5600,GND-17,GND,Z,59.2,59.2,battuta,passante,2.68,21.0,65.25,2.68,21.0,6.0
+AS5600,GND-18,GND,Y,20.0,19.0,battuta,battuta,2.68,21.0,6.0,2.68,1.0,6.0
+AS5600,SCL-01,SCL,Y,14.0,17.0,pin,passante,-2.16,11.0,78.6,-2.16,25.0,78.6
+AS5600,SCL-02,SCL,Z,48.6,50.6,battuta,pin,-2.16,25.0,78.6,-2.16,25.0,30.0
+AS5600,SDA-01,SDA,Y,14.0,17.0,pin,passante,0.38,11.0,78.6,0.38,25.0,78.6
+AS5600,SDA-02,SDA,Z,48.6,50.6,battuta,pin,0.38,25.0,78.6,0.38,25.0,30.0
+AS5600,3V3_SW-01,3V3_SW,Y,10.0,13.0,pin,passante,-2.4,11.0,65.25,-2.4,21.0,65.25
+AS5600,3V3_SW-02,3V3_SW,Z,35.2,37.2,battuta,pin,-2.4,21.0,65.25,-2.4,21.0,30.0
