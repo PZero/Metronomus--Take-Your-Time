@@ -58,7 +58,9 @@ simplefoc_mini:
   fori: [[2.0, 2.0], [24.0, 2.0], [2.0, 19.5], [24.0, 19.5]]
   note: >-
     i lobi dei fori sporgono: tra i fori la scheda è larga 22 (lati sinistro e destro rientrati).
-    Morsetti di potenza a passo 5,2. Ordine M1-M2-M3 e quale morsetto è + da confermare sulla serigrafia.
+    Morsetti di potenza a passo 5,2. Serigrafia della scheda di Fabio (v1.0, foto): fila EN-IN3-IN2-IN1-GND
+    (GND quadrato), fila nFT-nSP-nRT-GND-3V3, motore M1-M2-M3 da sinistra (M3 quadrato), - in alto e + in basso.
+    Attenzione: la v1.1 ha la fila IN in ordine inverso.
 
 tp4056:
   nome: TP4056 USB-C con protezione
@@ -136,4 +138,7 @@ motore_1503:
   diametro_campana: 19.0
   lunghezza: 15.0         # dalla base alla fine della campana
   mozzo: 3.5
+  sporgenza_albero: 0.0   # l'albero non sporge dal retro della base (Fabio, 18/10)
+  magnete_spessore: 2.0   # magnete diametrale già fissato sulla parte che ruota, a filo della base
+  magnete_diametro: 6.0
   note: misurare diametro e lunghezza, e i fori della base

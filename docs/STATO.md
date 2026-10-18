@@ -16,22 +16,20 @@ Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei mo
 
 ## Prossimi passi
 0. Montaggio una scheda alla volta, alimentazione per prima: pagina del PDF 1:1 per ogni gruppo (struttura, bus, batterie, MT3608, Mini‑360, servizi, ESP32, driver, AS5600).
-1. Risolvere AS5600 / magnete: misurare la sporgenza dell'albero, poi arretrare `Y_AS` (0,5–3 mm tra magnete e chip).
+1. Pannello della scala dentro una base da 150 mm (domanda 19).
 2. Misure mancanti: AS5600 (nessun datasheet), Mini‑360 e MT3608 (piazzole), diametro reale del filo, fori della base del motore ([fili/misure-da-prendere.md](../fili/misure-da-prendere.md)).
 3. Schema rev. 0.3: filamenti in serie (via R7), scheda servizi, DIR dell'AS5600; rigenerare PDF/PNG (serve cairosvg).
 4. Ordinare le parti mancanti (LDO, AO3401/AO3400, prolunga USB‑C, filo di rame).
 5. Firmware su breadboard: SimpleFOC in posizione, pendolo, scala Maelzel, letargo.
 
 ## In attesa da Fabio
-- Sporgenza dell'albero del motore dal retro della base; interasse dei fori M2.
+- Interasse dei fori M2 del motore; arco della scala (domanda 19).
 - Datasheet o misure di AS5600, Mini‑360, MT3608; spessore del PCB dell'S3; diametro reale del filo.
-- Serigrafia del SimpleFOC: ordine M1‑M2‑M3 e quale morsetto è +.
 - Modulo vibrazione (pin header standard a passo 2,54).
-- Masse separate (domanda 17); fili flessibili e mozzo del pendolo (domanda 18).
 - Col tester: pull‑up SDA/SCL e DIR dell'AS5600; Vf dei filamenti LED.
 
 ## Problemi aperti
-- **AS5600 tocca motore e magnete** (0,2 mm): `geometria.py` segnala 2 errori finché non c'è la sporgenza dell'albero.
+- **Pannello della scala** (170 mm) più largo della teca con la base da 150 mm: unici 4 errori di `geometria.py`. AS5600 e magnete risolti.
 - Render in `render/` e schema PDF/PNG fermi alla versione C3: servono `bpy` e `cairosvg`.
 - Rigidità del telaio del motore in filo da 1 mm: forse serve filo più grosso o ottone.
 - Ponticello EN–3V3 del driver fatto sulla scheda (pezzo sotto i 10 mm, unica eccezione).

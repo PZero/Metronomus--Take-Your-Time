@@ -183,7 +183,12 @@ def bus(nome_rete, *punti, sporgenze=(SPORGENZA, SPORGENZA)):
 # ================================================================== DISPOSIZIONE
 DECK = 30.0                      # piano delle schede orizzontali (lato componenti in su)
 ASSE = (0.0, 9.0, 72.0)          # punto dell'asse motore sul retro del motore (x, y, z)
-Y_AS = 11.0                      # piano dell'AS5600, componenti verso il motore
+# Magnete diametrale sull'estremità dell'albero, a filo del retro della base del motore (Fabio, 18/10).
+_M = MISURE["motore_1503"]
+MAGNETE = {"diametro": _M["magnete_diametro"], "spessore": _M["magnete_spessore"], "sporgenza": _M["sporgenza_albero"]}
+DISTANZA_MAGNETE = 1.0           # tra magnete e componenti dell'AS5600 (datasheet: 0,5–3 mm tra magnete e chip)
+Y_AS = ASSE[1] + MAGNETE["sporgenza"] + MAGNETE["spessore"] + DISTANZA_MAGNETE + MISURE["as5600"]["altezza"]
+# piano dell'AS5600, componenti verso il motore
 
 MODULI = {}
 
@@ -195,7 +200,7 @@ AS = MODULI["as5600"]
 
 # --- ESP32-S3 sul ponte, ruotato di 90 gradi: fila TX/RX/GPIO1..7 davanti, fila 5V..GPIO8 dietro.
 #     GPIO1 (SCL) e GPIO2 (SDA) sotto i fili che scendono dall'AS5600.
-Y_ESP_FRONTE = Y_AS + 14.0
+Y_ESP_FRONTE = 25.0             # fisso: driver e dorsale del 12 V restano lontani dal telaio
 MODULI["esp32"] = modulo("esp32s3", "ESP32-S3", rot=90, colore="nero")
 ESP = MODULI["esp32"]
 ESP.origine = (0, 0, DECK)
@@ -209,7 +214,7 @@ DRV.origine = (0, 0, DECK)
 DRV.allinea("IN1", (ESP.pin("GPIO7")[0], Y_ESP_FRONTE - 11.0, DECK))
 
 # --- Mini-360 a sinistra: OUT+ esattamente sotto la discesa del VCC dell'AS5600.
-Y_DISCESA_AS = Y_AS + 10.0       # i fili VCC e GND dell'AS5600 corrono 10 mm verso il retro e scendono
+Y_DISCESA_AS = 21.0             # i fili VCC e GND dell'AS5600 corrono verso il retro fin qui e scendono
 MODULI["mini360"] = modulo("mini360", "Mini-360", rot=0, colore="verde")
 MINI = MODULI["mini360"]
 MINI.origine = (0, 0, DECK)
@@ -243,9 +248,6 @@ SRV = servizi
 # ------------------------------------------------------------------ motore e telaio
 MOTORE = {"asse": ASSE, "diametro": MISURE["motore_1503"]["diametro_campana"],
           "lunghezza": MISURE["motore_1503"]["lunghezza"]}
-# Magnete diametrale dell'AS5600 incollato sull'estremità dell'albero, dietro al motore.
-# sporgenza = quanto l'albero esce dal retro della base (da misurare: per ora a filo).
-MAGNETE = {"diametro": 6.0, "spessore": 2.5, "sporgenza": MISURE["motore_1503"].get("sporgenza_albero", 0.0)}
 Y_TELAIO_RETRO, Y_TELAIO_FRONTE, X_TELAIO = 8.5, -8.0, 11.5
 
 # ------------------------------------------------------------------ pendolo e finecorsa
@@ -268,7 +270,8 @@ X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO = 72.0, -1.5, 195.0
 BATTERIE = [{"centro": (x, 19.5, 9.15), "diametro": 18.3, "lunghezza": 35.0} for x in (-35.0, -56.0)]
 
 # ------------------------------------------------------------------ base
-BASE = {"min": (-95.0, -25.0, -22.0), "max": (95.0, 65.0, 0.0)}
+BASE = {"min": (-75.0, -22.0, -22.0), "max": (75.0, 68.0, 0.0)}   # 150 x 90 mm (Fabio, 18/10: 15 x 8-10 cm)
+TECA_BORDO = 5.0 + 3.0           # il vetro sta a 5 mm dal bordo della base ed è spesso 3 mm
 
 # ================================================================== RETI
 # Quote dei bus sopra la base (sollevati dal legno): massa, 12 V, segnali.
@@ -281,8 +284,9 @@ ay0, ay1 = ANELLO["y"]
 # GND: anello chiuso vicino alla base; il ritorno della batteria scende nella base vicino al driver
 # e al MT3608 (le correnti del motore non passano sotto la logica).
 tratto("GND", (ax0, ay0, Z_ANELLO), (ax1, ay0, Z_ANELLO), (ax1, ay1, Z_ANELLO), (ax0, ay1, Z_ANELLO), (ax0, ay0, Z_ANELLO))
-foro_gnd = (ax0, (ay0 + ay1) / 2, 0.0)
-tratto("GND", (ax0, foro_gnd[1], Z_ANELLO), foro_gnd)            # al TP4056 OUT- sotto la base
+# foro a metà tra le discese di MT3608 VOUT- e driver PWR-: la corrente di potenza non gira nell'anello
+foro_gnd = tonda((ax1, (MT.pin("VOUT-")[1] + DRV.pin("PWR-")[1]) / 2, 0.0))
+tratto("GND", (ax1, foro_gnd[1], Z_ANELLO), foro_gnd)            # al TP4056 OUT- sotto la base
 rete("GND").fori.append(foro_gnd)
 
 # V12: dorsale lungo il fronte dal MT3608 al Mini-360, ramo verso la scheda servizi
@@ -569,6 +573,20 @@ def analizza():
                 errori.append(f"{p.codice} tocca {nome_o}")
                 CRITICITA["pezzi"].add(p.codice)
                 CRITICITA["oggetti"].add(nome_o)
+
+    # tutto dentro la teca di vetro
+    t_lo = tuple(BASE["min"][i] + TECA_BORDO for i in range(2))
+    t_hi = tuple(BASE["max"][i] - TECA_BORDO for i in range(2))
+    def fuori(lo, hi):
+        return any(lo[i] < t_lo[i] - TOL or hi[i] > t_hi[i] + TOL for i in range(2))
+    for p in pezzi:
+        if fuori([min(p.a[i], p.b[i]) - R_FILO for i in range(2)], [max(p.a[i], p.b[i]) + R_FILO for i in range(2)]):
+            errori.append(f"{p.codice} esce dalla teca")
+            CRITICITA["pezzi"].add(p.codice)
+    for nome_o, lo, hi in [(m.nome, *m.scatola()) for m in MODULI.values()] + list(ostacoli()):
+        if fuori(lo, hi):
+            errori.append(f"{nome_o} esce dalla teca (interno x {t_lo[0]}…{t_hi[0]}, y {t_lo[1]}…{t_hi[1]})")
+            CRITICITA["oggetti"].add(nome_o)
 
     # schede che si sovrappongono (ingombri allargati di GIOCO_SCHEDE)
     def sovrapposte(a, b):

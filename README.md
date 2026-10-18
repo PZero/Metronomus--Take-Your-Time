@@ -116,7 +116,7 @@ Funzioni previste: BPM 40–208 sulla scala Maelzel (39 posizioni), modalità im
 - La geometria parte dai **fori reali dei moduli** ([fili/moduli.yaml](fili/moduli.yaml), da misurare col calibro: [fili/misure-da-prendere.md](fili/misure-da-prendere.md)). `python fili/geometria.py` dispone i moduli, traccia i fili, controlla le regole e scrive la distinta [fili/segmenti.csv](fili/segmenti.csv) e il modello [modello/metronomus.scad](modello/metronomus.scad).
 
 ![Primo piano dei collegamenti](render/concept-vicino.png)
-- Una dima incisa al laser tiene i fili in posizione durante la saldatura.
+- Niente dima dedicata: i bus si saldano sulla stampa 1:1 fissata su un piano di sughero con spilli e squadrette; la base forata tiene dritte le discese.
 
 ### Attrezzi
 Calibro, tronchesino a taglio piano, lima fine e battuta di fine corsa per tagli in squadra, saldatore a punta fine e stagno, morsa per raddrizzare il filo, dima con squadre.

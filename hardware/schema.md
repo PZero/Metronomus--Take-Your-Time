@@ -29,6 +29,10 @@ Le etichette uguali indicano piedini collegati tra loro. Gli stessi nomi di rete
 | VBAT_ADC | nodo R1/R2/C1 → ESP32 GPIO9 | Metà di VSW |
 | M1 / M2 / M3 | SimpleFOC → fili del motore 1503 | L'ordine si aggiusta in firmware |
 
+## Condensatori aggiuntivi (ruolo elettronica, 18/10)
+- 220–470 µF tra V12 e GND direttamente ai morsetti PWR+/PWR− del driver.
+- 100 nF tra 3V3_SW e GND sui pin dell'AS5600 (il Mini‑360 è uno switching).
+
 ## Da verificare sul banco
 - Resistenze R6/R7 dei filamenti dopo la misura della Vf.
 - Se il modulo AS5600 ha già le pull‑up su SDA/SCL (altrimenti 4,7 kΩ a 3V3).

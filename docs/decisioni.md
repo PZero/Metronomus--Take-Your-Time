@@ -35,6 +35,10 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-18 | AS5600 collegato **direttamente** all'ESP32 (SCL, SDA) e al Mini‑360 (VCC), fuori dai bus | I2C corto e lontano dalle fasi del motore | I2C nel bus con massa in mezzo |
 | 2026-10-18 | I filamenti LED che oscillano si collegano con 15–20 mm di filo flessibile, fermato prima della saldatura | Il pendolo si muove: il filo flessibile lavora al posto del giunto | Rame rigido fino al LED |
 | 2026-10-18 | **Stop di emergenza**: due paletti di rame a ±45° nel piano del pendolo (finecorsa meccanici, rete STOP verso l'EN del driver con R9 10 kΩ di pull‑up e verso GPIO43) e collare di ottone sul pendolo (rete ARMA da GPIO44, filo flessibile). Con ARMA = 0 il contatto spegne il driver in hardware; ARMA = 1 solo all'avvio | In letargo il pendolo rovesciato cade su un finecorsa: con il percussore a massa il driver non potrebbe più ripartire | Percussore a massa (blocco al risveglio); solo firmware; solo finecorsa meccanici |
+| 2026-10-18 | Base di legno **150 × 90 mm**; nuovo controllo: tutto dentro la teca (vetro a 5 mm dal bordo, spesso 3) | Risposta di Fabio (15 × 8–10 cm) | Base da 190 mm |
+| 2026-10-18 | Magnete da 2 mm a filo del retro del motore; AS5600 con i componenti a 1 mm dal magnete (chip a circa 1–2 mm). ESP32 e Mini‑360 restano dove sono | L'albero non sporge (Fabio); spostando tutto, la dorsale del 12 V toccava il telaio | Arretrare anche le schede |
+| 2026-10-18 | **Masse non separate**: anello unico, con il foro del ritorno batteria a metà tra MT3608 VOUT‑ e driver PWR‑. In più 220–470 µF ai morsetti del driver e 100 nF su 3V3_SW all'AS5600 | Ruolo elettronica: le correnti del motore restano tra driver e motore; 1–2 mV tra le masse contro 1 V di soglia I2C | Masse di potenza e logica separate |
+| 2026-10-18 | Niente dima dedicata: stampa 1:1 su sughero con spilli e squadrette, la base forata tiene le discese | Tutti pezzi dritti (Fabio: la dima non è indispensabile) | Dima incisa al laser o stampata |
 
 ---
 

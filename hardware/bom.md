@@ -30,6 +30,7 @@ _Aggiornata il 18/10/2026: la scheda ESP32 è una S3, non una C3 (foto in [`foto
 | Partitore batteria | 2 × 100 kΩ + 100 nF | Misura del livello di carica |
 | Debounce encoder | 3 × 10 kΩ + 3 × 10 nF | Letture pulite di A, B e pulsante |
 | Filo flessibile per il LED | Silicone 30 AWG | Collegare il LED che oscilla e il collare del finecorsa (3 fili) |
+| Condensatori | Elettrolitico 220–470 µF 25 V + ceramico 100 nF | Ai morsetti del driver e all'AS5600 |
 | Stop di emergenza | Resistenza 10 kΩ (R9, al posto del ponticello EN–3V3 del driver) + collare di ottone Ø 6 × 10 mm, isolato dal filo di ritorno del LED | Il pendolo che tocca un paletto spegne il driver |
 | Filo di rame | Ø 1,0 mm | Il circuito (quantità dopo il layout) |
 | Vernice trasparente | Protettivo per rame | Contro l'ossidazione (opzionale) |
