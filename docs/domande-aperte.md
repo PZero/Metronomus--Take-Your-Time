@@ -20,4 +20,4 @@
 | 16 | Stop di emergenza: finecorsa meccanici in rame a ±(arco + 5°) e, in più, contatto elettrico che spegne il driver da solo (EN a massa) e avvisa l'ESP32? | Fabio | ✅ sì, meccanico + elettrico con armamento (18/10) |
 | 18 | Fili flessibili verso il pendolo: con i fili che arrivano dove sono ora servono 30–36 mm (decisi 15–20). Avvicinare le uscite dei LED all'asse? E come sono fatti mozzo e collare sul pendolo? | Fabio / piano fili | ✅ ci pensa Fabio |
 | 17 | Massa del motore e massa della logica separate e unite in un solo punto vicino alla batteria? Oggi l'anello è unico, con il ritorno della batteria vicino a driver e MT3608 | Fabio / elettronica | ✅ elettronica (18/10): non serve separare; foro del ritorno batteria spostato tra MT3608 e driver |
-| 19 | Pannello della scala: con la base da 150 mm il pannello (170 mm) non entra nella teca. Arco ±30° invece di ±40°, pendolo più corto o base più larga? | Fabio | aperta |
+| 19 | Pannello della scala: con la base da 150 mm il pannello (170 mm) non entra nella teca. Arco ±30° invece di ±40°, pendolo più corto o base più larga? | Fabio | ✅ scala su ±30°, finecorsa ±35°, pannello 124 mm (18/10) |

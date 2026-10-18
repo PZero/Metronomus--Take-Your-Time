@@ -34,11 +34,12 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-18 | **Circuito a bus**: ogni scheda ha le sue *discese* (fili dritti dal pin fino alla quota del bus); i bus corrono sollevati sopra la base (massa a 6 mm, 12 V a 14 mm, segnali a 18 mm) e sporgono 3 mm oltre l'ultima discesa, che si salda in T dove cade davvero. Montaggio a gruppi: struttura e bus sulla dima, poi una scheda alla volta, l'alimentazione per prima | Proposta di Fabio: gioco di montaggio, una scheda alla volta, correzioni sul bus se una misura non torna | Collegamenti a U chiusi tra i pin (nessun gioco) |
 | 2026-10-18 | AS5600 collegato **direttamente** all'ESP32 (SCL, SDA) e al Mini‑360 (VCC), fuori dai bus | I2C corto e lontano dalle fasi del motore | I2C nel bus con massa in mezzo |
 | 2026-10-18 | I filamenti LED che oscillano si collegano con 15–20 mm di filo flessibile, fermato prima della saldatura | Il pendolo si muove: il filo flessibile lavora al posto del giunto | Rame rigido fino al LED |
-| 2026-10-18 | **Stop di emergenza**: due paletti di rame a ±45° nel piano del pendolo (finecorsa meccanici, rete STOP verso l'EN del driver con R9 10 kΩ di pull‑up e verso GPIO43) e collare di ottone sul pendolo (rete ARMA da GPIO44, filo flessibile). Con ARMA = 0 il contatto spegne il driver in hardware; ARMA = 1 solo all'avvio | In letargo il pendolo rovesciato cade su un finecorsa: con il percussore a massa il driver non potrebbe più ripartire | Percussore a massa (blocco al risveglio); solo firmware; solo finecorsa meccanici |
+| 2026-10-18 | **Stop di emergenza**: due paletti di rame a ±35° (prima ±45°) nel piano del pendolo (finecorsa meccanici, rete STOP verso l'EN del driver con R9 10 kΩ di pull‑up e verso GPIO43) e collare di ottone sul pendolo (rete ARMA da GPIO44, filo flessibile). Con ARMA = 0 il contatto spegne il driver in hardware; ARMA = 1 solo all'avvio | In letargo il pendolo rovesciato cade su un finecorsa: con il percussore a massa il driver non potrebbe più ripartire | Percussore a massa (blocco al risveglio); solo firmware; solo finecorsa meccanici |
 | 2026-10-18 | Base di legno **150 × 90 mm**; nuovo controllo: tutto dentro la teca (vetro a 5 mm dal bordo, spesso 3) | Risposta di Fabio (15 × 8–10 cm) | Base da 190 mm |
 | 2026-10-18 | Magnete da 2 mm a filo del retro del motore; AS5600 con i componenti a 1 mm dal magnete (chip a circa 1–2 mm). ESP32 e Mini‑360 restano dove sono | L'albero non sporge (Fabio); spostando tutto, la dorsale del 12 V toccava il telaio | Arretrare anche le schede |
 | 2026-10-18 | **Masse non separate**: anello unico, con il foro del ritorno batteria a metà tra MT3608 VOUT‑ e driver PWR‑. In più 220–470 µF ai morsetti del driver e 100 nF su 3V3_SW all'AS5600 | Ruolo elettronica: le correnti del motore restano tra driver e motore; 1–2 mV tra le masse contro 1 V di soglia I2C | Masse di potenza e logica separate |
 | 2026-10-18 | Niente dima dedicata: stampa 1:1 su sughero con spilli e squadrette, la base forata tiene le discese | Tutti pezzi dritti (Fabio: la dima non è indispensabile) | Dima incisa al laser o stampata |
+| 2026-10-18 | **Scala su ±30°**, finecorsa a ±35° (paletti alti 94,5 mm, collare a 30 mm dall'asse), pannello largo 124 mm ricavato dall'arco; tutto entra nella base da 150 mm | Fabio: adattare la larghezza alle necessità. ±30° è circa l'oscillazione di un metronomo meccanico; 39 tacche a 2,7 mm l'una restano leggibili | ±40° con base da 175 mm; ±35° con base da 160 mm |
 
 ---
 
@@ -63,7 +64,7 @@ Niente display. Il tempo impostato si legge su una **scala ad arco incisa al las
   - 40–60 a passi di 2 · 60–72 a passi di 3 · 72–120 a passi di 4 · 120–144 a passi di 6 · 144–208 a passi di 8
   - In totale 39 posizioni.
 - Accanto ai numeri, i nomi dei tempi: Largo, Larghetto, Adagio, Andante, Moderato, Allegro, Presto.
-- Arco della scala: da definire con le dimensioni dell'oggetto (indicativamente ±40° dalla verticale). Lenti a sinistra, veloci a destra.
+- Arco della scala: **±30° dalla verticale** (decisione del 18/10, base da 150 mm), tacche tra 92 e 104 mm dall'asse; pannello largo 124 mm. Lenti a sinistra, veloci a destra.
 - Il file vettoriale (SVG/DXF per LightBurn) verrà generato dagli stessi dati del firmware, così scala incisa e angoli della lancetta coincidono per costruzione.
 
 #### Conseguenze tecniche

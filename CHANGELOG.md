@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-18
+- Scala su ±30° (finecorsa ±35°): pannello e colonne ricavati dall'arco, larghi 124 mm. Base 150 × 90 mm: geometria senza errori (93 pezzi, 3,16 m).
 - Risposte di Fabio registrate (domande 7–18). Base 150 × 90 mm con controllo della teca; magnete da 2 mm a filo, AS5600 arretrato: risolti i contatti con motore e magnete. Driver v1.0 confermato dalla serigrafia. Ritorno di massa spostato vicino a driver e MT3608 (ruolo elettronica), condensatori aggiuntivi. Resta il pannello della scala, troppo largo (domanda 19).
 - Stop di emergenza: paletti di rame a ±45° (finecorsa meccanici, rete STOP verso EN del driver e GPIO43) e collare di ottone sul pendolo (rete ARMA da GPIO44). Schema rev. 0.2.2 (solo SVG), pinout, BOM, rame (93 pezzi, 3,19 m) e modello 3D aggiornati.
 - Rame a bus: geometria.py divisa in bus (sollevati, con 3 mm di sporgenza per il gioco di montaggio) e discese per scheda; distinta segmenti.csv in ordine di montaggio (colonna `gruppo`). 84 pezzi, 2,72 m.

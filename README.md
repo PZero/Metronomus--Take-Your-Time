@@ -112,7 +112,7 @@ Funzioni previste: BPM 40–208 sulla scala Maelzel (39 posizioni), modalità im
 - **Circuito a bus.** Ogni scheda ha le sue *discese*: fili dritti dal pin fino alla quota del suo bus. I bus corrono sollevati sopra la base, su piani separati (massa su un anello a 6 mm, 12 V su una dorsale a 14 mm, segnali a 18 mm) e sporgono 3 mm oltre l'ultima discesa: la discesa si salda in T dove cade davvero, così resta un gioco di montaggio. L'AS5600 è l'eccezione: I2C e alimentazione diretti.
 - **Montaggio a gruppi**, nell'ordine della distinta: struttura e bus sulla dima, poi batterie, MT3608, Mini‑360, scheda servizi, ESP32‑S3, driver, AS5600. Ogni scheda si prova prima di passare alla successiva.
 - I filamenti LED, che oscillano, si collegano con filo flessibile; lo stesso per il collare del finecorsa.
-- **Stop di emergenza**: due paletti di rame a ±45° fanno da finecorsa meccanici e, toccati dal collare di ottone del pendolo, spengono il driver in hardware (dettagli in [hardware/pinout.md](hardware/pinout.md#stop-di-emergenza)).
+- **Stop di emergenza**: due paletti di rame a ±35° fanno da finecorsa meccanici e, toccati dal collare di ottone del pendolo, spengono il driver in hardware (dettagli in [hardware/pinout.md](hardware/pinout.md#stop-di-emergenza)).
 - La geometria parte dai **fori reali dei moduli** ([fili/moduli.yaml](fili/moduli.yaml), da misurare col calibro: [fili/misure-da-prendere.md](fili/misure-da-prendere.md)). `python fili/geometria.py` dispone i moduli, traccia i fili, controlla le regole e scrive la distinta [fili/segmenti.csv](fili/segmenti.csv) e il modello [modello/metronomus.scad](modello/metronomus.scad).
 
 ![Primo piano dei collegamenti](render/concept-vicino.png)

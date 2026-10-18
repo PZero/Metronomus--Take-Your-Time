@@ -253,7 +253,9 @@ Y_TELAIO_RETRO, Y_TELAIO_FRONTE, X_TELAIO = 8.5, -8.0, 11.5
 # ------------------------------------------------------------------ pendolo e finecorsa
 Y_PENDOLO = ASSE[1] - MOTORE["lunghezza"] - 5.5     # piano in cui oscilla il pendolo
 Y_FLESSIBILI = Y_PENDOLO + 8.0                      # dove finisce il rame e comincia il filo flessibile
-ANGOLO_FC = 45.0                                    # arco della scala ±40°, finecorsa 5° oltre
+ARCO_SCALA = 30.0                                   # scala Maelzel su ±30° (base da 150 mm, decisione del 18/10)
+R_SCALA = (92.0, 99.0, 104.0)                       # tacche: inizio, fine delle tacche corte, fine delle lunghe
+ANGOLO_FC = ARCO_SCALA + 5.0                        # finecorsa 5° oltre la scala
 R_COLLARE = 3.0                                     # collare di ottone sul LED: tocca il paletto per primo
 X_FC = 20.0
 # la cima del paletto tocca il collare quando il pendolo è a ANGOLO_FC
@@ -263,8 +265,10 @@ R_CONTATTO = round(X_FC * math.sin(_a) + (Z_FC - ASSE[2]) * math.cos(_a), 1)   #
 Z_TELAIO_ALTO, Z_TELAIO_BASSO = 84.0, 60.0
 
 # ------------------------------------------------------------------ pannello della scala
-PANNELLO = {"centro": (0.0, -5.0, 160.0), "dimensioni": (170.0, 5.0, 70.0)}
-X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO = 72.0, -1.5, 195.0
+# largo quanto la scala più 10 mm per lato per i numeri; le colonne stanno dietro, 5 mm dentro i bordi
+L_PANNELLO = math.ceil(2 * R_SCALA[2] * math.sin(math.radians(ARCO_SCALA)) + 20)
+PANNELLO = {"centro": (0.0, -5.0, 160.0), "dimensioni": (L_PANNELLO, 5.0, 70.0)}
+X_COLONNE_PANNELLO, Y_COLONNE_PANNELLO, Z_COLONNE_PANNELLO = L_PANNELLO / 2 - 5, -1.5, 195.0
 
 # ------------------------------------------------------------------ batterie 18350 in parallelo
 BATTERIE = [{"centro": (x, 19.5, 9.15), "diametro": 18.3, "lunghezza": 35.0} for x in (-35.0, -56.0)]
@@ -717,8 +721,8 @@ module scheda(o, u, v, n, d, sp, alt, col) {
                  f"[{cx}, {cy + bt['lunghezza'] / 2}, {cz}], {bt['diametro'] / 2});")
     c, d = PANNELLO["centro"], PANNELLO["dimensioni"]
     r.append(f"color({rosso('pannello', [0.6, 0.38, 0.2])}) translate({[c[i] - d[i] / 2 for i in range(3)]}) cube({list(d)});")
-    r.append(f"""if (mostra_scala) for (i = [0 : 38]) {{ t = -40 + 80 * i / 38; l = (i % 5 == 0) ? 104 : 99;
-    color("white") seg([{ax} + 92 * sin(t), {c[1] - d[1] / 2 - 0.1}, {az} + 92 * cos(t)], [{ax} + l * sin(t), {c[1] - d[1] / 2 - 0.1}, {az} + l * cos(t)], 0.4); }}""")
+    r.append(f"""if (mostra_scala) for (i = [0 : 38]) {{ t = {-ARCO_SCALA} + {2 * ARCO_SCALA} * i / 38; l = (i % 5 == 0) ? {R_SCALA[2]} : {R_SCALA[1]};
+    color("white") seg([{ax} + {R_SCALA[0]} * sin(t), {c[1] - d[1] / 2 - 0.1}, {az} + {R_SCALA[0]} * cos(t)], [{ax} + l * sin(t), {c[1] - d[1] / 2 - 0.1}, {az} + l * cos(t)], 0.4); }}""")
     # fili
     colori_rete = {"TELAIO": [0.7, 0.45, 0.3], "PANNELLO": [0.7, 0.45, 0.3]}
     for p in pezzi:

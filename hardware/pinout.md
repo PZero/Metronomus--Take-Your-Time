@@ -37,7 +37,7 @@ Perché questa disposizione: sulla fila 2 i pin 1…7 sono in fila davanti al dr
 - SimpleFOC Mini: EN alla rete STOP, con R9 10 kΩ verso il suo 3V3 al posto del ponticello (abilitato quando è alimentato e nessun finecorsa è toccato); nSP, nRT, nFT non collegati.
 
 ## Stop di emergenza
-- Due paletti di rame a ±45° nel piano del pendolo (rete STOP) fanno da finecorsa meccanici; un collare di ottone sul LED (rete ARMA) li tocca per primo.
+- Due paletti di rame a ±35° nel piano del pendolo (rete STOP) fanno da finecorsa meccanici; un collare di ottone sul LED (rete ARMA) li tocca per primo.
 - **ARMA = 0** (normale): se il pendolo tocca un paletto, EN va a 0 V e il driver si spegne in hardware, anche se il firmware sbaglia (per esempio con l'AS5600 che legge male).
 - **Avvio**: in letargo il pendolo cade su un finecorsa. Il firmware mette ARMA = 1, solleva il pendolo piano finché STOP non si apre, poi rimette ARMA = 0 prima di oscillare.
 - GPIO43 legge STOP: con ARMA = 0, STOP basso = finecorsa toccato. Il firmware spegne anche PWR_EN e segnala l'errore.

@@ -340,7 +340,7 @@ punto(nx + 40, ny)
 punto(nx + 120, ny)
 linea(nx + 120, ny, nx + 170, ny, BLU)
 testo(nx + 176, ny + 5, "ARMA", BLU, 13, "start", "bold")
-testo(470, 1000, "Paletti di rame a ±45° (rete STOP) e collare di ottone sul pendolo (rete ARMA, filo flessibile).\n"
+testo(470, 1000, "Paletti di rame a ±35° (rete STOP) e collare di ottone sul pendolo (rete ARMA, filo flessibile).\n"
       "ARMA = 0: se il pendolo tocca un paletto, EN va a 0 V e il driver si spegne anche se il firmware sbaglia.\n"
       "ARMA = 1 solo all'avvio, per staccare il pendolo dal finecorsa su cui cade in letargo.\n"
       "GPIO43 legge STOP: il firmware spegne anche PWR_EN e segnala l'errore. I paletti fanno da finecorsa meccanici.", GRIGIO, 12)

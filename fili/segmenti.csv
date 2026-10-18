@@ -1,6 +1,6 @@
 gruppo,codice,rete,asse,lunghezza_assi_mm,taglio_mm,estremo_A,estremo_B,A_x,A_y,A_z,B_x,B_y,B_z
-Struttura,STOP-01,STOP,Z,87.1,92.1,base,testa,-20.0,-11.5,0.0,-20.0,-11.5,87.1
-Struttura,STOP-02,STOP,Z,87.1,92.1,base,testa,20.0,-11.5,0.0,20.0,-11.5,87.1
+Struttura,STOP-01,STOP,Z,94.5,99.5,base,testa,-20.0,-11.5,0.0,-20.0,-11.5,94.5
+Struttura,STOP-02,STOP,Z,94.5,99.5,base,testa,20.0,-11.5,0.0,20.0,-11.5,94.5
 Struttura,TELAIO-01,TELAIO,Z,84.0,88.5,base,battuta,-11.5,8.5,0.0,-11.5,8.5,84.0
 Struttura,TELAIO-02,TELAIO,Z,84.0,88.5,base,battuta,-11.5,-8.0,0.0,-11.5,-8.0,84.0
 Struttura,TELAIO-03,TELAIO,Z,84.0,88.5,base,battuta,11.5,-8.0,0.0,11.5,-8.0,84.0
@@ -10,9 +10,9 @@ Struttura,TELAIO-06,TELAIO,X,23.0,22.0,battuta,battuta,11.5,8.5,60.0,-11.5,8.5,6
 Struttura,TELAIO-07,TELAIO,Y,16.5,16.5,battuta,passante,-11.5,8.5,84.0,-11.5,-8.0,84.0
 Struttura,TELAIO-08,TELAIO,X,23.0,23.0,battuta,passante,-11.5,-8.0,84.0,11.5,-8.0,84.0
 Struttura,TELAIO-09,TELAIO,Y,16.5,15.5,battuta,battuta,11.5,-8.0,84.0,11.5,8.5,84.0
-Struttura,PANNELLO-01,PANNELLO,Z,195.0,199.5,base,battuta,-72.0,-1.5,0.0,-72.0,-1.5,195.0
-Struttura,PANNELLO-02,PANNELLO,Z,195.0,199.5,base,battuta,72.0,-1.5,0.0,72.0,-1.5,195.0
-Struttura,PANNELLO-03,PANNELLO,X,144.0,143.0,battuta,battuta,-72.0,-1.5,195.0,72.0,-1.5,195.0
+Struttura,PANNELLO-01,PANNELLO,Z,195.0,199.5,base,battuta,-57.0,-1.5,0.0,-57.0,-1.5,195.0
+Struttura,PANNELLO-02,PANNELLO,Z,195.0,199.5,base,battuta,57.0,-1.5,0.0,57.0,-1.5,195.0
+Struttura,PANNELLO-03,PANNELLO,X,114.0,113.0,battuta,battuta,-57.0,-1.5,195.0,57.0,-1.5,195.0
 Bus,GND-01,GND,X,59.5,60.5,passante,passante,-22.0,1.0,6.0,37.5,1.0,6.0
 Bus,GND-02,GND,Y,27.7,27.7,battuta,passante,37.5,1.0,6.0,37.5,28.74,6.0
 Bus,GND-03,GND,X,59.5,59.5,battuta,passante,37.5,28.74,6.0,-22.0,28.74,6.0
