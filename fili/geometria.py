@@ -4,7 +4,7 @@ Uso:  python fili/geometria.py
   - legge le misure dei moduli da fili/moduli.yaml;
   - dispone i moduli e traccia le reti con segmenti dritti (nessuna piega);
   - controlla: pezzi >= 10 mm, distanza tra fili di reti diverse, fili che attraversano le schede,
-    reti tutte collegate;
+    schede che si sovrappongono (gioco 0,5 mm), reti tutte collegate;
   - scrive fili/segmenti.csv (distinta di taglio) e modello/metronomus.scad.
 
 Assi in mm: x verso destra, y verso il retro, z verso l'alto; z = 0 è il piano della base di legno.
@@ -25,6 +25,7 @@ PEZZO_MIN = 10.0          # nessun pezzo più corto di 1 cm (richiesta di Fabio)
 DISTANZA_MIN = 2.5        # tra gli assi di fili di reti diverse (gioco 1,5 mm; il passo dei pin è 2,54)
 INFILATA_PIN = 2.5        # filo che attraversa il foro di un modulo e sporge per la saldatura
 INFILATA_BASE = 5.0       # filo infilato in un foro della base di legno
+GIOCO_SCHEDE = 0.5        # distanza minima tra gli ingombri di due schede (o di una scheda e un ostacolo)
 TOL = 1e-6
 
 MISURE = yaml.safe_load((QUI / "moduli.yaml").read_text(encoding="utf-8"))
@@ -494,6 +495,18 @@ def analizza():
                 if p.rete.startswith("BATT") and nome_o.startswith("batteria"):
                     continue
                 errori.append(f"{p.codice} tocca {nome_o}")
+
+    # schede che si sovrappongono (ingombri allargati di GIOCO_SCHEDE)
+    def sovrapposte(a, b):
+        return all(a[0][i] < b[1][i] + GIOCO_SCHEDE and b[0][i] < a[1][i] + GIOCO_SCHEDE for i in range(3))
+    elenco = [(m.nome, m.scatola()) for m in MODULI.values()]
+    for i, (na, sa) in enumerate(elenco):
+        for nb, sb in elenco[i + 1:]:
+            if sovrapposte(sa, sb):
+                errori.append(f"{na} e {nb}: ingombri a meno di {GIOCO_SCHEDE} mm")
+        for nome_o, lo, hi in ostacoli():
+            if sovrapposte(sa, (lo, hi)):
+                errori.append(f"{na} e {nome_o}: ingombri a meno di {GIOCO_SCHEDE} mm")
 
     # ogni rete tocca tutti i suoi pin ed è tutta collegata
     for nome, r in RETI.items():

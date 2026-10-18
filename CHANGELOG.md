@@ -4,6 +4,7 @@
 - La scheda ESP32 è una **S3 SuperMini** (non una C3): moduli.yaml con le misure del disegno quotato Nologo (23,50 × 18,00, 2 file da 9 pin), nuovo pinout, schema rev. 0.2.1, BOM e foto rinominate.
 - Rame: S3 ruotata di 90°, scheda servizi riordinata; geometria rilanciata: 84 pezzi, 2,67 m, tutti i controlli superati.
 - TP4056: piazzole e dimensioni dalla foto quotata del venditore (26,1 × 17,4).
+- geometria.py: nuovo controllo sulle schede che si sovrappongono (tra loro e con motore, batterie e pannello, gioco 0,5 mm). Segnala AS5600 e motore a 0,2 mm: il magnete non è ancora nel modello.
 - SimpleFOC Mini dal disegno quotato del produttore (26 × 21,5, fori Ø2 a 22 × 17,5). Toccava il Mini‑360: driver spostato di un passo, PWM su GPIO7/6/5, PWR_EN su 4, pulsante su 8.
 
 ## 2026-10-17

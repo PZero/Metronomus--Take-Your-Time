@@ -31,6 +31,7 @@ Le posizioni dei fori dei moduli sono la base di tutto il rame: un errore di 0,5
 | | OUT−, B−, B+, OUT+: x, y | 1,4·16,0 · 1,4·12,1 · 1,4·5,3 · 1,4·1,4 | |
 | | IN−, IN+: x, y | 24,7·16,0 · 24,7·1,4 | |
 | Motore 1503 | diametro campana · lunghezza base‑campana · interasse fori M2 | 19 · 15 · ? | |
+| | **quanto sporge l'albero dal retro della base** (lì va il magnete Ø6 × 2,5, a 0,5–3 mm dal chip dell'AS5600) | 0 (a filo) | |
 | Filo di rame | diametro reale (spesso è 0,95–1,05) | 1,00 | |
 
 ## Col tester (moduli scollegati)

@@ -25,5 +25,6 @@ Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei mo
 - Col tester: pull‑up SDA/SCL e resistenza su DIR dell'AS5600; Vf dei filamenti LED.
 
 ## Problemi aperti
+- **AS5600 troppo vicino al motore** (0,2 mm, segnalato dal controllo delle sovrapposizioni): il magnete Ø6 × 2,5 sull'albero non è nel modello e, se l'albero è a filo della base, entrerebbe nella scheda. Serve la sporgenza dell'albero, poi si arretra `Y_AS` per avere 0,5–3 mm tra magnete e chip.
 - Rigidità del telaio del motore in filo da 1 mm: forse serve filo più grosso o ottone.
 - Ponticello EN–3V3 del driver fatto sulla scheda (pezzo sotto i 10 mm, unica eccezione).
