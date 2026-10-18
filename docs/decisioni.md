@@ -30,6 +30,7 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-18 | TP4056: piazzole e dimensioni dalla foto quotata del venditore (HW‑107, 26,1 × 17,4) | Stessa disposizione delle piazzole della versione USB‑C | Stima dalla foto di Fabio senza scala |
 | 2026-10-18 | SimpleFOC Mini dal disegno quotato del produttore: 26 × 21,5, 4 fori Ø2 a 22 × 17,5, alto 11 con i pin. Con le misure vere toccava il Mini‑360: driver spostato di un passo a destra (PWM su GPIO7/6/5, PWR_EN su 4, pulsante dell'encoder su 8) | La stima dalla foto (23,8 × 20) era troppo piccola | Spostare il Mini‑360 (tocca batteria e telaio) |
 | 2026-10-18 | Modello per ruolo: `elettronica` Opus (errori di progetto costosi), `coordinatore` e `piano-fili` Sonnet (la geometria è controllata dallo script), `git-readme` Haiku; comandi `/stato` Haiku e `/fine-sessione` Sonnet | Richiesta di Fabio: ridurre il consumo di token | Tutto sul modello della chat |
+| 2026-10-18 | Controllo delle sovrapposizioni tra schede (gioco 0,5 mm) e magnete dell'AS5600 nel modello; criticità ed etichette visibili nello script OpenSCAD | Il contatto driver/Mini‑360 non era stato visto; serve leggere il modello a colpo d'occhio | Controllo a vista sul render |
 
 ---
 

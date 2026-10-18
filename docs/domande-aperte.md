@@ -14,3 +14,6 @@
 | 9 | Rame nudo da lasciare patinare, o protetto con vernice trasparente? | Fabio | aperta |
 | 10 | Hai un laser (LightBurn) o una stampante 3D per la dima? | Fabio | aperta |
 | 11 | Dimensioni indicative dell'oggetto (altezza, ingombro della base) | Fabio | aperta |
+| 13 | Quanto sporge l'albero del motore dal retro della base (dove va il magnete)? | Fabio | aperta |
+| 14 | Datasheet o misure del modulo AS5600 (fori, file dei pin, centro del chip) | Fabio | aperta |
+| 15 | SimpleFOC Mini: ordine M1‑M2‑M3 e quale morsetto è + (serigrafia) | Fabio | aperta |

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-10-18
+- Fine sessione: STATO riscritto, nuove domande aperte (sporgenza dell'albero, AS5600, serigrafia del SimpleFOC).
 - Modello OpenSCAD: cartellini con il nome di schede e componenti (interruttore `etichette`).
 - Modello assegnato a ogni ruolo e comando (Opus per l'elettronica, Sonnet per coordinatore, piano fili e /fine-sessione, Haiku per git-readme e /stato).
 - La scheda ESP32 è una **S3 SuperMini** (non una C3): moduli.yaml con le misure del disegno quotato Nologo (23,50 × 18,00, 2 file da 9 pin), nuovo pinout, schema rev. 0.2.1, BOM e foto rinominate.

@@ -6,25 +6,30 @@ _Aggiornato il 18/10/2026._
 Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei moduli. In parallelo la fase 1 (parti da comprare).
 
 ## Fatto finora
-- Componenti identificati dalle foto e BOM ([hardware/bom.md](../hardware/bom.md)): ESP32‑S3 SuperMini (corretto il 18/10, era indicata come C3), SimpleFOC Mini, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, 2 filamenti LED, motorino a vibrazione.
-- Schema elettrico rev. 0.2.1 (GPIO dell'S3; il PDF/PNG va rigenerato con cairosvg, aggiornato solo l'SVG) con letargo sul pulsante dell'encoder ([hardware/schema.pdf](../hardware/schema.pdf)), pinout ([hardware/pinout.md](../hardware/pinout.md)).
-- Indicatore del tempo: il pendolo punta su una scala Maelzel incisa. Tic: motorino a vibrazione sotto la base.
-- Base di legno dentro una teca di vetro; encoder sul bordo anteriore, prolunga USB‑C sul retro.
-- Rame: misure dei moduli in [fili/moduli.yaml](../fili/moduli.yaml) (ancora **stimate** dalle foto), geometria in [fili/geometria.py](../fili/geometria.py) con controlli (pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede). Disposizione compatta: 84 pezzi, circa 2,67 m di filo (con l'S3).
-- Modello OpenSCAD e render generati dalla stessa geometria ([modello/](../modello), [render/](../render)).
+- Componenti e BOM ([hardware/bom.md](../hardware/bom.md)): **ESP32‑S3 SuperMini** (non C3, corretto il 18/10), SimpleFOC Mini, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, 2 filamenti LED, motorino a vibrazione.
+- Pinout dell'S3 ([hardware/pinout.md](../hardware/pinout.md)): PWM 7/6/5, I2C SCL 1 / SDA 2, PWR_EN 4, vibrazione 3, encoder 12/13/8, LED 10, ADC 9. Schema rev. 0.2.1 (aggiornato solo l'SVG).
+- Indicatore del tempo: il pendolo punta su una scala Maelzel incisa. Tic: motorino a vibrazione sotto la base. Base di legno in una teca di vetro.
+- Misure dai disegni quotati: ESP32‑S3 (Nologo), SimpleFOC Mini (produttore), TP4056 (foto quotata del venditore), in [fili/moduli.yaml](../fili/moduli.yaml).
+- Rame: [fili/geometria.py](../fili/geometria.py), 84 pezzi, 2,67 m. Controlli: pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede, **schede che non si sovrappongono** (gioco 0,5 mm, anche con motore, magnete, batterie e pannello).
+- Modello OpenSCAD ([modello/metronomus.scad](../modello/metronomus.scad)): criticità in rosso e cartellini con i nomi (interruttori `criticita` ed `etichette`); anteprima in `modello/criticita.png`.
+- Ruoli con il modello adatto: elettronica Opus, coordinatore e piano‑fili Sonnet, git‑readme Haiku.
 
 ## Prossimi passi
-1. Fabio misura i moduli col calibro ([fili/misure-da-prendere.md](../fili/misure-da-prendere.md)); si aggiorna `moduli.yaml` e si rilancia la geometria.
-2. Aggiornare lo schema elettrico: filamenti in serie con una sola resistenza (R7 via), scheda servizi, DIR dell'AS5600.
-3. Ordinare le parti mancanti (LDO, AO3401/AO3400, prolunga USB‑C da pannello, filo di rame).
-4. Firmware su breadboard: SimpleFOC in posizione, pendolo sinusoidale, scala Maelzel, letargo.
-5. Generatore del PDF 1:1 di taglio (solo con misure tutte "misurate").
+1. Risolvere AS5600 / magnete: misurare la sporgenza dell'albero, poi arretrare `Y_AS` (0,5–3 mm tra magnete e chip).
+2. Misure mancanti: AS5600 (nessun datasheet), Mini‑360 e MT3608 (piazzole), diametro reale del filo, fori della base del motore ([fili/misure-da-prendere.md](../fili/misure-da-prendere.md)).
+3. Schema rev. 0.3: filamenti in serie (via R7), scheda servizi, DIR dell'AS5600; rigenerare PDF/PNG (serve cairosvg).
+4. Ordinare le parti mancanti (LDO, AO3401/AO3400, prolunga USB‑C, filo di rame).
+5. Firmware su breadboard: SimpleFOC in posizione, pendolo, scala Maelzel, letargo.
 
 ## In attesa da Fabio
-- Misure col calibro di ESP32, driver, MT3608, Mini‑360, AS5600, TP4056, motore e diametro reale del filo.
-- Col tester: pull‑up SDA/SCL e resistenza su DIR dell'AS5600; Vf dei filamenti LED.
+- Sporgenza dell'albero del motore dal retro della base; interasse dei fori M2.
+- Datasheet o misure di AS5600, Mini‑360, MT3608; spessore del PCB dell'S3; diametro reale del filo.
+- Serigrafia del SimpleFOC: ordine M1‑M2‑M3 e quale morsetto è +.
+- Modulo vibrazione (pin header standard a passo 2,54).
+- Col tester: pull‑up SDA/SCL e DIR dell'AS5600; Vf dei filamenti LED.
 
 ## Problemi aperti
-- **AS5600 troppo vicino al motore** (0,2 mm, segnalato dal controllo delle sovrapposizioni): il magnete Ø6 × 2,5 sull'albero non è nel modello e, se l'albero è a filo della base, entrerebbe nella scheda. Serve la sporgenza dell'albero, poi si arretra `Y_AS` per avere 0,5–3 mm tra magnete e chip.
+- **AS5600 tocca motore e magnete** (0,2 mm): `geometria.py` segnala 2 errori finché non c'è la sporgenza dell'albero.
+- Render in `render/` e schema PDF/PNG fermi alla versione C3: servono `bpy` e `cairosvg`.
 - Rigidità del telaio del motore in filo da 1 mm: forse serve filo più grosso o ottone.
 - Ponticello EN–3V3 del driver fatto sulla scheda (pezzo sotto i 10 mm, unica eccezione).
