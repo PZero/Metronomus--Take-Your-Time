@@ -1,5 +1,6 @@
 ---
 description: Salva lo stato della sessione nei documenti del progetto
+model: sonnet
 ---
 
 Chiudiamo la sessione. Senza rileggere file che non servono:

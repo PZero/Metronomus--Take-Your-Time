@@ -29,6 +29,7 @@ Tutte le decisioni del progetto stanno in questo file: la tabella è l'indice, i
 | 2026-10-18 | La scheda è un'**ESP32‑S3 SuperMini**, non una C3: misure dal disegno quotato Nologo (23,50 × 18,00, 2 file da 9 pin). Nuovo pinout: PWM 7/6/5, I2C SCL 1 / SDA 2, PWR_EN 4, vibrazione 3, encoder 12/13/8, LED 10, ADC 9. Sul rame l'S3 è ruotata di 90° (fila 1…7 verso il driver, fila 5V…8 verso la scheda servizi) e la scheda servizi è riordinata | La foto mostra 9 pin per fila e la serigrafia "48" del LED RGB; il YouTube Controller usa la stessa scheda | Tenere il pinout C3 (pin inesistenti sull'S3) |
 | 2026-10-18 | TP4056: piazzole e dimensioni dalla foto quotata del venditore (HW‑107, 26,1 × 17,4) | Stessa disposizione delle piazzole della versione USB‑C | Stima dalla foto di Fabio senza scala |
 | 2026-10-18 | SimpleFOC Mini dal disegno quotato del produttore: 26 × 21,5, 4 fori Ø2 a 22 × 17,5, alto 11 con i pin. Con le misure vere toccava il Mini‑360: driver spostato di un passo a destra (PWM su GPIO7/6/5, PWR_EN su 4, pulsante dell'encoder su 8) | La stima dalla foto (23,8 × 20) era troppo piccola | Spostare il Mini‑360 (tocca batteria e telaio) |
+| 2026-10-18 | Modello per ruolo: `elettronica` Opus (errori di progetto costosi), `coordinatore` e `piano-fili` Sonnet (la geometria è controllata dallo script), `git-readme` Haiku; comandi `/stato` Haiku e `/fine-sessione` Sonnet | Richiesta di Fabio: ridurre il consumo di token | Tutto sul modello della chat |
 
 ---
 

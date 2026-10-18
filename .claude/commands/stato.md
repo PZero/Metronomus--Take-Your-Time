@@ -1,5 +1,6 @@
 ---
 description: Riepilogo dello stato del progetto con rischi e suggerimenti
+model: haiku
 ---
 
 Leggi `docs/STATO.md` e le ultime righe di `docs/decisioni.md` (non altri file, salvo necessità).
