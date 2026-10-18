@@ -589,7 +589,8 @@ def scrivi_scad(pezzi, errori=()):
     r.append("// Metronomus: modello 3D di controllo, GENERATO da fili/geometria.py: non modificarlo a mano.")
     r.append("// Misure dei moduli in fili/moduli.yaml. Assi in mm, z = 0 piano della base.\n")
     r.append("/* [Vista] */\nteca = true;\nmostra_vetro = true;\nmostra_scala = true;\nangolo_pendolo = -14;\n"
-             "// criticità (errori dei controlli) in rosso, con le zone di contatto evidenziate\ncriticita = true;\n")
+             "// criticità (errori dei controlli) in rosso, con le zone di contatto evidenziate\ncriticita = true;\n"
+             "// nomi delle schede e dei componenti, su cartellini rivolti verso il fronte\netichette = true;\n")
     r.append("// " + (f"{len(errori)} criticità:" if errori else "nessuna criticità"))
     for e in errori:
         r.append(f"//   - {e}")
@@ -598,6 +599,12 @@ def scrivi_scad(pezzi, errori=()):
     r.append("$fn = 24;\nR = %.2f;\n" % R_FILO)
     r.append("""module seg(a, b, r = R) { v = b - a; l = norm(v);
     if (l > 0) translate(a) rotate([0, acos(v[2] / l), atan2(v[1], v[0])]) cylinder(r = r, h = l, $fn = 12); }
+module etichetta(punto, testo, alto, dx = 0) {  // cartellino rivolto verso il fronte (-y): filo guida su di alto, poi di lato di dx
+    color([0.2, 0.2, 0.2]) { seg(punto, punto + [0, 0, alto], 0.25); seg(punto + [0, 0, alto], punto + [dx, 0, alto], 0.25); }
+    translate(punto + [dx, 0, alto]) rotate([90, 0, 0]) {
+        color("white") translate([-len(testo) * 1.45 - 1, -1.2, -0.3]) cube([len(testo) * 2.9 + 2, 6.4, 0.3]);
+        color([0.1, 0.1, 0.1]) linear_extrude(0.4) text(testo, size = 4, halign = "center", font = "Liberation Sans:style=Bold");
+    } }
 module scheda(o, u, v, n, d, sp, alt, col) {
     color(col) multmatrix([[u[0], v[0], n[0], o[0]], [u[1], v[1], n[1], o[1]], [u[2], v[2], n[2], o[2]], [0, 0, 0, 1]]) {
         translate([0, 0, -sp]) cube([d[0], d[1], sp]);
@@ -644,6 +651,21 @@ module scheda(o, u, v, n, d, sp, alt, col) {
             r.append(f"color({col}) seg({list(p.a)}, {list(p.b)});  // {p.codice}")
     giunti = sorted({pt for p in pezzi for pt in (p.a, p.b)})
     r.append("color([0.75, 0.75, 0.72]) for (g = " + str([list(g) for g in giunti]) + ") translate(g) sphere(r = R * 1.4, $fn = 12);")
+    # etichette: sopra il centro di ogni scheda, altezze sfalsate per non coprirsi
+    # (alto, spostamento laterale): i cartellini escono da dietro al motore e non si coprono
+    posti = {"AS5600": (20, 0), "ESP32-S3": (76, 36), "SimpleFOC Mini": (16, 0), "Mini-360": (12, -28),
+             "MT3608": (14, 0), "Scheda servizi": (42, 0)}
+    for m in MODULI.values():
+        lo, hi = m.scatola()
+        punto = [round((lo[0] + hi[0]) / 2, 2), round(lo[1], 2), round(hi[2], 2)]
+        alto, dx = posti.get(m.nome, (20, 0))
+        r.append(f'if (etichette) etichetta({punto}, "{m.nome}", {alto}, {dx});')
+    r.append(f'if (etichette) etichetta([{ax - rr - 2}, {ay - ll / 2}, {az + rr}], "Motore 1503", 12);')
+    r.append(f'if (etichette) etichetta([{ax}, {ay + MAGNETE["sporgenza"]}, {az - MAGNETE["diametro"] / 2}], "magnete", -12, -30);')
+    for i, bt in enumerate(BATTERIE):
+        cx, cy, cz = bt["centro"]
+        r.append(f'if (etichette) etichetta([{cx}, {cy - bt["lunghezza"] / 2}, {cz + bt["diametro"] / 2}], "18350", 8);')
+    r.append(f'if (etichette) etichetta([{BASE["min"][0] + 55}, {BASE["min"][1]}, 0], "TP4056, encoder e vibrazione sotto la base", 6);')
     for nome, lo, hi in CRITICITA["zone"]:
         r.append(f"if (criticita) color([1, 0, 0, 0.45]) translate({[round(c, 3) for c in lo]}) "
                  f"cube({[round(hi[i] - lo[i], 3) for i in range(3)]});  // contatto {nome}")
