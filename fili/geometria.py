@@ -167,19 +167,19 @@ MODULI["as5600"] = modulo("as5600", "AS5600", verticale=((0, 0, 1), (-1, 0, 0)),
 MODULI["as5600"].allinea("CHIP", (ASSE[0], Y_AS, ASSE[2]))
 AS = MODULI["as5600"]
 
-# --- ESP32-C3 sul ponte, ruotato di 270 gradi: fila GPIO5..21 davanti, fila 5V..GPIO0 dietro.
-#     GPIO21 (SCL) e GPIO20 (SDA) sotto i fili che scendono dall'AS5600.
+# --- ESP32-S3 sul ponte, ruotato di 90 gradi: fila TX/RX/GPIO1..7 davanti, fila 5V..GPIO8 dietro.
+#     GPIO1 (SCL) e GPIO2 (SDA) sotto i fili che scendono dall'AS5600.
 Y_ESP_FRONTE = Y_AS + 14.0
-MODULI["esp32"] = modulo("esp32c3", "ESP32-C3", rot=270, colore="nero")
+MODULI["esp32"] = modulo("esp32s3", "ESP32-S3", rot=90, colore="nero")
 ESP = MODULI["esp32"]
 ESP.origine = (0, 0, DECK)
-ESP.allinea("GPIO21", (AS.pin("SCL")[0], Y_ESP_FRONTE, DECK))
+ESP.allinea("GPIO1", (AS.pin("SCL")[0], Y_ESP_FRONTE, DECK))
 
-# --- Driver davanti all'ESP32: IN1..IN3 sotto GPIO5..7, collegati a U.
+# --- Driver davanti all'ESP32: IN1..IN3 sotto GPIO6..4, collegati a U.
 MODULI["driver"] = modulo("simplefoc_mini", "SimpleFOC Mini", rot=0, colore="nero")
 DRV = MODULI["driver"]
 DRV.origine = (0, 0, DECK)
-DRV.allinea("IN1", (ESP.pin("GPIO5")[0], Y_ESP_FRONTE - 11.0, DECK))
+DRV.allinea("IN1", (ESP.pin("GPIO6")[0], Y_ESP_FRONTE - 11.0, DECK))
 
 # --- Mini-360 a sinistra: OUT+ esattamente sotto la discesa del VCC dell'AS5600.
 Y_DISCESA_AS = Y_AS + 10.0       # i fili VCC e GND dell'AS5600 corrono 10 mm verso il retro e scendono
@@ -196,16 +196,17 @@ MT.allinea("VOUT+", (38.0 + 4.8, DRV.pin("PWR+")[1], DECK))
 
 # --- Scheda servizi (millefori a passo 2,54, da tagliare): LDO, MOSFET del letargo e del LED,
 #     resistenze. I suoi pin sono sulla stessa griglia dei pin dell'ESP32.
-Y_SERVIZI = ESP.pin("GPIO0")[1] + 12.26
-X0 = ESP.pin("GPIO0")[0]          # griglia x dei pin: X0 + 2,54 k
+#     Griglia contata dal pin 5V dell'S3 (k = 0), verso +x: 3V3 = 2, GPIO10 = 6, GPIO9 = 7, GPIO8 = 8.
+Y_SERVIZI = ESP.pin("5V")[1] + 12.26
+X0 = ESP.pin("5V")[0]             # griglia x dei pin: X0 + 2,54 k
 def gx(k): return round(X0 + 2.54 * k, 3)
 
 
 PIN_SERVIZI = {
-    "PWR_EN": gx(-2), "ADC": gx(0), "LED_PWM": gx(1), "LED_K": gx(2), "LED_A": gx(3),
-    "3V3": gx(5), "GND": gx(7), "V12": gx(9), "VBAT": gx(11), "VSW": gx(12), "VSW_VIB": gx(13),
+    "3V3": gx(2), "LED_PWM": gx(6), "ADC": gx(7), "PWR_EN": gx(8), "LED_K": gx(9), "LED_A": gx(10),
+    "VBAT": gx(11), "GND": gx(12), "V12": gx(14), "VSW": gx(15), "VSW_VIB": gx(16),
 }
-servizi = Modulo("Scheda servizi", None, (gx(13) - gx(-2) + 2 * 1.8, 10.16), origine=(gx(-2) - 1.8, Y_SERVIZI - 5.08, DECK),
+servizi = Modulo("Scheda servizi", None, (gx(16) - gx(2) + 2 * 1.8, 10.16), origine=(gx(2) - 1.8, Y_SERVIZI - 5.08, DECK),
                  spessore=1.6, altezza=6.0, sotto=1.0, colore="millefori", stato="progetto")
 servizi.pin_loc = {k: [x - servizi.origine[0], 5.08] for k, x in PIN_SERVIZI.items()}
 MODULI["servizi"] = servizi
@@ -268,22 +269,22 @@ p = AS.pin("VCC")
 tratto("3V3_SW", p, (p[0], Y_DISCESA_AS, p[2]), MINI.pin("OUT+"))
 
 # --- I2C: dall'AS5600 verso il retro e giù, dritti sui pin dell'ESP32
-for nome, pa, pe in (("SCL", "SCL", "GPIO21"), ("SDA", "SDA", "GPIO20")):
+for nome, pa, pe in (("SCL", "SCL", "GPIO1"), ("SDA", "SDA", "GPIO2")):
     rete(nome).pin += [("as5600", pa), ("esp32", pe)]
     p, q = AS.pin(pa), ESP.pin(pe)
     tratto(nome, p, (p[0], q[1], p[2]), q)
 
 # --- PWM: ponti a U sotto le schede
-for nome, pe, pd in (("PWM_A", "GPIO5", "IN1"), ("PWM_B", "GPIO6", "IN2"), ("PWM_C", "GPIO7", "IN3")):
+for nome, pe, pd in (("PWM_A", "GPIO6", "IN1"), ("PWM_B", "GPIO5", "IN2"), ("PWM_C", "GPIO4", "IN3")):
     rete(nome).pin += [("esp32", pe), ("driver", pd)]
     ponte(nome, ESP.pin(pe), DRV.pin(pd), Z_PONTI)
 
 # --- ESP32 <-> scheda servizi
-for nome, pe, ps in (("3V3", "3V3", "3V3"), ("LED_PWM", "GPIO1", "LED_PWM"), ("VBAT_ADC", "GPIO0", "ADC")):
+for nome, pe, ps in (("3V3", "3V3", "3V3"), ("LED_PWM", "GPIO10", "LED_PWM"), ("VBAT_ADC", "GPIO9", "ADC")):
     rete(nome).pin += [("esp32", pe), ("servizi", ps)]
     ponte(nome, ESP.pin(pe), SRV.pin(ps), Z_PONTI)
-rete("PWR_EN").pin += [("esp32", "GPIO10"), ("servizi", "PWR_EN")]
-a, b = ESP.pin("GPIO10"), SRV.pin("PWR_EN")
+rete("PWR_EN").pin += [("esp32", "GPIO7"), ("servizi", "PWR_EN")]
+a, b = ESP.pin("GPIO7"), SRV.pin("PWR_EN")
 tratto("PWR_EN", a, (a[0], a[1], Z_PONTI), (b[0], a[1], Z_PONTI), (b[0], b[1], Z_PONTI), b)
 
 # --- VSW: scheda servizi -> MT3608 VIN+ ; e giù nella base verso il motorino a vibrazione
@@ -301,7 +302,7 @@ tratto("VBAT", (p[0], p[1], 0.0), p)
 rete("VBAT").fori.append((p[0], p[1], 0.0))
 
 # --- fili che scendono nella base: encoder (sotto la base, sul bordo anteriore) e motorino
-for nome, pe in (("ENC_SW", "GPIO2"), ("ENC_A", "GPIO3"), ("ENC_B", "GPIO4"), ("VIB_IN", "GPIO8")):
+for nome, pe in (("ENC_SW", "GPIO11"), ("ENC_A", "GPIO12"), ("ENC_B", "GPIO13"), ("VIB_IN", "GPIO3")):
     rete(nome).pin.append(("esp32", pe))
     p = ESP.pin(pe)
     tratto(nome, p, (p[0], p[1], 0.0))

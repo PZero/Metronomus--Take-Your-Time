@@ -149,7 +149,7 @@ def sezione(x, y, w, h, titolo, c):
 
 # ------------------------------------------------------------------ cartiglio
 testo(40, 48, "METRONOMUS · schema elettrico", NERO, 26, "start", "bold")
-testo(40, 74, "rev. 0.2 · 17/10/2026 · bozza da verificare su breadboard · "
+testo(40, 74, "rev. 0.2.1 · 18/10/2026 · ESP32-S3 · bozza da verificare su breadboard · "
       "le etichette uguali indicano piedini collegati tra loro", GRIGIO, 14)
 
 # ------------------------------------------------------------------ ALIMENTAZIONE
@@ -248,13 +248,13 @@ testo(1190, 500, "Tarare MT3608 a 12,0 V e Mini-360 a 3,30 V PRIMA di collegare 
 INIZIO_CONTROLLO = len(el)
 sezione(30, 495, 1620, 670, "CONTROLLO E ATTUATORI", BLU)
 
-esp = modulo(740, 560, 230, 360, "ESP32-C3\nSuperMini",
-             sx=[("5V", "n.c."), ("GND", "GND"), ("3V3", "3V3"), ("GPIO4", "ENC_B"), ("GPIO3", "ENC_A"),
-                 ("GPIO2", "ENC_SW"), ("GPIO1", "LED_PWM"), ("GPIO0", "VBAT_ADC")],
-             dx=[("GPIO5", "PWM_A"), ("GPIO6", "PWM_B"), ("GPIO7", "PWM_C"), ("GPIO8", "VIB_IN"),
-                 ("GPIO9", "n.c."), ("GPIO10", "PWR_EN"), ("GPIO20", "SDA"), ("GPIO21", "SCL")],
-             passo=42, stub=60)
-testo(855, 945, "GPIO2 = pulsante, risveglia dal letargo · GPIO9 = tasto BOOT\nTogliere il LED rosso di alimentazione della SuperMini", GRIGIO, 12, "middle")
+esp = modulo(740, 560, 230, 360, "ESP32-S3\nSuperMini",
+             sx=[("5V", "n.c."), ("GND", "GND"), ("3V3", "3V3"), ("GPIO13", "ENC_B"), ("GPIO12", "ENC_A"),
+                 ("GPIO11", "ENC_SW"), ("GPIO10", "LED_PWM"), ("GPIO9", "VBAT_ADC"), ("GPIO8", "n.c.")],
+             dx=[("TX", "n.c."), ("RX", "n.c."), ("GPIO1", "SCL"), ("GPIO2", "SDA"), ("GPIO3", "VIB_IN"),
+                 ("GPIO4", "PWM_C"), ("GPIO5", "PWM_B"), ("GPIO6", "PWM_A"), ("GPIO7", "PWR_EN")],
+             passo=37, stub=60)
+testo(855, 945, "GPIO11 = pulsante, risveglia dal letargo · GPIO3 = strapping JTAG (innocuo)\nTogliere il LED rosso di alimentazione della SuperMini", GRIGIO, 12, "middle")
 
 drv = modulo(1200, 560, 200, 380, "SimpleFOC\nMini v1.0\n(DRV8313)",
              sx=[("IN1", "PWM_A"), ("IN2", "PWM_B"), ("IN3", "PWM_C"), ("EN", "DRV_3V3"), ("GND", "GND"),

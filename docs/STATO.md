@@ -1,16 +1,16 @@
 # Stato del progetto
 
-_Aggiornato il 17/10/2026._
+_Aggiornato il 18/10/2026._
 
 ## Fase attuale
 Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei moduli. In parallelo la fase 1 (parti da comprare).
 
 ## Fatto finora
-- Componenti identificati dalle foto e BOM ([hardware/bom.md](../hardware/bom.md)): ESP32‑C3 SuperMini, SimpleFOC Mini, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, 2 filamenti LED, motorino a vibrazione.
-- Schema elettrico rev. 0.2 con letargo sul pulsante dell'encoder ([hardware/schema.pdf](../hardware/schema.pdf)), pinout ([hardware/pinout.md](../hardware/pinout.md)).
+- Componenti identificati dalle foto e BOM ([hardware/bom.md](../hardware/bom.md)): ESP32‑S3 SuperMini (corretto il 18/10, era indicata come C3), SimpleFOC Mini, motore 1503, AS5600, EC11, TP4056 USB‑C, MT3608, Mini‑360, 2 × 18350 in parallelo, 2 filamenti LED, motorino a vibrazione.
+- Schema elettrico rev. 0.2.1 (GPIO dell'S3; il PDF/PNG va rigenerato con cairosvg, aggiornato solo l'SVG) con letargo sul pulsante dell'encoder ([hardware/schema.pdf](../hardware/schema.pdf)), pinout ([hardware/pinout.md](../hardware/pinout.md)).
 - Indicatore del tempo: il pendolo punta su una scala Maelzel incisa. Tic: motorino a vibrazione sotto la base.
 - Base di legno dentro una teca di vetro; encoder sul bordo anteriore, prolunga USB‑C sul retro.
-- Rame: misure dei moduli in [fili/moduli.yaml](../fili/moduli.yaml) (ancora **stimate** dalle foto), geometria in [fili/geometria.py](../fili/geometria.py) con controlli (pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede). Disposizione compatta: 85 pezzi, circa 2,7 m di filo.
+- Rame: misure dei moduli in [fili/moduli.yaml](../fili/moduli.yaml) (ancora **stimate** dalle foto), geometria in [fili/geometria.py](../fili/geometria.py) con controlli (pezzi ≥ 10 mm, assi ≥ 2,5 mm, nessun filo attraverso le schede). Disposizione compatta: 84 pezzi, circa 2,67 m di filo (con l'S3).
 - Modello OpenSCAD e render generati dalla stessa geometria ([modello/](../modello), [render/](../render)).
 
 ## Prossimi passi
@@ -26,5 +26,4 @@ Fase 3 · disposizione del circuito in rame, in attesa delle misure reali dei mo
 
 ## Problemi aperti
 - Rigidità del telaio del motore in filo da 1 mm: forse serve filo più grosso o ottone.
-- Ordine dei pin della SuperMini da confermare sulla serigrafia.
 - Ponticello EN–3V3 del driver fatto sulla scheda (pezzo sotto i 10 mm, unica eccezione).

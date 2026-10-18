@@ -13,21 +13,27 @@
 #   2. per ogni fila di pin: distanza del centro del PRIMO foro dal bordo sinistro e dal bordo inferiore;
 #      gli altri fori della fila seguono il passo 2,54 (verificalo misurando primo-ultimo).
 
-esp32c3:
-  nome: ESP32-C3 SuperMini
+esp32s3:
+  nome: ESP32-S3 SuperMini
   vista: USB in alto, chip verso l'osservatore
   stato: stimato
-  fonte: dimensioni da scheda tecnica (22,52 x 18), file dei pin a 15,24 stimate dalla foto
-  dimensioni: [18.0, 22.52]
-  spessore: 1.0
-  altezza: 3.5            # USB-C e modulo
-  sotto: 0.5
+  fonte: >-
+    disegno quotato Nologo (wiki.nologo.tech, 10/08/2024) e footprint KiCad 9veedz, raccolti nel
+    YouTube Controller (enclosure/dimensioni.md). PCB 23,50 x 18,00 (18,00 confermato col calibro);
+    2 file da 9 pin, passo 2,54, primo pin a 1,59 dai bordi corti, file a 1,38 dai bordi lunghi
+    (interasse 15,24). Lato delle file letto sulla foto. Manca solo lo spessore del PCB.
+  dimensioni: [18.0, 23.5]
+  spessore: 1.0           # non pubblicato: da misurare
+  altezza: 3.2            # USB-C (HRO TYPE-C-31-M-12)
+  sotto: 0.5              # gambe passanti della USB-C
   passo: 2.54
   file:
     # [x del primo foro, y del primo foro, direzione (+y o -y), nomi in ordine]
-    - [1.38, 20.15, -y, [5V, GND, 3V3, GPIO4, GPIO3, GPIO2, GPIO1, GPIO0]]
-    - [16.62, 20.15, -y, [GPIO5, GPIO6, GPIO7, GPIO8, GPIO9, GPIO10, GPIO20, GPIO21]]
-  note: ordine dei pin da verificare sulla serigrafia (lato sinistro / destro con USB in alto)
+    - [1.38, 21.91, -y, [GPIO43, GPIO44, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7]]
+    - [16.62, 21.91, -y, [5V, GND, 3V3, GPIO13, GPIO12, GPIO11, GPIO10, GPIO9, GPIO8]]
+  note: >-
+    GPIO43 = TX, GPIO44 = RX. USB-C centrata sul lato corto in alto, sporge 1,2-2,2 (fonti
+    divergenti); antenna ceramica sul lato corto opposto, tenere lontano il rame (ultimi ~3 mm).
 
 simplefoc_mini:
   nome: SimpleFOC Mini v1.0 (2024-05-13)
@@ -50,20 +56,25 @@ simplefoc_mini:
 
 tp4056:
   nome: TP4056 USB-C con protezione
-  vista: come foto/caricatore-tp4056-usbc.jpg (USB-C a destra)
+  vista: come foto/caricatore-tp4056-usbc.jpg (USB a destra)
   stato: stimato
-  fonte: foto, circa 29 px/mm
-  dimensioni: [27.0, 17.0]
+  fonte: >-
+    foto quotata del venditore (modello HW-107 micro-USB, stessa disposizione delle piazzole):
+    PCB 26,1 x 17,4, 27,9 con la presa sporgente. Piazzole d'angolo a ~1,4 dai bordi;
+    B+ e B- in mezzo, ricavate in proporzione dalla foto (+-0,5). La scheda di Fabio è USB-C:
+    lunghezza e altezza della presa da confermare.
+  dimensioni: [26.1, 17.4]
   spessore: 1.0
-  altezza: 3.3
+  altezza: 3.3            # presa USB-C
   sotto: 0.3
+  sporgenza_usb: 1.8      # 27,9 - 26,1
   pin:
-    OUT-: [3.1, 15.2]
-    B-: [3.1, 11.8]
-    B+: [3.1, 4.8]
-    OUT+: [3.1, 1.7]
-    IN-: [25.8, 15.0]
-    IN+: [25.8, 1.6]
+    OUT-: [1.4, 16.0]
+    B-: [1.4, 12.1]
+    B+: [1.4, 5.3]
+    OUT+: [1.4, 1.4]
+    IN-: [24.7, 16.0]
+    IN+: [24.7, 1.4]
 
 mt3608:
   nome: MT3608 boost

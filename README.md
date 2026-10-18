@@ -48,7 +48,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 | Componente | Modello | Stato |
 |---|---|---|
-| ESP32 | ESP32‑C3 SuperMini | ✅ disponibile |
+| ESP32 | ESP32‑S3 SuperMini | ✅ disponibile |
 | Driver brushless | SimpleFOC Mini v1.0 (DRV8313, 8–30 V) | ✅ disponibile |
 | Motore brushless | 1503, 7,4 V, 0,3 A, 0,5 Ω | ✅ disponibile |
 | Batteria | 2 × 18350 in parallelo (1S, 3,7 V) | ✅ disponibile |
@@ -86,7 +86,7 @@ Elenco completo e modelli in [hardware/bom.md](hardware/bom.md).
 
 **Teca:** il metronomo sta su una base di legno dentro una piccola teca di vetro; il pomello dell'encoder sporge dal bordo della base, la USB‑C è sul retro.
 
-**Microcontrollore:** ESP32‑C3 SuperMini. Usa 12 dei suoi 13 GPIO: tre PWM e l'abilitazione per il driver, I2C per l'AS5600, tre ingressi per l'encoder, un'uscita per i LED, una per il motorino a vibrazione e un ingresso analogico per la batteria.
+**Microcontrollore:** ESP32‑S3 SuperMini (la stessa scheda del YouTube Controller). Usa 12 dei suoi 15 GPIO sul bordo: tre PWM e l'abilitazione per il driver, I2C per l'AS5600, tre ingressi per l'encoder, un'uscita per i LED, una per il motorino a vibrazione e un ingresso analogico per la batteria.
 
 **Tic:** un motorino a vibrazione fissato sotto la base di legno dà un colpetto a ogni battito (impulsi da almeno 60 ms).
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-18
+- La scheda ESP32 è una **S3 SuperMini** (non una C3): moduli.yaml con le misure del disegno quotato Nologo (23,50 × 18,00, 2 file da 9 pin), nuovo pinout, schema rev. 0.2.1, BOM e foto rinominate.
+- Rame: S3 ruotata di 90°, scheda servizi riordinata; geometria rilanciata: 84 pezzi, 2,67 m, tutti i controlli superati.
+- TP4056: piazzole e dimensioni dalla foto quotata del venditore (26,1 × 17,4).
+
 ## 2026-10-17
 - Comandi di Claude Code `/stato` e `/fine-sessione` (come nel YouTube Controller), stato del progetto in docs/STATO.md, ruoli copiati in .claude/agents/.
 - Disposizione compatta: misure dei moduli in fili/moduli.yaml, geometria unica in fili/geometria.py con i controlli (pezzi ≥ 10 mm, distanze, schede attraversate), distinta fili/segmenti.csv. Modello OpenSCAD e render ora generati dalla stessa geometria.
