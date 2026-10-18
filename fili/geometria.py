@@ -123,6 +123,10 @@ class Rete:
 
 RETI = {}
 
+# Criticità trovate dai controlli, per colorarle di rosso nel modello OpenSCAD:
+# pezzi (codici), oggetti (nomi di moduli o ostacoli) e zone (scatole dove gli ingombri si toccano).
+CRITICITA = {"pezzi": set(), "oggetti": set(), "zone": []}
+
 
 def rete(nome):
     return RETI.setdefault(nome, Rete(nome))
@@ -218,6 +222,9 @@ SRV = servizi
 # ------------------------------------------------------------------ motore e telaio
 MOTORE = {"asse": ASSE, "diametro": MISURE["motore_1503"]["diametro_campana"],
           "lunghezza": MISURE["motore_1503"]["lunghezza"]}
+# Magnete diametrale dell'AS5600 incollato sull'estremità dell'albero, dietro al motore.
+# sporgenza = quanto l'albero esce dal retro della base (da misurare: per ora a filo).
+MAGNETE = {"diametro": 6.0, "spessore": 2.5, "sporgenza": MISURE["motore_1503"].get("sporgenza_albero", 0.0)}
 Y_TELAIO_RETRO, Y_TELAIO_FRONTE, X_TELAIO = 8.5, -8.0, 11.5
 Z_TELAIO_ALTO, Z_TELAIO_BASSO = 84.0, 60.0
 
@@ -409,6 +416,8 @@ def ostacoli():
     ax, ay, az = MOTORE["asse"]
     r = MOTORE["diametro"] / 2
     yield "motore", (ax - r, ay - MOTORE["lunghezza"] - 4, az - r), (ax + r, ay, az + r)
+    rm, sm = MAGNETE["diametro"] / 2, MAGNETE["spessore"]
+    yield "magnete", (ax - rm, ay + MAGNETE["sporgenza"], az - rm), (ax + rm, ay + MAGNETE["sporgenza"] + sm, az + rm)
     for i, bt in enumerate(BATTERIE):
         cx, cy, cz = bt["centro"]
         r, l = bt["diametro"] / 2, bt["lunghezza"] / 2
@@ -467,6 +476,7 @@ def analizza():
     for p in pezzi:
         if p.taglio < PEZZO_MIN - TOL:
             errori.append(f"{p.codice}: pezzo da {p.taglio:.1f} mm (minimo {PEZZO_MIN:.0f})")
+            CRITICITA["pezzi"].add(p.codice)
 
     # distanze tra reti diverse
     for i, p in enumerate(pezzi):
@@ -476,6 +486,7 @@ def analizza():
             d = distanza_segmenti(p.a, p.b, q.a, q.b)
             if d < DISTANZA_MIN - 1e-3:
                 errori.append(f"{p.codice} e {q.codice}: assi a {d:.2f} mm (minimo {DISTANZA_MIN})")
+                CRITICITA["pezzi"].update((p.codice, q.codice))
 
     # attraversamenti di schede e ingombri
     for p in pezzi:
@@ -490,23 +501,35 @@ def analizza():
                     ok = norma(cross(d, m.n)) < TOL
             if not ok:
                 errori.append(f"{p.codice} attraversa {m.nome}")
+                CRITICITA["pezzi"].add(p.codice)
+                CRITICITA["oggetti"].add(m.nome)
         for nome_o, lo, hi in ostacoli():
             if segmento_in_scatola(p.a, p.b, lo, hi, R_FILO):
                 if p.rete.startswith("BATT") and nome_o.startswith("batteria"):
                     continue
                 errori.append(f"{p.codice} tocca {nome_o}")
+                CRITICITA["pezzi"].add(p.codice)
+                CRITICITA["oggetti"].add(nome_o)
 
     # schede che si sovrappongono (ingombri allargati di GIOCO_SCHEDE)
     def sovrapposte(a, b):
         return all(a[0][i] < b[1][i] + GIOCO_SCHEDE and b[0][i] < a[1][i] + GIOCO_SCHEDE for i in range(3))
+
+    def segnala(na, sa, nb, sb):
+        errori.append(f"{na} e {nb}: ingombri a meno di {GIOCO_SCHEDE} mm")
+        CRITICITA["oggetti"].update((na, nb))
+        # zona del contatto: intersezione delle scatole allargate del gioco
+        lo = tuple(max(sa[0][i], sb[0][i]) - GIOCO_SCHEDE for i in range(3))
+        hi = tuple(min(sa[1][i], sb[1][i]) + GIOCO_SCHEDE for i in range(3))
+        CRITICITA["zone"].append((f"{na} / {nb}", lo, hi))
     elenco = [(m.nome, m.scatola()) for m in MODULI.values()]
     for i, (na, sa) in enumerate(elenco):
         for nb, sb in elenco[i + 1:]:
             if sovrapposte(sa, sb):
-                errori.append(f"{na} e {nb}: ingombri a meno di {GIOCO_SCHEDE} mm")
+                segnala(na, sa, nb, sb)
         for nome_o, lo, hi in ostacoli():
             if sovrapposte(sa, (lo, hi)):
-                errori.append(f"{na} e {nome_o}: ingombri a meno di {GIOCO_SCHEDE} mm")
+                segnala(na, sa, nome_o, (lo, hi))
 
     # ogni rete tocca tutti i suoi pin ed è tutta collegata
     for nome, r in RETI.items():
@@ -557,11 +580,21 @@ COLORI_SCAD = {"nero": [0.1, 0.1, 0.1], "blu": [0.1, 0.25, 0.7], "verde": [0.05,
                "bianco": [0.92, 0.92, 0.9], "millefori": [0.75, 0.6, 0.3]}
 
 
-def scrivi_scad(pezzi):
+ROSSO = [0.9, 0.05, 0.05]
+
+
+def scrivi_scad(pezzi, errori=()):
     r = []
+    rosso = lambda nome, col: f'(criticita ? {ROSSO} : {col})' if nome in CRITICITA["oggetti"] else str(col)
     r.append("// Metronomus: modello 3D di controllo, GENERATO da fili/geometria.py: non modificarlo a mano.")
     r.append("// Misure dei moduli in fili/moduli.yaml. Assi in mm, z = 0 piano della base.\n")
-    r.append("/* [Vista] */\nteca = true;\nmostra_vetro = true;\nmostra_scala = true;\nangolo_pendolo = -14;\n")
+    r.append("/* [Vista] */\nteca = true;\nmostra_vetro = true;\nmostra_scala = true;\nangolo_pendolo = -14;\n"
+             "// criticità (errori dei controlli) in rosso, con le zone di contatto evidenziate\ncriticita = true;\n")
+    r.append("// " + (f"{len(errori)} criticità:" if errori else "nessuna criticità"))
+    for e in errori:
+        r.append(f"//   - {e}")
+        r.append(f'if (criticita) echo("CRITICITÀ: {e}");')
+    r.append("")
     r.append("$fn = 24;\nR = %.2f;\n" % R_FILO)
     r.append("""module seg(a, b, r = R) { v = b - a; l = norm(v);
     if (l > 0) translate(a) rotate([0, acos(v[2] / l), atan2(v[1], v[0])]) cylinder(r = r, h = l, $fn = 12); }
@@ -579,32 +612,41 @@ module scheda(o, u, v, n, d, sp, alt, col) {
              f"translate([3, 3, -1]) cube([{hi[0] - lo[0] - 16}, {hi[1] - lo[1] - 16}, 218]); }}")
     # moduli
     for m in MODULI.values():
-        col = COLORI_SCAD[m.colore]
+        col = rosso(m.nome, COLORI_SCAD[m.colore])
         r.append(f"scheda({list(m.origine)}, {list(m.u)}, {list(m.v)}, {list(m.n)}, {list(m.dimensioni)}, "
                  f"{m.spessore}, {m.altezza}, {col});  // {m.nome}")
     # motore, pendolo, batterie, pannello
     ax, ay, az = MOTORE["asse"]
     rr, ll = MOTORE["diametro"] / 2, MOTORE["lunghezza"]
-    r.append(f"color([0.75, 0.75, 0.78]) seg([{ax}, {ay}, {az}], [{ax}, {ay - ll}, {az}], {rr});")
+    r.append(f"color({rosso('motore', [0.75, 0.75, 0.78])}) seg([{ax}, {ay}, {az}], [{ax}, {ay - ll}, {az}], {rr});")
+    ym = ay + MAGNETE["sporgenza"]
+    r.append(f"color({rosso('magnete', [0.35, 0.35, 0.4])}) seg([{ax}, {ym}, {az}], [{ax}, {ym + MAGNETE['spessore']}, {az}], "
+             f"{MAGNETE['diametro'] / 2});  // magnete dell'AS5600")
     r.append(f"color([0.75, 0.75, 0.78]) seg([{ax}, {ay - ll}, {az}], [{ax}, {ay - ll - 4}, {az}], 3);")
     yp = ay - ll - 5.5
     r.append(f"translate([{ax}, {yp}, {az}]) rotate([0, angolo_pendolo, 0]) {{ color([1, 0.75, 0.25]) "
              f"cylinder(r = 1.1, h = 108); color([0.85, 0.45, 0.25]) translate([2.2, 0, 0]) cylinder(r = 0.2, h = 108); }}")
-    for bt in BATTERIE:
+    for i, bt in enumerate(BATTERIE):
         cx, cy, cz = bt["centro"]
-        r.append(f"color([0.25, 0.55, 0.95]) seg([{cx}, {cy - bt['lunghezza'] / 2}, {cz}], "
+        r.append(f"color({rosso(f'batteria {i + 1}', [0.25, 0.55, 0.95])}) seg([{cx}, {cy - bt['lunghezza'] / 2}, {cz}], "
                  f"[{cx}, {cy + bt['lunghezza'] / 2}, {cz}], {bt['diametro'] / 2});")
     c, d = PANNELLO["centro"], PANNELLO["dimensioni"]
-    r.append(f"color([0.6, 0.38, 0.2]) translate({[c[i] - d[i] / 2 for i in range(3)]}) cube({list(d)});")
+    r.append(f"color({rosso('pannello', [0.6, 0.38, 0.2])}) translate({[c[i] - d[i] / 2 for i in range(3)]}) cube({list(d)});")
     r.append(f"""if (mostra_scala) for (i = [0 : 38]) {{ t = -40 + 80 * i / 38; l = (i % 5 == 0) ? 104 : 99;
     color("white") seg([{ax} + 92 * sin(t), {c[1] - d[1] / 2 - 0.1}, {az} + 92 * cos(t)], [{ax} + l * sin(t), {c[1] - d[1] / 2 - 0.1}, {az} + l * cos(t)], 0.4); }}""")
     # fili
     colori_rete = {"TELAIO": [0.7, 0.45, 0.3], "PANNELLO": [0.7, 0.45, 0.3]}
     for p in pezzi:
         col = colori_rete.get(p.rete, [0.85, 0.45, 0.25])
-        r.append(f"color({col}) seg({list(p.a)}, {list(p.b)});  // {p.codice}")
+        if p.codice in CRITICITA["pezzi"]:
+            r.append(f"color(criticita ? {ROSSO} : {col}) seg({list(p.a)}, {list(p.b)}, criticita ? R * 1.6 : R);  // {p.codice} CRITICO")
+        else:
+            r.append(f"color({col}) seg({list(p.a)}, {list(p.b)});  // {p.codice}")
     giunti = sorted({pt for p in pezzi for pt in (p.a, p.b)})
     r.append("color([0.75, 0.75, 0.72]) for (g = " + str([list(g) for g in giunti]) + ") translate(g) sphere(r = R * 1.4, $fn = 12);")
+    for nome, lo, hi in CRITICITA["zone"]:
+        r.append(f"if (criticita) color([1, 0, 0, 0.45]) translate({[round(c, 3) for c in lo]}) "
+                 f"cube({[round(hi[i] - lo[i], 3) for i in range(3)]});  // contatto {nome}")
     (RADICE / "modello").mkdir(exist_ok=True)
     (RADICE / "modello" / "metronomus.scad").write_text("\n".join(r) + "\n", encoding="utf-8")
 
@@ -616,7 +658,7 @@ def costruisci():
 if __name__ == "__main__":
     pezzi, errori, avvisi = analizza()
     scrivi_csv(pezzi)
-    scrivi_scad(pezzi)
+    scrivi_scad(pezzi, errori)
     reti_el = [n for n in RETI if n not in ("TELAIO", "PANNELLO")]
     giunti = len({pt for p in pezzi for pt in (p.a, p.b)})
     print(f"{len(pezzi)} pezzi ({sum(1 for p in pezzi if p.rete in reti_el)} elettrici), "
